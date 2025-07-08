@@ -25,7 +25,7 @@ const WhyChooseUs = () => {
   return (
     <section className="bg-black py-16 px-6">
       <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-4xl font-bold text-yellow-400">Why Choose Us</h2>
+        <h2 className="text-4xl text-yellow-400 racing">Why Choose Us</h2>
         <p className="mt-2 text-gray-400 max-w-2xl mx-auto">
           Elevate your journey with premium services, dedicated support, and
           unbeatable value.

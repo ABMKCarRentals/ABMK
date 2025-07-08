@@ -20,3 +20,10 @@ body {
 button {
   cursor: pointer;
 }
+
+.racing {
+  font-family: "Racing Sans One";
+}
+.mont {
+  font-family: "Montserrat";
+}

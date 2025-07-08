@@ -18,9 +18,9 @@ const brands = [
 
 const BrandSection = () => {
   return (
-    <section className="bg-black text-white py-16 px-4">
+    <section className="bg-black text-white py-16 px-4 racing">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-16 text- gold">Our Brands</h2>
+        <h2 className="text-4xl mb-16 text- gold">Our Brands</h2>
 
         <div className="flex flex-wrap justify-center gap-6 mb-10">
           {brands.map((brand, index) => (
@@ -33,12 +33,12 @@ const BrandSection = () => {
                 alt={brand.name}
                 className="h-10 mb-3 object-contain"
               />
-              <p className="font-medium text- gold">{brand.name}</p>
+              <p className="text- gold font-light">{brand.name}</p>
             </div>
           ))}
         </div>
         <div className="flex justify-center mt-16">
-          <Button className="border gold text-black text-md font-semibold py-2 px-5 rounded-md flex items-center gap-2">
+          <Button className="border gold text-black text-md font-semibold py-2 px-5 rounded-md flex items-center gap-2 mont">
             All Brands <ArrowRight size={18} />
           </Button>
         </div>

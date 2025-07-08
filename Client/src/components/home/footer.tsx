@@ -62,7 +62,9 @@ const Footer = () => {
           <ul className="space-y-2 text-sm text-gray-600">
             <li>1234 Luxury Drive</li>
             <li>San Francisco, CA 94107</li>
-            <li>+1 234 567 890</li>
+            <li>
+              <a href="tel:">+971 552082602</a>
+            </li>
             <li>info@ambkrentals.com</li>
           </ul>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
-import logo from "../../assets/images/logocroped.png";
+import logo from "../../assets/images/logonav.png";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -67,13 +67,13 @@ const Navbar: React.FC = () => {
           scrolled
             ? "bg-black/95 backdrop-blur border-b border-yellow-400"
             : "bg-transparent"
-        } text-yellow-400 px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300`}
+        } text-yellow-400 px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300 mont`}
       >
         {/* Logo */}
-        <div className="text-xl font-bold tracking-widest flex items-center gap-3">
+        <div className="text-xl font-bold tracking-widest flex items-center gap-2">
           <img src={logo} alt="logo" width={50} height={25} />
-          <span className="hidden sm:block">AMBK Rentals</span>
-          <span className="sm:hidden">AMBK</span>
+          <span className="hidden sm:block">ABMK Rentals</span>
+          <span className="sm:hidden">ABMK</span>
         </div>
 
         {/* Desktop Nav */}
@@ -86,7 +86,9 @@ const Navbar: React.FC = () => {
               {item}
             </li>
           ))}
-          <Button className="ml-4 border text-md">Login</Button>
+          <Button className="ml-4 border gold text-md">
+            Login
+          </Button>
         </ul>
 
         {/* Hamburger Button - Fixed */}

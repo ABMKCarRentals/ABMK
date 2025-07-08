@@ -40,7 +40,7 @@ const CommonCardLayout: React.FunctionComponent<CommonCardLayoutProps> = ({
       {cars.map((car, index) => (
         <Card
           key={index}
-          className={`overflow-hidden transition-transform hover:scale-[1.01] border-[#232424] shadow-2xl cursor-pointer ${cardClassName}`}
+          className={`overflow-hidden transition-transform hover:scale-[1.01] border-[#232424] shadow-2xl cursor-pointer ${cardClassName} mont`}
           onClick={() => onCardClick?.(car, index)}
         >
           <div className="relative">
@@ -58,7 +58,7 @@ const CommonCardLayout: React.FunctionComponent<CommonCardLayoutProps> = ({
           </div>
 
           <CardHeader>
-            <CardTitle className="text-lg font-bold">{car.name}</CardTitle>
+            <CardTitle className="text-lg racing font-extralight">{car.name}</CardTitle>
             <CardDescription className="text-gray-600">
               {car.type}
             </CardDescription>

@@ -75,8 +75,8 @@ const FeaturedVehicles = () => {
   return (
     <section className="py-12 bg-black text-yellow-400">
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-bold">Featured Vehicles</h2>
-        <p className="text-gray-500 mt-2">
+        <h2 className="text-4xl racing">Featured Vehicles</h2>
+        <p className="text-gray-500 mt-2 mont">
           Explore our selection of premium vehicles available for your next
           adventure.
         </p>
@@ -92,7 +92,7 @@ const FeaturedVehicles = () => {
       </div>
 
       <div className="mt-12 flex justify-center items-center">
-        <Button className="flex justify-center border items-center text-md gap-2">
+        <Button className="flex justify-center border items-center text-md gap-2 mont">
           Explore all Cars <FastForwardIcon />
         </Button>
       </div>
