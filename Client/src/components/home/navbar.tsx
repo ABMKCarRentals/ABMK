@@ -86,15 +86,13 @@ const Navbar: React.FC = () => {
               {item}
             </li>
           ))}
-          <Button className="ml-4 border gold text-md">
-            Login
-          </Button>
+          <Button className="ml-4 border gold text-md">Login</Button>
         </ul>
 
         {/* Hamburger Button - Fixed */}
         <button
           type="button"
-          className="md:hidden hamburger-button text-yellow-400 hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black"
+          className="md:hidden hamburger-button text- gold hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black"
           onClick={handleToggleMenu}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -118,7 +116,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Slide Menu */}
       <div
-        className={`mobile-menu fixed top-0 right-0 h-full w-72 bg-black/95 backdrop-blur-md border-l border-yellow-400 z-50 transition-transform duration-300 ease-in-out md:hidden ${
+        className={`mobile-menu fixed top-0 right-0 h-full w-72 bg-black/95 backdrop-blur-md border-l border- gold z-50 transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -132,7 +130,7 @@ const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={handleCloseMenu}
-              className="text-yellow-400 hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="text- gold hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
               aria-label="Close mobile menu"
             >
               <X size={24} />
@@ -145,7 +143,7 @@ const Navbar: React.FC = () => {
               <li key={item}>
                 <button
                   type="button"
-                  className="w-full text-left py-3 px-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="w-full text-left py-3 px-4 text- gold hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   onClick={handleCloseMenu}
                 >
                   {item}
