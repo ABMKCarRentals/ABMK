@@ -31,16 +31,14 @@ const Testimonials = () => {
   return (
     <section className="py-16 px-4 bg-black">
       <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-4xl font-bold text- gold">
-          What Our Customers Say
-        </h2>
-        <p className="mt-2 text-gray-500 max-w-2xl mx-auto">
+        <h2 className="text-4xl text- gold racing">What Our Customers Say</h2>
+        <p className="mt-2 text-gray-500 max-w-2xl mx-auto mont">
           Discover why discerning travelers choose StayVenture for their luxury
           accommodations around the world.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto text- gold">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-18 max-w-7xl mx-auto text- gold mont">
         {testimonials.map((t, idx) => (
           <Card
             key={idx}
