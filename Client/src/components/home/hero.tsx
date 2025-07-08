@@ -1,4 +1,4 @@
-import { Fullscreen, CalendarDays, Search } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import video from "../../assets/videos/w1-launch-film-v2-9x16.mp4";
 
 function Hero() {
