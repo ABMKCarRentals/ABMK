@@ -65,9 +65,9 @@ const Navbar: React.FC = () => {
       <nav
         className={`${
           scrolled
-            ? "bg-black/95 backdrop-blur border-b border-yellow-400"
+            ? "bg-black/95 backdrop-blur border-b border- gold"
             : "bg-transparent"
-        } text-yellow-400 px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300 mont`}
+        } text- gold px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300 mont`}
       >
         {/* Logo */}
         <div className="text-xl font-bold tracking-widest flex items-center gap-2">

@@ -60,7 +60,7 @@ function Hero() {
           </div>
 
           {/* Search Button */}
-          <button className="flex items-center justify-center bg-yellow-500 text-white font-medium text-sm px-6 py-2 rounded-lg hover:bg-yellow-600 transition">
+          <button className="flex items-center justify-center bg- goldbg text-white font-medium text-sm px-6 py-2 rounded-lg hover:bg-yellow-600 transition">
             <Search size={16} className="mr-2" />
             Search
           </button>

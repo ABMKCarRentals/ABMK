@@ -7,7 +7,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-yellow-400 pt-28 px-6 mont">
+    <footer className="bg-black text- gold pt-28 px-6 mont">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-8">
         {/* Logo and Description */}
         <div>
@@ -71,7 +71,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="text-center text-xs text-yellow-500 py-4 flex flex-col md:flex-row justify-between items-center max-w-full mx-auto">
+      <div className="text-center text-xs text- gold py-4 flex flex-col md:flex-row justify-between items-center max-w-full mx-auto">
         <p>© 2025 ABMK Rentals. All rights reserved.</p>
         <div className="space-x-4 mt-2 md:mt-0">
           <span className="hover:text-yellow-300 cursor-pointer">Privacy</span>

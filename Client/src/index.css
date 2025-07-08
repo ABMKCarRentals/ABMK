@@ -14,7 +14,10 @@ body {
 }
 
 .gold {
-  color: #ffd700;
+  color: #9f7746;
+}
+.goldbg {
+  background-color: #9f7746;
 }
 
 button {

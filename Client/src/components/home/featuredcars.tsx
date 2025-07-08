@@ -73,7 +73,7 @@ const FeaturedVehicles = () => {
   };
 
   return (
-    <section className="py-12 bg-black text-yellow-400">
+    <section className="py-12 bg-black text- gold">
       <div className="text-center mb-10">
         <h2 className="text-4xl racing">Featured Vehicles</h2>
         <p className="text-gray-500 mt-2 mont">
