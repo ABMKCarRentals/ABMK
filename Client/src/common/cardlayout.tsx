@@ -49,7 +49,7 @@ const CommonCardLayout: React.FunctionComponent<CommonCardLayoutProps> = ({
               alt={car.name}
               className="w-full h-56 object-cover"
             />
-            <span className="absolute top-3 left-3 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-semibold">
+            <span className="absolute top-3 left-3 bg- goldbg text-black text-xs px-3 py-1 rounded-full font-semibold mont">
               Available Now
             </span>
             <span className="absolute bottom-3 right-3 bg-black text-white text-sm font-semibold px-3 py-1 rounded-md">
