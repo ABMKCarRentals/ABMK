@@ -1,4 +1,5 @@
 import BrandSection from "@/components/home/brands";
+import TypeSection from "@/components/home/carTypes";
 import FeaturedVehicles from "@/components/home/featuredcars";
 import FindUs from "@/components/home/findus";
 import Footer from "@/components/home/footer";
@@ -13,6 +14,7 @@ function Home() {
       <Navbar />
       <Hero />
       <BrandSection />
+      <TypeSection />
       <FeaturedVehicles />
       <ListYourCar />
       <Testimonials />

@@ -47,6 +47,7 @@ const carSchema = new mongoose.Schema(
         "Convertible",
         "Coupe",
         "Hatchback",
+        "Super",
       ],
     },
     transmission: {
