@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import loader from "./assets/speedometer-loader-unscreen.gif";
 
 import Home from "./pages/home/home";
+import AdminLogin from "./components/auth/login";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<AdminLogin />} />
     </Routes>
   );
 }
