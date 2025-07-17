@@ -120,10 +120,10 @@ const FindUs = () => {
                   <div>
                     <span className="text-gray-400 text-sm block">Email</span>
                     <a
-                      href="mailto:info@ambkrentals.com"
+                      href="mailto:info@abmkrentals.com"
                       className="text-gray-300 hover:text-yellow-300 transition-colors"
                     >
-                      info@ambkrentals.com
+                      info@abmkrentals.com
                     </a>
                   </div>
                 </div>
