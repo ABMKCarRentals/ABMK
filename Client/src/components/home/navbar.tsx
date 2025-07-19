@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Play, Pause } from "lucide-react";
 import logo from "../../assets/images/logonav.png";
+import anthem from "../../assets/videos/Anthem.mp3";
 
 import ferrari from "../../assets/images/brands/ferrari.png";
 import lambo from "../../assets/images/brands/lambo.png";
@@ -23,6 +24,17 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [brandsDropdownOpen, setBrandsDropdownOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Set initial volume when component mounts
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      // Set volume to very low (0.1 = 10% volume, adjust as needed)
+      audio.volume = 0.1; // You can change this value between 0.0 (silent) and 1.0 (full volume)
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +43,27 @@ const Navbar: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Auto-play audio on component mount
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const playAudio = async () => {
+        try {
+          await audio.play();
+          setIsPlaying(true);
+        } catch (error) {
+          // Handle autoplay policy restrictions
+          console.log("Autoplay was prevented:", error);
+          setIsPlaying(false);
+        }
+      };
+
+      // Small delay to ensure audio element is ready
+      const timer = setTimeout(playAudio, 100);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   // Close menu when clicking outside
@@ -87,16 +120,59 @@ const Navbar: React.FC = () => {
     setBrandsDropdownOpen(false);
   };
 
+  const toggleAudio = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  // Handle audio ended event
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const handleEnded = () => setIsPlaying(false);
+      const handleLoadedData = () => {
+        // Set volume again when audio loads and try to play
+        audio.volume = 0.1; // Ensure volume is set when audio loads
+        audio.play().catch((error) => {
+          console.log("Autoplay was prevented:", error);
+          setIsPlaying(false);
+        });
+      };
+
+      audio.addEventListener("ended", handleEnded);
+      audio.addEventListener("loadeddata", handleLoadedData);
+
+      return () => {
+        audio.removeEventListener("ended", handleEnded);
+        audio.removeEventListener("loadeddata", handleLoadedData);
+      };
+    }
+  }, []);
+
   const navigationItems = [
     "All Cars",
     "Brands",
     "Car Types",
     "About us",
     "Contact us",
+    "Anthem",
   ];
 
   return (
     <>
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src={anthem} preload="auto" loop={false} />
+
       {/* Navbar */}
       <nav
         className={`${
@@ -108,7 +184,7 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <div className="text-xl font-bold tracking-widest flex items-center gap-2">
           <img src={logo} alt="logo" width={50} height={25} />
-          <span className="hidden sm:block">ABMK Rentals</span>
+          <span className="hidden sm:block">ABMK Car Rentals</span>
           <span className="sm:hidden">ABMK</span>
         </div>
 
@@ -172,6 +248,20 @@ const Navbar: React.FC = () => {
                     </div>
                   )}
                 </div>
+              ) : item === "Anthem" ? (
+                <button
+                  type="button"
+                  onClick={toggleAudio}
+                  className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black rounded-md px-2"
+                  aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
+                >
+                  <span>{item}</span>
+                  {isPlaying ? (
+                    <Pause size={16} className="text-yellow-300" />
+                  ) : (
+                    <Play size={16} className="text- gold" />
+                  )}
+                </button>
               ) : (
                 <span className="hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 block">
                   {item}
@@ -283,6 +373,20 @@ const Navbar: React.FC = () => {
                       </div>
                     )}
                   </div>
+                ) : item === "Anthem" ? (
+                  <button
+                    type="button"
+                    onClick={toggleAudio}
+                    className="w-full text-left py-3 px-4 text- gold hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between"
+                    aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
+                  >
+                    <span>{item}</span>
+                    {isPlaying ? (
+                      <Pause size={16} className="text-yellow-300" />
+                    ) : (
+                      <Play size={16} className="text- gold" />
+                    )}
+                  </button>
                 ) : (
                   <button
                     type="button"

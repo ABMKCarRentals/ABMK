@@ -2,7 +2,6 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import loader from "./assets/speedometer-loader-unscreen.gif";
-
 import Home from "./pages/home/home";
 import AdminLogin from "./components/auth/login";
 

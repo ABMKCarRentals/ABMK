@@ -1,6 +1,7 @@
 import { FastForwardIcon } from "lucide-react";
-import logo from "../../assets/images/logocroped.png";
+import logo from "../../assets/images/logonavhero.png";
 import video from "../../assets/videos/w1-launch-film-v2-9x16.mp4";
+
 import { Button } from "../ui/button";
 
 function Hero() {
