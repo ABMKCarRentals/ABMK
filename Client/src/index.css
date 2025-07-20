@@ -2,11 +2,37 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Dark theme variables */
+:root {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+  --radius: 0.5rem;
+}
+
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: rgb(27, 27, 27);
+  background-color: #0a0a0a;
+  color: #ffffff;
+  font-family: "Montserrat", sans-serif;
 }
 
 .custom-curve {
@@ -14,10 +40,10 @@ body {
 }
 
 .gold {
-  color: #9f7746;
+  color: #fbbf24;
 }
 .goldbg {
-  background-color: #9f7746;
+  background-color: #fbbf24;
 }
 
 button {
@@ -29,4 +55,101 @@ button {
 }
 .mont {
   font-family: "Montserrat";
+}
+
+/* Dark theme component styles */
+.dark-dialog {
+  background-color: #1a1a1a !important;
+  border: 1px solid #374151 !important;
+  color: #ffffff !important;
+}
+
+.dark-input {
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  color: #ffffff !important;
+}
+
+.dark-input:focus {
+  outline: none !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1) !important;
+}
+
+.dark-select-trigger {
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  color: #ffffff !important;
+}
+
+.dark-select-trigger:focus {
+  outline: none !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1) !important;
+}
+
+.dark-select-content {
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  color: #ffffff !important;
+  z-index: 10002 !important;
+}
+
+.dark-select-item {
+  color: #ffffff !important;
+}
+
+.dark-select-item:hover {
+  background-color: #4b5563 !important;
+}
+
+.dark-label {
+  color: #e5e7eb !important;
+}
+
+/* Switch component dark theme */
+.dark-switch {
+  background-color: #4b5563 !important;
+}
+
+.dark-switch[data-state="checked"] {
+  background-color: #fbbf24 !important;
+}
+
+/* Dialog overlay */
+[data-radix-dialog-overlay] {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  z-index: 9998 !important;
+}
+
+[data-radix-dialog-content] {
+  z-index: 9999 !important;
+}
+
+/* Select dropdown z-index */
+[data-radix-select-content] {
+  z-index: 10002 !important;
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+}
+
+[data-radix-select-item] {
+  color: #ffffff !important;
+}
+
+[data-radix-select-item]:hover {
+  background-color: #4b5563 !important;
+}
+
+/* Switch styling */
+[data-radix-switch-root] {
+  background-color: #4b5563 !important;
+}
+
+[data-radix-switch-root][data-state="checked"] {
+  background-color: #fbbf24 !important;
+}
+
+[data-radix-switch-thumb] {
+  background-color: #ffffff !important;
 }

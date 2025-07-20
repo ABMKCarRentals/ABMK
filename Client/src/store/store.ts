@@ -2,12 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import authReducer from "./auth-slice";
+import carReducer from "./car-slice";
+import adminCarReducer from "./admin/car-slice";
 
 // Configure store
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    // Add other reducers here as needed
+    car: carReducer,
+    adminCars: adminCarReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -7,10 +7,10 @@ const lusca = require("lusca");
 
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth/auth-rotes");
-const adminProductsRouter = require("./routes/admin/product-routes");
-const shopProductRouter = require("./routes/shop/productroutes");
-const shopSearchRouter = require("./routes/shop/searchroutes");
-const reviewRouter = require("./routes/shop/reviewroutes");
+const adminCarRouter = require("./routes/admin/car-routes");
+const userCarRouter = require("./routes/user/car-routes.js");
+const userSearchRouter = require("./routes/user/searchroutes.js");
+const reviewRouter = require("./routes/user/reviewroutes.js");
 
 // Connect to MongoDB
 mongoose
@@ -58,13 +58,13 @@ app.use(
   })
 );
 
-// Initialize passport
+
 
 // Routes
 app.use("/api/auth", authRouter);
-app.use("/api/admin/products", adminProductsRouter);
-app.use("/api/shop/products", shopProductRouter);
-app.use("/api/shop/search", shopSearchRouter);
+app.use("/api/admin/cars", adminCarRouter);
+app.use("/api/cars", userCarRouter);
+app.use("/api/shop/search", userSearchRouter);
 app.use("/api/shop/review", reviewRouter);
 
 // Root route

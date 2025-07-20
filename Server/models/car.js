@@ -70,19 +70,6 @@ const carSchema = new mongoose.Schema(
     },
 
     // Pricing
-    pricePerDay: {
-      type: Number,
-      required: [true, "Price per day is required"],
-      min: [0, "Price cannot be negative"],
-    },
-    pricePerWeek: {
-      type: Number,
-      min: [0, "Price cannot be negative"],
-    },
-    pricePerMonth: {
-      type: Number,
-      min: [0, "Price cannot be negative"],
-    },
 
     // Images
     images: [

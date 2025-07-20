@@ -1,6 +1,6 @@
 import { FastForwardIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import CommonCardLayout from "../../common/cardlayout";
+import CommonCardLayout from "../common/cardlayout";
 import x5 from "../../assets/images/x5.png";
 
 const cars = [

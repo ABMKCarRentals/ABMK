@@ -4,12 +4,12 @@ const rateLimit = require("express-rate-limit");
 const {
   addProductReview,
   getProductReviews,
-} = require("../../controllers/shop/reviewcontroller");
+} = require("../../controllers/user/reviewcontroller");
 
 const router = express.Router();
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
+  windowMs: 15 * 60 * 1000,
   max: 100,
 });
 router.use(limiter);

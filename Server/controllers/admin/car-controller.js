@@ -49,9 +49,6 @@ const addCar = async (req, res) => {
       transmission,
       fuelType,
       seats,
-      pricePerDay,
-      pricePerWeek,
-      pricePerMonth,
       images,
       features,
       specifications,
@@ -73,7 +70,6 @@ const addCar = async (req, res) => {
       !transmission ||
       !fuelType ||
       !seats ||
-      !pricePerDay ||
       !images?.length
     ) {
       return res.status(400).json({
@@ -121,9 +117,6 @@ const addCar = async (req, res) => {
       transmission,
       fuelType,
       seats: Number(seats),
-      pricePerDay: Number(pricePerDay),
-      pricePerWeek: pricePerWeek ? Number(pricePerWeek) : undefined,
-      pricePerMonth: pricePerMonth ? Number(pricePerMonth) : undefined,
       images: processedImages,
       features: processedFeatures,
       specifications: specifications || {},
@@ -176,8 +169,6 @@ const fetchAllCars = async (req, res) => {
       status,
       isActive,
       isFeatured,
-      minPrice,
-      maxPrice,
       search,
     } = req.query;
 
@@ -189,12 +180,6 @@ const fetchAllCars = async (req, res) => {
     if (status) filter.status = status;
     if (isActive !== undefined) filter.isActive = isActive === "true";
     if (isFeatured !== undefined) filter.isFeatured = isFeatured === "true";
-
-    if (minPrice || maxPrice) {
-      filter.pricePerDay = {};
-      if (minPrice) filter.pricePerDay.$gte = Number(minPrice);
-      if (maxPrice) filter.pricePerDay.$lte = Number(maxPrice);
-    }
 
     if (search) {
       filter.$or = [
@@ -292,7 +277,6 @@ const editCar = async (req, res) => {
       updates.brand === "" ||
       updates.model === "" ||
       updates.category === "" ||
-      updates.pricePerDay === "" ||
       !updates.images ||
       updates.images.length === 0
     ) {
@@ -305,11 +289,6 @@ const editCar = async (req, res) => {
     // Process numeric fields
     if (updates.year) updates.year = Number(updates.year);
     if (updates.seats) updates.seats = Number(updates.seats);
-    if (updates.pricePerDay) updates.pricePerDay = Number(updates.pricePerDay);
-    if (updates.pricePerWeek)
-      updates.pricePerWeek = Number(updates.pricePerWeek);
-    if (updates.pricePerMonth)
-      updates.pricePerMonth = Number(updates.pricePerMonth);
 
     // Process boolean fields
     if (updates.isActive !== undefined)

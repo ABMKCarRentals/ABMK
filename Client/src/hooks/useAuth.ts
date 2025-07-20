@@ -1,19 +1,44 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   loginAdmin,
   logoutAdmin,
-  checkAuthStatus,
   refreshToken,
+  checkAuthStatus,
+  changePassword,
+  forgotPassword,
+  resetPassword,
   clearError,
   setCredentialsFromStorage,
+  resetAuthState,
+  updateUserProfile,
+  setLoading,
+  forceLogout,
   selectAuth,
   selectUser,
   selectIsAuthenticated,
   selectIsLoading,
   selectError,
   selectAccessToken,
+  selectLastLoginTime,
+  selectIsAdmin,
+  selectUserInfo,
 } from "../store/auth-slice";
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface ChangePasswordData {
+  currentPassword: string;
+  newPassword: string;
+}
+
+interface ResetPasswordData {
+  token: string;
+  newPassword: string;
+}
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -25,106 +50,156 @@ export const useAuth = () => {
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectError);
   const accessToken = useAppSelector(selectAccessToken);
+  const lastLoginTime = useAppSelector(selectLastLoginTime);
+  const isAdmin = useAppSelector(selectIsAdmin);
+  const userInfo = useAppSelector(selectUserInfo);
 
-  // Initialize auth on app start
-  useEffect(() => {
-    const initializeAuth = async () => {
-      const token =
-        localStorage.getItem("adminToken") ||
-        sessionStorage.getItem("adminToken");
+  // Auth actions
+  const login = useCallback(
+    (credentials: LoginCredentials) => {
+      return dispatch(loginAdmin(credentials));
+    },
+    [dispatch]
+  );
 
-      if (token) {
-        try {
-          // Check if token is still valid
-          await dispatch(checkAuthStatus()).unwrap();
-        } catch (error) {
-          // Token is invalid, try to refresh
-          try {
-            await dispatch(refreshToken()).unwrap();
-            await dispatch(checkAuthStatus()).unwrap();
-          } catch (refreshError) {
-            // Refresh failed, clear storage
-            localStorage.removeItem("adminToken");
-            sessionStorage.removeItem("adminToken");
-          }
-        }
-      }
-    };
-
-    initializeAuth();
+  const logout = useCallback(() => {
+    return dispatch(logoutAdmin());
   }, [dispatch]);
 
-  // Auto-refresh token before expiration
+  const refreshAuthToken = useCallback(() => {
+    return dispatch(refreshToken());
+  }, [dispatch]);
+
+  const checkAuth = useCallback(() => {
+    return dispatch(checkAuthStatus());
+  }, [dispatch]);
+
+  const updatePassword = useCallback(
+    (passwordData: ChangePasswordData) => {
+      return dispatch(changePassword(passwordData));
+    },
+    [dispatch]
+  );
+
+  const requestPasswordReset = useCallback(
+    (email: string) => {
+      return dispatch(forgotPassword({ email }));
+    },
+    [dispatch]
+  );
+
+  const resetUserPassword = useCallback(
+    (resetData: ResetPasswordData) => {
+      return dispatch(resetPassword(resetData));
+    },
+    [dispatch]
+  );
+
+  const clearAuthError = useCallback(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  const setAuthLoading = useCallback(
+    (loading: boolean) => {
+      dispatch(setLoading(loading));
+    },
+    [dispatch]
+  );
+
+  const updateProfile = useCallback(
+    (
+      profileData: Partial<{
+        id: string;
+        email: string;
+        name: string;
+        role: string;
+      }>
+    ) => {
+      dispatch(updateUserProfile(profileData));
+    },
+    [dispatch]
+  );
+
+  const resetAuth = useCallback(() => {
+    dispatch(resetAuthState());
+  }, [dispatch]);
+
+  const forceLogoutUser = useCallback(() => {
+    dispatch(forceLogout());
+  }, [dispatch]);
+
+  const restoreFromStorage = useCallback(
+    (token: string, userData: any) => {
+      dispatch(setCredentialsFromStorage({ token, user: userData }));
+    },
+    [dispatch]
+  );
+
+  // Auto-check auth on mount
+  useEffect(() => {
+    const token =
+      localStorage.getItem("adminToken") ||
+      sessionStorage.getItem("adminToken");
+    if (token && !isAuthenticated && !user) {
+      checkAuth();
+    }
+  }, [checkAuth, isAuthenticated, user]);
+
+  // Auto-refresh token before expiry
   useEffect(() => {
     if (isAuthenticated && accessToken) {
-      // Set up token refresh interval (every 14 minutes for 15-minute tokens)
+      // Set up token refresh interval (refresh every 30 minutes)
       const refreshInterval = setInterval(() => {
-        dispatch(refreshToken());
-      }, 14 * 60 * 1000);
+        refreshAuthToken();
+      }, 30 * 60 * 1000);
 
       return () => clearInterval(refreshInterval);
     }
-  }, [isAuthenticated, accessToken, dispatch]);
+  }, [isAuthenticated, accessToken, refreshAuthToken]);
 
-  // Auth functions
-  const login = async (
-    credentials: { email: string; password: string },
-    rememberMe = false
-  ) => {
-    try {
-      const result = await dispatch(loginAdmin(credentials)).unwrap();
-
-      // Store token based on remember me option
-      if (rememberMe) {
-        localStorage.setItem("adminToken", result.accessToken);
-      } else {
-        sessionStorage.setItem("adminToken", result.accessToken);
+  // Handle token expiry
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "adminToken" && !e.newValue && isAuthenticated) {
+        // Token was removed from storage, force logout
+        forceLogoutUser();
       }
+    };
 
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await dispatch(logoutAdmin()).unwrap();
-    } catch (error) {
-      // Continue with logout even if server request fails
-      console.error("Logout error:", error);
-    } finally {
-      // Always clear local storage
-      localStorage.removeItem("adminToken");
-      sessionStorage.removeItem("adminToken");
-    }
-  };
-
-  const clearAuthError = () => {
-    dispatch(clearError());
-  };
-
-  const checkAuth = async () => {
-    try {
-      await dispatch(checkAuthStatus()).unwrap();
-    } catch (error) {
-      throw error;
-    }
-  };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [isAuthenticated, forceLogoutUser]);
 
   return {
     // State
+    auth,
     user,
     isAuthenticated,
     isLoading,
     error,
     accessToken,
-    lastLoginTime: auth.lastLoginTime,
+    lastLoginTime,
+    isAdmin,
+    userInfo,
 
     // Actions
     login,
     logout,
-    clearAuthError,
+    refreshAuthToken,
     checkAuth,
+    updatePassword,
+    requestPasswordReset,
+    resetUserPassword,
+    clearAuthError,
+    setAuthLoading,
+    updateProfile,
+    resetAuth,
+    forceLogoutUser,
+    restoreFromStorage,
+
+    // Utility functions
+    hasRole: (role: string) => user?.role === role,
+    isTokenValid: () => !!accessToken && isAuthenticated,
+    getAuthHeader: () => (accessToken ? `Bearer ${accessToken}` : null),
   };
 };
