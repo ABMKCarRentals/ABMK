@@ -60,6 +60,7 @@ const ContactPage: React.FC = () => {
         submittedBy: "guest",
         source: "website_contact_form",
       };
+      console.log(submissionData);
 
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1500));

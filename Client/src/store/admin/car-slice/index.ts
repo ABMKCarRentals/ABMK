@@ -22,16 +22,12 @@ adminApiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor for admin operations
 adminApiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
+  (response: AxiosResponse) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("adminToken");
@@ -251,10 +247,11 @@ export const uploadCarImage = createAsyncThunk<ImageUploadResponse, File>(
 
 export const fetchAllCars = createAsyncThunk<
   CarsResponse,
-  FilterOptions | void
->("adminCars/fetchAllCars", async (filters = {}, { rejectWithValue }) => {
+  FilterOptions | undefined
+>("adminCars/fetchAllCars", async (filters, { rejectWithValue }) => {
   try {
-    const queryString = buildQueryString(filters);
+    const safeFilters = filters || {};
+    const queryString = buildQueryString(safeFilters);
     const url = queryString
       ? `/api/admin/cars/get?${queryString}`
       : "/api/admin/cars/get";
@@ -447,9 +444,7 @@ const adminCarSlice = createSlice({
       state.isImageUploading = action.payload;
     },
 
-    resetAdminCarState: () => {
-      return initialState;
-    },
+    resetAdminCarState: () => initialState,
   },
   extraReducers: (builder) => {
     builder

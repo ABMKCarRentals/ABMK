@@ -1,16 +1,9 @@
-import {
-  FileIcon,
-  UploadCloudIcon,
-  XIcon,
-  AlertCircle,
-  CheckCircle,
-} from "lucide-react";
+import { UploadCloudIcon, XIcon, AlertCircle, CheckCircle } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { Skeleton } from "../ui/skeleton";
 
 // Type for image file slot
 interface CarImageUploadFile {

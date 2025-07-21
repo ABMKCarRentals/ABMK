@@ -6,7 +6,7 @@ import type { AxiosResponse, AxiosError } from "axios";
 // Configure axios instance with enhanced error handling
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_PORT,
-  timeout: 15000, // Increased timeout
+  timeout: 15000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -39,26 +39,19 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Enhanced response interceptor
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
+  (response: AxiosResponse) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
       window.location.href = "/admin/login";
     } else if (error.response?.status === 429) {
-      // Handle rate limiting
       const retryAfter = error.response.headers["retry-after"] || 5;
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          // Retry the original request
           if (error.config) {
             apiClient.request(error.config).then(resolve).catch(reject);
           } else {
@@ -203,7 +196,6 @@ interface CarState {
   lastFetchTime: string | null;
   cacheExpiryTime: number;
 
-  // Rate limiting state
   isRateLimited: boolean;
   retryAfter: number;
 }
@@ -255,7 +247,6 @@ const initialState: CarState = {
   retryAfter: 0,
 };
 
-// Utility function to clean filters and remove "all" values
 const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
   const cleanedFilters: CleanFilterOptions = {};
 
@@ -281,7 +272,6 @@ const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
           cleanedFilters.search = value.trim();
         }
         break;
-
       case "brand":
       case "category":
       case "transmission":
@@ -299,7 +289,6 @@ const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
           cleanedFilters[key] = value;
         }
         break;
-
       case "seats":
       case "year":
         if (Array.isArray(value)) {
@@ -320,7 +309,6 @@ const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
           cleanedFilters[key] = value;
         }
         break;
-
       case "priceMin":
       case "priceMax":
         if (typeof value === "number" && value > 0) {
@@ -336,7 +324,6 @@ const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
           }
         }
         break;
-
       case "page":
       case "limit":
         if (typeof value === "number" && value > 0) {
@@ -348,13 +335,11 @@ const cleanFilters = (filters: FilterOptions): CleanFilterOptions => {
           }
         }
         break;
-
       case "sort":
         if (typeof value === "string" && value !== "all" && value !== "") {
           cleanedFilters.sort = value;
         }
         break;
-
       default:
         break;
     }
@@ -391,7 +376,6 @@ const handleApiError = (error: unknown): string => {
       } else if (status >= 500) {
         return "Server error. Please try again later.";
       }
-
       return `Error (${status}): ${message}`;
     } else if (error.request) {
       return "Network Error: Unable to connect to server. Please check your internet connection.";
@@ -405,7 +389,7 @@ const handleApiError = (error: unknown): string => {
   return "An unexpected error occurred";
 };
 
-// Async thunks with proper route handling
+// Async thunks
 export const fetchAllCars = createAsyncThunk<CarsResponse, FilterOptions>(
   "cars/fetchAllCars",
   async (filters = {}, { rejectWithValue }) => {
@@ -413,9 +397,7 @@ export const fetchAllCars = createAsyncThunk<CarsResponse, FilterOptions>(
       const cleanedFilters = cleanFilters(filters);
       const queryString = buildQueryString(cleanedFilters);
 
-      // Use base route instead of /all to avoid conflicts
       const url = queryString ? `/api/cars?${queryString}` : "/api/cars";
-
       const response = await apiClient.get<CarsResponse>(url);
 
       if (!response.data.success) {
@@ -460,7 +442,6 @@ export const fetchCarsByCategory = createAsyncThunk<
   async ({ category, filters = {} }, { rejectWithValue }) => {
     try {
       if (!category || category === "all") {
-        // If category is "all", fetch all cars instead
         const cleanedFilters = cleanFilters(filters);
         const response = await apiClient.get<CarsResponse>(
           `/api/cars?${buildQueryString(cleanedFilters)}`
@@ -474,8 +455,6 @@ export const fetchCarsByCategory = createAsyncThunk<
 
       const cleanedFilters = cleanFilters(filters);
       const queryString = buildQueryString(cleanedFilters);
-
-      // Use the direct category routes (without /category/ prefix)
       const url = queryString
         ? `/api/cars/${category.toLowerCase()}?${queryString}`
         : `/api/cars/${category.toLowerCase()}`;
@@ -506,7 +485,6 @@ export const fetchCarsByBrand = createAsyncThunk<
   async ({ brand, filters = {} }, { rejectWithValue }) => {
     try {
       if (!brand || brand === "all") {
-        // If brand is "all", fetch all cars instead
         const cleanedFilters = cleanFilters(filters);
         const response = await apiClient.get<CarsResponse>(
           `/api/cars?${buildQueryString(cleanedFilters)}`
@@ -546,7 +524,6 @@ export const fetchCarById = createAsyncThunk<Car, string>(
   "cars/fetchCarById",
   async (carId, { rejectWithValue }) => {
     try {
-      // Validate carId
       if (
         !carId ||
         carId === "all" ||
@@ -580,7 +557,6 @@ export const fetchRelatedCars = createAsyncThunk<
   "cars/fetchRelatedCars",
   async ({ carId, limit = 4 }, { rejectWithValue }) => {
     try {
-      // Validate carId
       if (
         !carId ||
         carId === "all" ||
@@ -614,7 +590,6 @@ export const incrementCarViewCount = createAsyncThunk<
   string
 >("cars/incrementViewCount", async (carId, { rejectWithValue }) => {
   try {
-    // Validate carId
     if (
       !carId ||
       carId === "all" ||
@@ -650,27 +625,21 @@ const carSlice = createSlice({
       state.isRateLimited = false;
       state.retryAfter = 0;
     },
-
     clearFeaturedError: (state) => {
       state.featuredError = null;
     },
-
     clearCategoryError: (state) => {
       state.categoryError = null;
     },
-
     clearBrandError: (state) => {
       state.brandError = null;
     },
-
     clearCarError: (state) => {
       state.carError = null;
     },
-
     clearRelatedError: (state) => {
       state.relatedError = null;
     },
-
     clearAllErrors: (state) => {
       state.error = null;
       state.featuredError = null;
@@ -681,16 +650,13 @@ const carSlice = createSlice({
       state.isRateLimited = false;
       state.retryAfter = 0;
     },
-
     setActiveFilters: (state, action: PayloadAction<FilterOptions>) => {
       const cleanedFilters = cleanFilters(action.payload);
       state.activeFilters = { ...state.activeFilters, ...cleanedFilters };
     },
-
     clearActiveFilters: (state) => {
       state.activeFilters = {};
     },
-
     setSearchQuery: (state, action: PayloadAction<string>) => {
       const query = action.payload;
       if (query && query !== "all") {
@@ -699,25 +665,20 @@ const carSlice = createSlice({
         state.searchQuery = "";
       }
     },
-
     clearSearchQuery: (state) => {
       state.searchQuery = "";
     },
-
     clearCurrentCar: (state) => {
       state.currentCar = null;
       state.relatedCars = [];
     },
-
     clearCarsByBrand: (state) => {
       state.carsByBrand = [];
       state.currentBrand = null;
     },
-
     incrementViewCountLocal: (state, action: PayloadAction<string>) => {
       const carId = action.payload;
 
-      // Validate carId
       if (
         !carId ||
         carId === "all" ||
@@ -743,7 +704,6 @@ const carSlice = createSlice({
         state.featuredCars[featuredIndex].viewCount += 1;
       }
     },
-
     validateCache: (state) => {
       if (state.lastFetchTime) {
         const now = new Date().getTime();
@@ -757,7 +717,6 @@ const carSlice = createSlice({
         }
       }
     },
-
     setRateLimited: (
       state,
       action: PayloadAction<{ isLimited: boolean; retryAfter?: number }>
@@ -765,10 +724,7 @@ const carSlice = createSlice({
       state.isRateLimited = action.payload.isLimited;
       state.retryAfter = action.payload.retryAfter || 0;
     },
-
-    resetCarState: () => {
-      return initialState;
-    },
+    resetCarState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -800,7 +756,6 @@ const carSlice = createSlice({
           state.retryAfter = 5;
         }
       })
-
       // fetchFeaturedCars
       .addCase(fetchFeaturedCars.pending, (state) => {
         state.isFeaturedLoading = true;
@@ -815,7 +770,6 @@ const carSlice = createSlice({
         state.isFeaturedLoading = false;
         state.featuredError = action.payload as string;
       })
-
       // fetchCarsByCategory
       .addCase(fetchCarsByCategory.pending, (state) => {
         state.isCategoryLoading = true;
@@ -824,7 +778,6 @@ const carSlice = createSlice({
       .addCase(fetchCarsByCategory.fulfilled, (state, action) => {
         state.isCategoryLoading = false;
         const { cars, category } = action.payload;
-
         switch (category.toLowerCase()) {
           case "luxury":
             state.luxuryCars = cars;
@@ -845,18 +798,15 @@ const carSlice = createSlice({
             state.coupeCars = cars;
             break;
           case "all":
-            // If fetching all cars, update the main cars array
             state.cars = cars;
             break;
         }
-
         state.categoryError = null;
       })
       .addCase(fetchCarsByCategory.rejected, (state, action) => {
         state.isCategoryLoading = false;
         state.categoryError = action.payload as string;
       })
-
       // fetchCarsByBrand
       .addCase(fetchCarsByBrand.pending, (state) => {
         state.isBrandLoading = true;
@@ -872,7 +822,6 @@ const carSlice = createSlice({
         state.isBrandLoading = false;
         state.brandError = action.payload as string;
       })
-
       // fetchCarById
       .addCase(fetchCarById.pending, (state) => {
         state.isCarLoading = true;
@@ -888,7 +837,6 @@ const carSlice = createSlice({
         state.carError = action.payload as string;
         state.currentCar = null;
       })
-
       // fetchRelatedCars
       .addCase(fetchRelatedCars.pending, (state) => {
         state.isRelatedLoading = true;
@@ -903,7 +851,6 @@ const carSlice = createSlice({
         state.isRelatedLoading = false;
         state.relatedError = action.payload as string;
       })
-
       // incrementCarViewCount
       .addCase(incrementCarViewCount.fulfilled, (state, action) => {
         const { carId, newViewCount } = action.payload;

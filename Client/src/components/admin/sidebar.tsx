@@ -2,7 +2,6 @@ import {
   BadgeCheck,
   ChartNoAxesCombined,
   LayoutDashboard,
-  ShoppingBasket,
   Car,
 } from "lucide-react";
 import { Fragment } from "react";

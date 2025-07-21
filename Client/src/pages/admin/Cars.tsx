@@ -71,7 +71,6 @@ function AdminCars() {
     toggleAvailability,
     fetchStats,
     clearAllCarErrors,
-    uploadImage,
   } = useAdminCars();
 
   const [openCreateCarDialog, setOpenCreateCarDialog] = useState(false);
@@ -255,14 +254,13 @@ function AdminCars() {
         ? updateCar(currentEditedId, processedFormData)
         : createCar(processedFormData));
 
-      if (response.payload?.success) {
+      if (response.payload && response.payload.success) {
         toast({
           title: "Success",
           description: `Car ${
             currentEditedId ? "updated" : "added"
           } successfully!`,
         });
-        // Refresh data
         getAllCars();
         fetchStats();
         resetForm();
@@ -282,7 +280,7 @@ function AdminCars() {
   const handleDelete = async (carId: string) => {
     try {
       const response = await removeCar(carId);
-      if (response.payload?.success) {
+      if (response.payload && response.payload.success) {
         toast({
           title: "Success",
           description: "Car deleted successfully!",
@@ -302,7 +300,7 @@ function AdminCars() {
   const handleToggleAvailability = async (carId: string) => {
     try {
       const response = await toggleAvailability(carId);
-      if (response.payload?.success) {
+      if (response.payload && response.payload.success) {
         toast({
           title: "Success",
           description: "Car availability updated successfully!",
@@ -412,7 +410,6 @@ function AdminCars() {
                 className="dark-input"
               />
             </div>
-
             <div>
               <Label className="dark-label text-sm font-medium mb-2 block">
                 Brand
@@ -440,7 +437,6 @@ function AdminCars() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label className="dark-label text-sm font-medium mb-2 block">
                 Category
@@ -468,7 +464,6 @@ function AdminCars() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label className="dark-label text-sm font-medium mb-2 block">
                 Status
@@ -496,7 +491,6 @@ function AdminCars() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label className="dark-label text-sm font-medium mb-2 block">
                 Active Status
@@ -521,7 +515,6 @@ function AdminCars() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label className="dark-label text-sm font-medium mb-2 block">
                 Featured Status
@@ -549,7 +542,6 @@ function AdminCars() {
               </Select>
             </div>
           </div>
-
           <div className="flex justify-end mt-4">
             <Button
               variant="outline"
