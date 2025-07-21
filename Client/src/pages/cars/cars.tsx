@@ -38,6 +38,8 @@ import CarCard from "../../components/cars/car-card";
 import Navbar from "../../components/home/navbar";
 import Footer from "../../components/home/footer";
 
+// CarTypeTab and LocalFilters types remain unchanged
+
 type CarTypeTab = {
   id: string;
   name: string;
@@ -47,6 +49,7 @@ type CarTypeTab = {
   color: string;
 };
 
+// Add index signature to LocalFilters to allow string-based access
 type LocalFilters = {
   brand: string;
   category: string;
@@ -55,6 +58,7 @@ type LocalFilters = {
   seats: string;
   year: string;
   sort: string;
+  [key: string]: string;
 };
 
 const CarsPage: React.FC = () => {
@@ -308,7 +312,7 @@ const CarsPage: React.FC = () => {
     const category = searchParams.get("category");
     const search = searchParams.get("search");
 
-    const initialFilters = {
+    const initialFilters: LocalFilters = {
       brand: brand || "all",
       category: category || "all",
       transmission: "all",
@@ -506,11 +510,11 @@ const CarsPage: React.FC = () => {
 
     Object.keys(newFilters).forEach((filterKey) => {
       if (
-        newFilters[filterKey as keyof LocalFilters] !== "all" &&
-        newFilters[filterKey as keyof LocalFilters] !== "" &&
+        newFilters[filterKey] !== "all" &&
+        newFilters[filterKey] !== "" &&
         filterKey !== "category"
       ) {
-        apiFilters[filterKey] = newFilters[filterKey as keyof LocalFilters];
+        apiFilters[filterKey] = newFilters[filterKey];
       }
     });
 
@@ -594,9 +598,6 @@ const CarsPage: React.FC = () => {
     "BMW",
     "Audi",
   ];
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
   return (
     <div className="min-h-screen bg-gray-900">

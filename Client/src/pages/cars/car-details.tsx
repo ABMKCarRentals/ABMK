@@ -1,23 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCars } from "../../hooks/useCars";
-import {
-  ArrowLeft,
-  Star,
-  Users,
-  Fuel,
-  Settings,
-  Calendar,
-  MapPin,
-  Eye,
-  Share2,
-  Heart,
-  Phone,
-  MessageCircle,
-  CheckCircle,
-} from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "../../components/home/navbar";
@@ -25,8 +10,6 @@ import Footer from "../../components/home/footer";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import CarCard from "../../components/cars/car-card";
 import ImageGallery from "../../components/cars/image-gallery";
-
-// ... Car interfaces unchanged ...
 
 interface Specification {
   engine?: string;
@@ -90,10 +73,6 @@ const CarDetails: React.FC = () => {
     incrementCarViewCount,
   } = useCars();
 
-  // Image selection for gallery (if needed for thumbnails)
-  // FIX: Remove unused state to resolve TS6133 error
-  // const [selectedImage, setSelectedImage] = useState<number>(0);
-
   useEffect(() => {
     if (id) {
       getCarById(id);
@@ -115,21 +94,6 @@ const CarDetails: React.FC = () => {
       `https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(message)}`,
       "_blank"
     );
-  };
-
-  const handleShare = () => {
-    if (!currentCar) return;
-    if (navigator.share) {
-      navigator.share({
-        title: `${currentCar.brand} ${currentCar.model} ${currentCar.name}`,
-        text: `Check out this amazing car for rent in Dubai!`,
-        url: window.location.href,
-      });
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        // Optionally show a toast/feedback here for copied link
-      });
-    }
   };
 
   if (isCarLoading) {
@@ -169,16 +133,12 @@ const CarDetails: React.FC = () => {
     );
   }
 
-  // Professional formatting for numbers & fallback for missing fields
   const formatNumber = (num?: number) =>
     typeof num === "number" ? num.toLocaleString() : "-";
 
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
-      {/* ... rest of the component unchanged ... */}
-      {/* The rest of your component is unchanged, just removed unused selectedImage and setSelectedImage */}
-      {/* ... */}
       <div className="bg-gray-800 border-b border-gray-700">
         <div className="container mx-auto px-4 py-4">
           <nav
@@ -202,17 +162,12 @@ const CarDetails: React.FC = () => {
           </nav>
         </div>
       </div>
-      {/* ... rest of your component ... */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* ... Car Header, Gallery, Tabs ... */}
-            {/* ... unchanged ... */}
             <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 shadow-lg">
               <ImageGallery images={currentCar.images || []} />
             </section>
-            {/* ... Details Tabs ... */}
             <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 shadow-lg">
               <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="grid w-full grid-cols-3 bg-gray-700">
@@ -235,7 +190,6 @@ const CarDetails: React.FC = () => {
                     Features
                   </TabsTrigger>
                 </TabsList>
-                {/* ... TabsContent unchanged ... */}
                 <TabsContent value="overview" className="mt-6">
                   <div>
                     <h3 className="text-lg font-semibold mb-4 text-white">
@@ -332,9 +286,7 @@ const CarDetails: React.FC = () => {
               </Tabs>
             </section>
           </div>
-          {/* Sidebar unchanged ... */}
           <aside className="lg:col-span-1">
-            {/* ... */}
             <Card className="sticky top-4 mb-6 bg-gray-800 border-gray-700 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-white text-lg font-semibold">
@@ -343,7 +295,6 @@ const CarDetails: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* Contact Info */}
                   <div className="text-center p-4 bg-gray-700 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-400 mb-2 uppercase tracking-wider">
                       Premium Rental
@@ -352,7 +303,6 @@ const CarDetails: React.FC = () => {
                       Contact us for pricing
                     </div>
                   </div>
-                  {/* Action Buttons */}
                   <div className="space-y-2">
                     <Button
                       onClick={handleBookNow}
@@ -371,12 +321,10 @@ const CarDetails: React.FC = () => {
                       Call Now
                     </Button>
                   </div>
-                  {/* Contact Info */}
                   <div className="text-center text-sm text-gray-400 pt-4 border-t border-gray-600">
                     <p>Need help? Contact us</p>
                     <p className="font-semibold text-white">+971 XX XXX XXXX</p>
                   </div>
-                  {/* Additional Info */}
                   <div className="bg-gray-700 p-4 rounded-lg">
                     <h4 className="font-semibold text-white mb-2 text-base">
                       Why Choose Us?
@@ -393,7 +341,6 @@ const CarDetails: React.FC = () => {
             </Card>
           </aside>
         </div>
-        {/* Related Cars unchanged ... */}
         {relatedCars && relatedCars.length > 0 && (
           <section className="mt-12">
             <h2 className="text-2xl font-bold text-white mb-6">Similar Cars</h2>

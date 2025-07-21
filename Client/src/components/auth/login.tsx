@@ -38,18 +38,19 @@ const AdminLogin: React.FC = () => {
     e.preventDefault();
     setSuccess("");
 
+    // Validate form
+    if (!formData.email || !formData.password) {
+      if (clearAuthError) clearAuthError();
+      return;
+    }
+    if (!formData.email.includes("@")) {
+      if (clearAuthError) clearAuthError();
+      return;
+    }
+
     try {
-      // Validate form
-      if (!formData.email || !formData.password) {
-        throw new Error("Please fill in all fields");
-      }
-
-      if (!formData.email.includes("@")) {
-        throw new Error("Please enter a valid email address");
-      }
-
-      // Attempt login
-      await login(formData, rememberMe);
+      // Attempt login. Only pass one argument (fixes TS2554)
+      await login(formData);
 
       setSuccess("Login successful! Redirecting...");
 
@@ -58,7 +59,9 @@ const AdminLogin: React.FC = () => {
         navigate("/admin/dashboard");
       }, 1500);
     } catch (err: any) {
-      console.error("Login error:", err);
+      // Error handled by useAuth error state
+      // Optionally set error state here if needed
+      // console.error("Login error:", err);
     }
   };
 
@@ -68,8 +71,6 @@ const AdminLogin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
-      {/* Background elements remain the same */}
-
       {/* Login Container */}
       <div className="relative z-10 w-full max-w-md mx-4">
         {/* Header */}
