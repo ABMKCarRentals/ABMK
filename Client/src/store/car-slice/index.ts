@@ -64,7 +64,7 @@ apiClient.interceptors.response.use(
           } else {
             reject(error);
           }
-        }, parseInt(retryAfter) * 1000);
+        }, parseInt(retryAfter.toString()) * 1000);
       });
     }
     return Promise.reject(error);
@@ -375,7 +375,7 @@ const buildQueryString = (filters: CleanFilterOptions): string => {
   return params.toString();
 };
 
-const handleApiError = (error: any): string => {
+const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
       const status = error.response.status;
@@ -399,7 +399,10 @@ const handleApiError = (error: any): string => {
       return `Request Error: ${error.message}`;
     }
   }
-  return error.message || "An unexpected error occurred";
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "An unexpected error occurred";
 };
 
 // Async thunks with proper route handling
@@ -420,7 +423,7 @@ export const fetchAllCars = createAsyncThunk<CarsResponse, FilterOptions>(
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -443,7 +446,7 @@ export const fetchFeaturedCars = createAsyncThunk<Car[], { limit?: number }>(
       return Array.isArray(response.data.data)
         ? response.data.data
         : ([response.data.data] as Car[]);
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -489,7 +492,7 @@ export const fetchCarsByCategory = createAsyncThunk<
         ? response.data.data
         : ([response.data.data] as Car[]);
       return { cars, category };
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -533,7 +536,7 @@ export const fetchCarsByBrand = createAsyncThunk<
         ? response.data.data
         : ([response.data.data] as Car[]);
       return { cars, brand };
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -564,7 +567,7 @@ export const fetchCarById = createAsyncThunk<Car, string>(
       return Array.isArray(response.data.data)
         ? response.data.data[0]
         : (response.data.data as Car);
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -600,7 +603,7 @@ export const fetchRelatedCars = createAsyncThunk<
       return Array.isArray(response.data.data)
         ? response.data.data
         : ([response.data.data] as Car[]);
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -631,7 +634,7 @@ export const incrementCarViewCount = createAsyncThunk<
     }
 
     return { carId, newViewCount: response.data.data.viewCount };
-  } catch (error: any) {
+  } catch (error) {
     // Don't show error for view count failures
     console.warn("View count update failed:", error);
     return rejectWithValue("View count update failed");

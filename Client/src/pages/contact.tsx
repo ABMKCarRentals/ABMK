@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-const ContactPage = () => {
+const ContactPage: React.FC = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -33,10 +33,14 @@ const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getCurrentUTCDateTime = () => {
-    return "2025-07-20 12:55:26";
+    return new Date().toISOString().slice(0, 19).replace("T", " ");
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -44,7 +48,7 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -56,8 +60,6 @@ const ContactPage = () => {
         submittedBy: "guest",
         source: "website_contact_form",
       };
-
-      console.log("Contact form submission:", submissionData);
 
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -100,7 +102,8 @@ const ContactPage = () => {
         "Business Bay, Conrad Dubai Hotel",
         "Sheikh Zayed Road, Dubai, UAE",
       ],
-      color: "text-blue-600",
+      color: "text-blue-400",
+      bg: "bg-blue-900/30",
     },
     {
       icon: Phone,
@@ -110,7 +113,8 @@ const ContactPage = () => {
         "Mobile: +971 50 123 4567",
         "Emergency: +971 55 999 8888",
       ],
-      color: "text-green-600",
+      color: "text-green-400",
+      bg: "bg-green-900/30",
     },
     {
       icon: Mail,
@@ -120,7 +124,8 @@ const ContactPage = () => {
         "bookings@abmkrentals.ae",
         "vip@abmkrentals.ae",
       ],
-      color: "text-purple-600",
+      color: "text-purple-400",
+      bg: "bg-purple-900/30",
     },
     {
       icon: Clock,
@@ -130,7 +135,8 @@ const ContactPage = () => {
         "Saturday - Sunday: 9:00 AM - 9:00 PM",
         "24/7 Emergency & VIP Support",
       ],
-      color: "text-orange-600",
+      color: "text-yellow-400",
+      bg: "bg-yellow-900/20",
     },
   ];
 
@@ -140,8 +146,8 @@ const ContactPage = () => {
       title: "WhatsApp",
       description: "Get instant responses for quick bookings",
       action: "Chat on WhatsApp",
-      bgColor: "bg-green-600",
-      hoverColor: "hover:bg-green-700",
+      bgColor: "bg-green-700",
+      hoverColor: "hover:bg-green-600",
       link: "https://wa.me/971501234567",
     },
     {
@@ -149,8 +155,8 @@ const ContactPage = () => {
       title: "Call Direct",
       description: "Speak with our luxury car specialists",
       action: "Call +971 4 567 8900",
-      bgColor: "bg-blue-600",
-      hoverColor: "hover:bg-blue-700",
+      bgColor: "bg-blue-700",
+      hoverColor: "hover:bg-blue-600",
       link: "tel:+97145678900",
     },
     {
@@ -158,8 +164,8 @@ const ContactPage = () => {
       title: "Email Inquiry",
       description: "Send detailed requirements for custom quotes",
       action: "Email Us",
-      bgColor: "bg-purple-600",
-      hoverColor: "hover:bg-purple-700",
+      bgColor: "bg-purple-700",
+      hoverColor: "hover:bg-purple-600",
       link: "mailto:info@abmkrentals.ae",
     },
   ];
@@ -171,17 +177,17 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#18181b] via-[#1e232a] to-[#18181b] text-[#e7e2d9]">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="bg-black text-white py-16">
+      <div className="bg-gradient-to-b from-black via-gray-900 to-black py-16 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Get in <span className="text-yellow-400">Touch</span>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-yellow-400 drop-shadow-lg">
+              Get in <span className="text-yellow-600">Touch</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8">
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 font-medium">
               Ready to experience luxury? Our team of experts is here to help
               you find the perfect premium vehicle for any occasion in Dubai.
             </p>
@@ -190,11 +196,11 @@ const ContactPage = () => {
                 const Icon = stat.icon;
                 return (
                   <div key={index} className="text-center">
-                    <Icon className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                    <Icon className="w-10 h-10 text-yellow-400 mx-auto mb-2 drop-shadow" />
                     <div className="text-2xl font-bold text-yellow-400">
                       {stat.number}
                     </div>
-                    <div className="text-gray-300">{stat.label}</div>
+                    <div className="text-gray-400">{stat.label}</div>
                   </div>
                 );
               })}
@@ -204,13 +210,13 @@ const ContactPage = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="py-12 bg-white">
+      <div className="py-12 bg-[#23232b] border-b border-[#27272f]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-center text-yellow-400 mb-4">
               Quick Ways to Reach Us
             </h2>
-            <p className="text-center text-gray-600 mb-8">
+            <p className="text-center text-gray-400 mb-8">
               Choose your preferred method to connect with our luxury car
               specialists
             </p>
@@ -220,19 +226,19 @@ const ContactPage = () => {
                 return (
                   <div
                     key={index}
-                    className="text-center p-6 border rounded-lg hover:shadow-lg transition-all duration-200 group"
+                    className="text-center p-6 bg-gradient-to-br from-[#18181b] to-[#292934] rounded-xl border border-[#292934] hover:border-yellow-400 hover:shadow-xl transition-all duration-200 group"
                   >
                     <div
-                      className={`w-16 h-16 ${action.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}
+                      className={`w-16 h-16 ${action.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200 shadow-lg`}
                     >
                       <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-yellow-400 mb-2">
                       {action.title}
                     </h3>
-                    <p className="text-gray-600 mb-4">{action.description}</p>
+                    <p className="text-gray-400 mb-4">{action.description}</p>
                     <Button
-                      className={`${action.bgColor} ${action.hoverColor} text-white`}
+                      className={`w-full ${action.bgColor} ${action.hoverColor} text-yellow-100 font-semibold tracking-wide border-0 shadow group-hover:shadow-md`}
                       onClick={() => window.open(action.link, "_blank")}
                     >
                       {action.action}
@@ -251,19 +257,20 @@ const ContactPage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Contact Form */}
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <div className="bg-[#1f2128] p-8 rounded-2xl shadow-2xl border border-[#292934]">
+                <h2 className="text-3xl font-bold text-yellow-400 mb-2">
                   Send Us a Message
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-400 mb-6">
                   Fill out the form below and we'll get back to you within 24
                   hours
                 </p>
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name">Full Name *</Label>
+                      <Label htmlFor="name" className="text-yellow-400">
+                        Full Name *
+                      </Label>
                       <Input
                         id="name"
                         name="name"
@@ -272,11 +279,13 @@ const ContactPage = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="Your full name"
-                        className="mt-1"
+                        className="mt-1 bg-[#23232b] border-[#292934] text-white focus:border-yellow-500"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="email">Email Address *</Label>
+                      <Label htmlFor="email" className="text-yellow-400">
+                        Email Address *
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -285,14 +294,15 @@ const ContactPage = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="your.email@example.com"
-                        className="mt-1"
+                        className="mt-1 bg-[#23232b] border-[#292934] text-white focus:border-yellow-500"
                       />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone" className="text-yellow-400">
+                        Phone Number
+                      </Label>
                       <Input
                         id="phone"
                         name="phone"
@@ -300,11 +310,13 @@ const ContactPage = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="+971 XX XXX XXXX"
-                        className="mt-1"
+                        className="mt-1 bg-[#23232b] border-[#292934] text-white focus:border-yellow-500"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="subject">Subject *</Label>
+                      <Label htmlFor="subject" className="text-yellow-400">
+                        Subject *
+                      </Label>
                       <Input
                         id="subject"
                         name="subject"
@@ -313,20 +325,21 @@ const ContactPage = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="How can we help?"
-                        className="mt-1"
+                        className="mt-1 bg-[#23232b] border-[#292934] text-white focus:border-yellow-500"
                       />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="carInterest">Car Category Interest</Label>
+                      <Label htmlFor="carInterest" className="text-yellow-400">
+                        Car Category Interest
+                      </Label>
                       <select
                         id="carInterest"
                         name="carInterest"
                         value={formData.carInterest}
                         onChange={handleInputChange}
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+                        className="w-full p-2 mt-1 bg-[#23232b] border border-[#292934] rounded-md text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                       >
                         <option value="">Select Category</option>
                         <option value="luxury">Luxury Cars</option>
@@ -338,13 +351,15 @@ const ContactPage = () => {
                       </select>
                     </div>
                     <div>
-                      <Label htmlFor="rentalPeriod">Rental Period</Label>
+                      <Label htmlFor="rentalPeriod" className="text-yellow-400">
+                        Rental Period
+                      </Label>
                       <select
                         id="rentalPeriod"
                         name="rentalPeriod"
                         value={formData.rentalPeriod}
                         onChange={handleInputChange}
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+                        className="w-full p-2 mt-1 bg-[#23232b] border border-[#292934] rounded-md text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                       >
                         <option value="">Select Period</option>
                         <option value="daily">Daily Rental</option>
@@ -354,9 +369,10 @@ const ContactPage = () => {
                       </select>
                     </div>
                   </div>
-
                   <div>
-                    <Label htmlFor="message">Message *</Label>
+                    <Label htmlFor="message" className="text-yellow-400">
+                      Message *
+                    </Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -365,12 +381,14 @@ const ContactPage = () => {
                       required
                       placeholder="Tell us about your requirements, preferred dates, special requests, or any questions you have..."
                       rows={5}
-                      className="mt-1"
+                      className="mt-1 bg-[#23232b] border-[#292934] text-white focus:border-yellow-500"
                     />
                   </div>
-
                   <div>
-                    <Label htmlFor="preferredContact">
+                    <Label
+                      htmlFor="preferredContact"
+                      className="text-yellow-400"
+                    >
                       Preferred Contact Method
                     </Label>
                     <select
@@ -378,14 +396,13 @@ const ContactPage = () => {
                       name="preferredContact"
                       value={formData.preferredContact}
                       onChange={handleInputChange}
-                      className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+                      className="w-full p-2 mt-1 bg-[#23232b] border border-[#292934] rounded-md text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                     >
                       <option value="email">Email</option>
                       <option value="phone">Phone Call</option>
                       <option value="whatsapp">WhatsApp</option>
                     </select>
                   </div>
-
                   <Button
                     type="submit"
                     disabled={isSubmitting}
@@ -409,49 +426,37 @@ const ContactPage = () => {
               {/* Contact Information */}
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                  <h2 className="text-3xl font-bold text-yellow-400 mb-6">
                     Visit Us Today
                   </h2>
-                  <p className="text-gray-600 mb-8">
+                  <p className="text-gray-400 mb-8">
                     Experience our premium showroom and see our luxury fleet in
                     person. Our experts are ready to help you choose the perfect
                     vehicle.
                   </p>
                 </div>
-
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
                     <div
                       key={index}
-                      className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-yellow-400"
+                      className={`p-6 rounded-lg shadow-md border-l-4 border-yellow-500 bg-gradient-to-r ${info.bg} flex items-center`}
                     >
-                      <div className="flex items-start">
-                        <div
-                          className={`w-12 h-12 ${
-                            info.color === "text-blue-600"
-                              ? "bg-blue-100"
-                              : info.color === "text-green-600"
-                              ? "bg-green-100"
-                              : info.color === "text-purple-600"
-                              ? "bg-purple-100"
-                              : "bg-orange-100"
-                          } 
-                          rounded-lg flex items-center justify-center mr-4 flex-shrink-0`}
-                        >
-                          <Icon className={`w-6 h-6 ${info.color}`} />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            {info.title}
-                          </h3>
-                          <div className="space-y-1">
-                            {info.details.map((detail, detailIndex) => (
-                              <p key={detailIndex} className="text-gray-600">
-                                {detail}
-                              </p>
-                            ))}
-                          </div>
+                      <div
+                        className={`w-12 h-12 ${info.bg} rounded-lg flex items-center justify-center mr-4 flex-shrink-0 border border-[#292934]`}
+                      >
+                        <Icon className={`w-7 h-7 ${info.color}`} />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-yellow-400 mb-1">
+                          {info.title}
+                        </h3>
+                        <div className="space-y-1">
+                          {info.details.map((detail, detailIndex) => (
+                            <p key={detailIndex} className="text-gray-300">
+                              {detail}
+                            </p>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -459,11 +464,11 @@ const ContactPage = () => {
                 })}
 
                 {/* Map Placeholder */}
-                <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+                <div className="bg-[#21212b] h-64 rounded-lg flex items-center justify-center border border-[#292934] shadow-inner">
                   <div className="text-center">
-                    <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                    <MapPin className="w-12 h-12 text-gray-500 mx-auto mb-2" />
                     <p className="text-gray-500">Interactive Map</p>
-                    <p className="text-sm text-gray-400">Business Bay, Dubai</p>
+                    <p className="text-sm text-gray-600">Business Bay, Dubai</p>
                   </div>
                 </div>
               </div>
@@ -473,47 +478,47 @@ const ContactPage = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="py-16 bg-white">
+      <div className="py-16 bg-[#1f2128] border-t border-[#292934]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            <h2 className="text-3xl font-bold text-yellow-400 text-center mb-12">
               Frequently Asked Questions
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
                   What documents do I need to rent a car?
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-300 mb-6">
                   You'll need a valid driving license, passport/Emirates ID, and
                   a credit card. International visitors need an International
                   Driving Permit.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
                   Do you offer delivery and pickup services?
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-300 mb-6">
                   Yes! We provide complimentary delivery and pickup within
                   Dubai. Airport and hotel delivery services are also available.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
                   What's included in the rental price?
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-300 mb-6">
                   All rentals include comprehensive insurance, 24/7 roadside
                   assistance, and basic maintenance. Fuel and additional
                   insurance options available.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
                   Can I extend my rental period?
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-300 mb-6">
                   Absolutely! Contact us at least 24 hours before your return
                   date to extend your rental. Subject to vehicle availability.
                 </p>

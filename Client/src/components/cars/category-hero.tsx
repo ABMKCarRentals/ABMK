@@ -1,6 +1,24 @@
 import React from "react";
 
-const CategoryHero = ({ data }) => {
+interface Feature {
+  icon: React.ComponentType<{ className?: string }>;
+  text: string;
+}
+
+interface CategoryHeroData {
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  features?: Feature[];
+}
+
+interface CategoryHeroProps {
+  data: CategoryHeroData;
+}
+
+const CategoryHero: React.FC<CategoryHeroProps> = ({ data }) => {
   const Icon = data.icon;
 
   return (

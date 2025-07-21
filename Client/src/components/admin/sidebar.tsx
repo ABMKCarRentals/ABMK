@@ -8,6 +8,7 @@ import {
 import { Fragment } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import React from "react";
 
 const adminSidebarMenuItems = [
   {
@@ -24,7 +25,11 @@ const adminSidebarMenuItems = [
   },
 ];
 
-function MenuItems({ setOpen }) {
+interface MenuItemsProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MenuItems({ setOpen }: MenuItemsProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -55,7 +60,12 @@ function MenuItems({ setOpen }) {
   );
 }
 
-function AdminSideBar({ open, setOpen }) {
+interface AdminSideBarProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AdminSideBar({ open, setOpen }: AdminSideBarProps) {
   const navigate = useNavigate();
 
   return (
@@ -87,7 +97,8 @@ function AdminSideBar({ open, setOpen }) {
           <ChartNoAxesCombined size={32} className="text-yellow-600" />
           <h1 className="text-xl font-bold text-white">Admin Panel</h1>
         </div>
-        <MenuItems />
+        {/* setOpen is not needed for MenuItems in desktop sidebar */}
+        <MenuItems setOpen={() => {}} />
 
         {/* Footer section */}
         <div className="mt-auto pt-6 border-t border-gray-700">

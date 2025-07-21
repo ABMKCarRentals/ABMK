@@ -79,11 +79,11 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-950 text-white">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="bg-black text-white py-20">
+      <div className="bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -110,15 +110,15 @@ const AboutPage = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="py-16 bg-white">
+      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-yellow-600 mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-yellow-500 mb-2">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-gray-300 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -126,15 +126,15 @@ const AboutPage = () => {
       </div>
 
       {/* Our Story Section */}
-      <div className="py-16">
+      <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-6">
                   Our Story
                 </h2>
-                <div className="space-y-4 text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-gray-300 leading-relaxed">
                   <p>
                     Founded in 2008 by Ahmed Al Maktoum, ABMK Rentals began with
                     a simple vision: to provide Dubai's residents and visitors
@@ -174,14 +174,14 @@ const AboutPage = () => {
       </div>
 
       {/* Our Values */}
-      <div className="py-16 bg-white">
+      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
                 Our Values
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-gray-300">
                 The principles that drive everything we do
               </p>
             </div>
@@ -191,13 +191,13 @@ const AboutPage = () => {
                 const Icon = value.icon;
                 return (
                   <div key={index} className="text-center p-6">
-                    <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon className="w-8 h-8 text-yellow-600" />
+                    <div className="w-16 h-16 bg-yellow-800 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-8 h-8 text-yellow-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    <h3 className="text-lg font-semibold text-yellow-200 mb-3">
                       {value.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className="text-gray-300 text-sm leading-relaxed">
                       {value.description}
                     </p>
                   </div>
@@ -209,11 +209,11 @@ const AboutPage = () => {
       </div>
 
       {/* Mission & Vision */}
-      <div className="py-16">
+      <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="bg-gradient-to-br from-yellow-600 to-orange-500 p-8 rounded-xl text-black">
+              <div className="bg-gradient-to-br from-yellow-600 to-orange-500 p-8 rounded-xl text-black shadow-lg">
                 <div className="flex items-center mb-6">
                   <Target className="w-8 h-8 mr-3" />
                   <h3 className="text-2xl font-bold">Our Mission</h3>
@@ -226,7 +226,7 @@ const AboutPage = () => {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-xl text-white">
+              <div className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-xl text-white shadow-lg">
                 <div className="flex items-center mb-6">
                   <Globe className="w-8 h-8 mr-3 text-yellow-400" />
                   <h3 className="text-2xl font-bold">Our Vision</h3>
@@ -244,14 +244,14 @@ const AboutPage = () => {
       </div>
 
       {/* Team Section */}
-      <div className="py-16 bg-white">
+      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
                 Meet Our Team
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-gray-300">
                 The passionate professionals behind your exceptional experience
               </p>
             </div>
@@ -263,17 +263,17 @@ const AboutPage = () => {
                     <img
                       src={member.image}
                       alt={member.name}
-                      className="w-32 h-32 rounded-full mx-auto object-cover group-hover:scale-105 transition-transform duration-200"
+                      className="w-32 h-32 rounded-full mx-auto object-cover group-hover:scale-105 transition-transform duration-200 border-4 border-yellow-800"
                     />
                     <div className="absolute inset-0 bg-yellow-600 bg-opacity-20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  <h3 className="text-lg font-semibold text-yellow-200 mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-yellow-600 font-medium mb-2">
+                  <p className="text-yellow-400 font-medium mb-2">
                     {member.position}
                   </p>
-                  <p className="text-gray-600 text-sm">{member.description}</p>
+                  <p className="text-gray-300 text-sm">{member.description}</p>
                 </div>
               ))}
             </div>
@@ -282,11 +282,11 @@ const AboutPage = () => {
       </div>
 
       {/* Why Choose Us */}
-      <div className="py-16 bg-gray-900 text-white">
+      <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
                 Why Choose ABMK Rentals?
               </h2>
               <p className="text-xl text-gray-300">
@@ -297,7 +297,9 @@ const AboutPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center p-6">
                 <Award className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Premium Fleet</h3>
+                <h3 className="text-xl font-semibold mb-3 text-yellow-200">
+                  Premium Fleet
+                </h3>
                 <p className="text-gray-300">
                   Meticulously maintained vehicles from the world's most
                   prestigious manufacturers
@@ -306,7 +308,9 @@ const AboutPage = () => {
 
               <div className="text-center p-6">
                 <Clock className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">24/7 Service</h3>
+                <h3 className="text-xl font-semibold mb-3 text-yellow-200">
+                  24/7 Service
+                </h3>
                 <p className="text-gray-300">
                   Round-the-clock support and assistance whenever you need it
                 </p>
@@ -314,7 +318,9 @@ const AboutPage = () => {
 
               <div className="text-center p-6">
                 <Users className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Expert Team</h3>
+                <h3 className="text-xl font-semibold mb-3 text-yellow-200">
+                  Expert Team
+                </h3>
                 <p className="text-gray-300">
                   Knowledgeable professionals dedicated to exceeding your
                   expectations

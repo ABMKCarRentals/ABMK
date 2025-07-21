@@ -1,3 +1,4 @@
+import React from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -11,16 +12,45 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { AlertCircle, Check } from "lucide-react";
 
+// Types for props
+type Option = {
+  id: string;
+  label: string;
+};
+
+type FormControl = {
+  name: string;
+  label: string;
+  placeholder?: string;
+  description?: string;
+  tooltip?: string;
+  required?: boolean;
+  type?: string;
+  componentType: "input" | "select" | "textarea" | string;
+  options?: Option[];
+  fullWidth?: boolean;
+};
+
+interface CommonFormProps {
+  formControls: FormControl[];
+  formData: Record<string, any>;
+  setFormData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  buttonText?: string;
+  isBtnDisabled?: boolean;
+  className?: string;
+}
+
 function CommonForm({
   formControls,
   formData,
   setFormData,
   onSubmit,
   buttonText,
-  isBtnDisabled,
+  isBtnDisabled = false,
   className = "",
-}) {
-  function renderInputsByComponentType(getControlItem) {
+}: CommonFormProps) {
+  function renderInputsByComponentType(getControlItem: FormControl) {
     let element = null;
     const value = formData[getControlItem.name] || "";
     const isRequired = getControlItem.required || false;
@@ -99,7 +129,7 @@ function CommonForm({
                 />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-600 text-white max-h-60 overflow-y-auto">
-                {getControlItem.options.map((optionItem) => (
+                {getControlItem.options?.map((optionItem) => (
                   <SelectItem
                     key={optionItem.id}
                     value={optionItem.id}
@@ -250,7 +280,7 @@ function CommonForm({
             className="px-6 py-2 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
             onClick={() => {
               // Reset form or close modal logic can be added here
-              const resetData = {};
+              const resetData: Record<string, any> = {};
               formControls.forEach((control) => {
                 resetData[control.name] = "";
               });

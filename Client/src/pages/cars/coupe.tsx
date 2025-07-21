@@ -7,7 +7,7 @@ import CarCard from "../../components/cars/car-card";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import CategoryHero from "../../components/cars/category-hero";
 
-const CoupeCars = () => {
+const CoupeCars: React.FC = () => {
   const { coupeCars, isCategoryLoading, categoryError, getCoupeCars } =
     useCars();
 
@@ -91,7 +91,7 @@ const CoupeCars = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {coupeCars.map((car) => (
+              {coupeCars.map((car: any) => (
                 <CarCard key={car._id} car={car} />
               ))}
             </div>
@@ -99,7 +99,7 @@ const CoupeCars = () => {
         )}
 
         {/* Design Philosophy Section */}
-        <div className="mt-16 bg-white rounded-lg p-8">
+        <div className="mt-16 bg-white rounded-lg p-8 shadow">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               The Art of Automotive Design
@@ -153,7 +153,7 @@ const CoupeCars = () => {
         </div>
 
         {/* Occasions Section */}
-        <div className="mt-16 bg-gradient-to-r from-purple-900 to-pink-600 rounded-lg p-8 text-white">
+        <div className="mt-16 bg-gradient-to-r from-purple-900 to-pink-600 rounded-lg p-8 text-white shadow-lg">
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold mb-4">
               Perfect for Every Occasion

@@ -10,13 +10,20 @@ import {
   Users,
   MapPin,
   ArrowRight,
-  Car,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-const CarCard = ({ car, viewMode = "grid" }) => {
-  const formatPrice = (price) => {
+// Import the Car type from your slice or define it here as needed
+import type { Car } from "@/store/admin/car-slice"; // Adjust path if needed
+
+interface CarCardProps {
+  car: Car;
+  viewMode?: "grid" | "list";
+}
+
+const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
+  const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-AE", {
       style: "currency",
       currency: "AED",
@@ -25,7 +32,7 @@ const CarCard = ({ car, viewMode = "grid" }) => {
     }).format(price);
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status?: string) => {
     switch (status?.toLowerCase()) {
       case "available":
         return "bg-green-600 text-white";
@@ -52,8 +59,8 @@ const CarCard = ({ car, viewMode = "grid" }) => {
               src={imageUrl}
               alt={car.name}
               className="w-full h-48 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                e.target.src = "/api/placeholder/300/200";
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = "/api/placeholder/300/200";
               }}
             />
 
@@ -151,8 +158,8 @@ const CarCard = ({ car, viewMode = "grid" }) => {
           src={imageUrl}
           alt={car.name}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-          onError={(e) => {
-            e.target.src = "/api/placeholder/300/200";
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            e.currentTarget.src = "/api/placeholder/300/200";
           }}
         />
 
@@ -216,8 +223,6 @@ const CarCard = ({ car, viewMode = "grid" }) => {
 
         {/* Price and Action */}
         <div className="flex items-center justify-between mb-4">
-          
-
           <div className="flex items-center gap-1 text-gray-400 text-sm">
             <Eye className="w-4 h-4" />
             <span>{car.viewCount || 0}</span>

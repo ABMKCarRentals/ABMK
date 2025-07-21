@@ -39,7 +39,7 @@ import {
   selectAvailableCars,
 } from "../store/admin/car-slice";
 
-interface FilterOptions {
+export interface FilterOptions {
   page?: number;
   limit?: number;
   brand?: string;
@@ -52,7 +52,7 @@ interface FilterOptions {
   search?: string;
 }
 
-interface Car {
+export interface Car {
   _id: string;
   name: string;
   brand: string;
@@ -174,7 +174,7 @@ export const useAdminCars = () => {
     return dispatch(getCarStats());
   }, [dispatch]);
 
-  const clearCarError = useCallback(() => {
+  const clearCarErrorCb = useCallback(() => {
     dispatch(clearError());
   }, [dispatch]);
 
@@ -260,7 +260,7 @@ export const useAdminCars = () => {
     uploadImage,
     fetchStats,
 
-    clearCarError,
+    clearCarError: clearCarErrorCb,
     clearImageError,
     clearSingleCarError,
     clearStatisticsError,

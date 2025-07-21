@@ -75,10 +75,11 @@ function AdminCars() {
   } = useAdminCars();
 
   const [openCreateCarDialog, setOpenCreateCarDialog] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
-  const [carImages, setCarImages] = useState([]);
-  const [imageLoadingStates, setImageLoadingStates] = useState([]);
-  const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [formData, setFormData] =
+    useState<typeof initialFormData>(initialFormData);
+  const [carImages, setCarImages] = useState<any[]>([]);
+  const [imageLoadingStates, setImageLoadingStates] = useState<boolean[]>([]);
+  const [currentEditedId, setCurrentEditedId] = useState<string | null>(null);
 
   // Filter states (removed price filters)
   const [filters, setFilters] = useState({
@@ -89,11 +90,12 @@ function AdminCars() {
     isActive: "all",
     isFeatured: "all",
   });
-  const [filteredCars, setFilteredCars] = useState([]);
+  const [filteredCars, setFilteredCars] = useState<any[]>([]);
 
   useEffect(() => {
     getAllCars();
     fetchStats();
+    // eslint-disable-next-line
   }, [getAllCars, fetchStats]);
 
   useEffect(() => {
@@ -102,11 +104,13 @@ function AdminCars() {
     } else {
       setFilteredCars([]);
     }
+    // eslint-disable-next-line
   }, [carList, filters]);
 
   // Clear errors on mount
   useEffect(() => {
     clearAllCarErrors();
+    // eslint-disable-next-line
   }, [clearAllCarErrors]);
 
   const resetForm = () => {
@@ -128,7 +132,7 @@ function AdminCars() {
   };
 
   const applyFilters = () => {
-    let filtered = [...carList];
+    let filtered = [...(carList || [])];
 
     if (filters.search.trim() !== "") {
       filtered = filtered.filter(
@@ -175,7 +179,7 @@ function AdminCars() {
     setFilteredCars(filtered);
   };
 
-  const handleFilterChange = (name, value) => {
+  const handleFilterChange = (name: string, value: string) => {
     setFilters((prev) => ({
       ...prev,
       [name]: value,
@@ -196,7 +200,7 @@ function AdminCars() {
 
     return (
       requiredFields.every((field) => {
-        const value = formData[field];
+        const value = formData[field as keyof typeof formData];
         if (typeof value === "number") {
           return value !== null && !isNaN(value);
         }
@@ -205,7 +209,7 @@ function AdminCars() {
     );
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (imageLoadingStates.some((state) => state)) {
@@ -264,7 +268,7 @@ function AdminCars() {
         resetForm();
         setOpenCreateCarDialog(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -275,7 +279,7 @@ function AdminCars() {
     }
   };
 
-  const handleDelete = async (carId) => {
+  const handleDelete = async (carId: string) => {
     try {
       const response = await removeCar(carId);
       if (response.payload?.success) {
@@ -286,7 +290,7 @@ function AdminCars() {
         getAllCars();
         fetchStats();
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -295,7 +299,7 @@ function AdminCars() {
     }
   };
 
-  const handleToggleAvailability = async (carId) => {
+  const handleToggleAvailability = async (carId: string) => {
     try {
       const response = await toggleAvailability(carId);
       if (response.payload?.success) {
@@ -305,7 +309,7 @@ function AdminCars() {
         });
         getAllCars();
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -314,7 +318,7 @@ function AdminCars() {
     }
   };
 
-  const handleEditCar = (car) => {
+  const handleEditCar = (car: typeof initialFormData & { _id: string }) => {
     setFormData({
       ...car,
       specifications: car.specifications || initialFormData.specifications,
@@ -326,19 +330,19 @@ function AdminCars() {
 
   // Extract unique values for filters
   const uniqueBrands = carList
-    ? [...new Set(carList.map((car) => car.brand))].filter(
+    ? [...new Set(carList.map((car: any) => car.brand))].filter(
         (brand) => brand && brand.trim() !== ""
       )
     : [];
 
   const uniqueCategories = carList
-    ? [...new Set(carList.map((car) => car.category))].filter(
+    ? [...new Set(carList.map((car: any) => car.category))].filter(
         (category) => category && category.trim() !== ""
       )
     : [];
 
   const uniqueStatuses = carList
-    ? [...new Set(carList.map((car) => car.status))].filter(
+    ? [...new Set(carList.map((car: any) => car.status))].filter(
         (status) => status && status.trim() !== ""
       )
     : [];

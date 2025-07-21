@@ -44,7 +44,27 @@ import Navbar from "../../components/home/navbar";
 import Footer from "../../components/home/footer";
 import LoadingSpinner from "../../components/common/loading-spinner";
 
-const CarsPage = () => {
+// Types
+type CarTypeTab = {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  description: string;
+  count: number;
+  color: string;
+};
+
+type LocalFilters = {
+  brand: string;
+  category: string;
+  transmission: string;
+  fuelType: string;
+  seats: string;
+  year: string;
+  sort: string;
+};
+
+const CarsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     cars,
@@ -77,13 +97,13 @@ const CarsPage = () => {
     isCategoryLoading,
   } = useCars();
 
-  const [localSearchQuery, setLocalSearchQuery] = useState(
+  const [localSearchQuery, setLocalSearchQuery] = useState<string>(
     searchParams.get("search") || ""
   );
-  const [activeTab, setActiveTab] = useState(
+  const [activeTab, setActiveTab] = useState<string>(
     searchParams.get("category") || "all"
   );
-  const [localFilters, setLocalFilters] = useState({
+  const [localFilters, setLocalFilters] = useState<LocalFilters>({
     brand: searchParams.get("brand") || "all",
     category: searchParams.get("category") || "all",
     transmission: "all",
@@ -92,16 +112,16 @@ const CarsPage = () => {
     year: "all",
     sort: "newest",
   });
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [retryCount, setRetryCount] = useState(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [retryAfter, setRetryAfter] = useState(0);
 
   // Enhanced debounce and rate limiting
-  const debounceTimer = useRef(null);
-  const lastApiCall = useRef(0);
-  const requestQueue = useRef([]);
-  const isProcessingQueue = useRef(false);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const lastApiCall = useRef<number>(0);
+  const requestQueue = useRef<any[]>([]);
+  const isProcessingQueue = useRef<boolean>(false);
   const MIN_API_INTERVAL = 2000;
   const MAX_RETRIES = 3;
 
@@ -139,7 +159,7 @@ const CarsPage = () => {
   const filteredCars = getCurrentCategoryCars();
 
   // Car type categories with dynamic counts
-  const carTypes = [
+  const carTypes: CarTypeTab[] = [
     {
       id: "all",
       name: "All Cars",
@@ -226,7 +246,7 @@ const CarsPage = () => {
         setIsRateLimited(false);
         setRetryCount(0);
         resolve(result);
-      } catch (error) {
+      } catch (error: any) {
         if (error.response?.status === 429) {
           const retryAfterSeconds =
             parseInt(error.response.headers["retry-after"]) || 5;
@@ -258,7 +278,7 @@ const CarsPage = () => {
 
   // Enhanced API call function with queue
   const makeApiCall = useCallback(
-    (apiFunction, params) => {
+    (apiFunction: (...args: any[]) => Promise<any>, params: any) => {
       return new Promise((resolve, reject) => {
         requestQueue.current = requestQueue.current.filter(
           (req) =>
@@ -313,7 +333,7 @@ const CarsPage = () => {
     setLocalSearchQuery(search || "");
 
     // Load initial data - always load all cars first
-    const apiFilters = {
+    const apiFilters: Record<string, any> = {
       page: 1,
       limit: 12,
       sort: "newest",
@@ -332,6 +352,7 @@ const CarsPage = () => {
     makeApiCall(getSedanCars, {});
     makeApiCall(getConvertibleCars, {});
     makeApiCall(getCoupeCars, {});
+    // eslint-disable-next-line
   }, [
     getAllCars,
     getLuxuryCars,
@@ -345,7 +366,7 @@ const CarsPage = () => {
   ]);
 
   const debouncedApiCall = useCallback(
-    (apiFunction, params) => {
+    (apiFunction: (...args: any[]) => Promise<any>, params: any) => {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
       }
@@ -358,9 +379,7 @@ const CarsPage = () => {
   );
 
   // Handle tab change with category-specific endpoints
-  const handleTabChange = (tabValue) => {
-    console.log("Tab changed to:", tabValue);
-
+  const handleTabChange = (tabValue: string) => {
     setActiveTab(tabValue);
     const newFilters = { ...localFilters, category: tabValue };
     setLocalFilters(newFilters);
@@ -374,7 +393,7 @@ const CarsPage = () => {
     setSearchParams(newSearchParams);
 
     // Build API filters (excluding category since we use specific endpoints)
-    const apiFilters = {
+    const apiFilters: Record<string, any> = {
       search: localSearchQuery,
       page: 1,
       limit: 12,
@@ -386,7 +405,7 @@ const CarsPage = () => {
       if (
         newFilters[key] !== "all" &&
         newFilters[key] !== "" &&
-        key !== "category" // Exclude category since we're using specific endpoint
+        key !== "category"
       ) {
         apiFilters[key] = newFilters[key];
       }
@@ -394,13 +413,12 @@ const CarsPage = () => {
 
     // Use category-specific endpoints
     if (tabValue === "all") {
-      console.log("Loading all cars with filters:", apiFilters);
       debouncedApiCall(getAllCars, apiFilters);
     } else {
-      console.log(`Loading ${tabValue} cars with filters:`, apiFilters);
-
-      // Map tab values to category functions
-      const categoryFunctionMap = {
+      const categoryFunctionMap: Record<
+        string,
+        (...args: any[]) => Promise<any>
+      > = {
         luxury: getLuxuryCars,
         sports: getSportsCars,
         suv: getSUVCars,
@@ -420,13 +438,13 @@ const CarsPage = () => {
     }
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newSearchParams = new URLSearchParams(searchParams);
     if (localSearchQuery.trim()) {
       newSearchParams.set("search", localSearchQuery);
 
-      const apiFilters = { page: 1, limit: 12 };
+      const apiFilters: Record<string, any> = { page: 1, limit: 12 };
       Object.keys(localFilters).forEach((key) => {
         if (
           localFilters[key] !== "all" &&
@@ -441,7 +459,7 @@ const CarsPage = () => {
     } else {
       newSearchParams.delete("search");
 
-      const apiFilters = { page: 1, limit: 12 };
+      const apiFilters: Record<string, any> = { page: 1, limit: 12 };
       Object.keys(localFilters).forEach((key) => {
         if (
           localFilters[key] !== "all" &&
@@ -455,7 +473,10 @@ const CarsPage = () => {
       if (activeTab === "all") {
         makeApiCall(getAllCars, apiFilters);
       } else {
-        const categoryFunctionMap = {
+        const categoryFunctionMap: Record<
+          string,
+          (...args: any[]) => Promise<any>
+        > = {
           luxury: getLuxuryCars,
           sports: getSportsCars,
           suv: getSUVCars,
@@ -472,7 +493,7 @@ const CarsPage = () => {
     setSearchParams(newSearchParams);
   };
 
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = (key: keyof LocalFilters, value: string) => {
     const newFilters = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
 
@@ -487,7 +508,7 @@ const CarsPage = () => {
     }
     setSearchParams(newSearchParams);
 
-    const apiFilters = {
+    const apiFilters: Record<string, any> = {
       search: localSearchQuery,
       page: 1,
       limit: 12,
@@ -495,18 +516,21 @@ const CarsPage = () => {
 
     Object.keys(newFilters).forEach((filterKey) => {
       if (
-        newFilters[filterKey] !== "all" &&
-        newFilters[filterKey] !== "" &&
+        newFilters[filterKey as keyof LocalFilters] !== "all" &&
+        newFilters[filterKey as keyof LocalFilters] !== "" &&
         filterKey !== "category"
       ) {
-        apiFilters[filterKey] = newFilters[filterKey];
+        apiFilters[filterKey] = newFilters[filterKey as keyof LocalFilters];
       }
     });
 
     if (activeTab === "all") {
       debouncedApiCall(filterAndSortCars, apiFilters);
     } else {
-      const categoryFunctionMap = {
+      const categoryFunctionMap: Record<
+        string,
+        (...args: any[]) => Promise<any>
+      > = {
         luxury: getLuxuryCars,
         sports: getSportsCars,
         suv: getSUVCars,
@@ -522,7 +546,7 @@ const CarsPage = () => {
   };
 
   const handleClearFilters = () => {
-    const resetFilters = {
+    const resetFilters: LocalFilters = {
       brand: "all",
       category: "all",
       transmission: "all",
@@ -552,7 +576,10 @@ const CarsPage = () => {
     if (activeTab === "all") {
       makeApiCall(getAllCars, { page: 1, limit: 12, sort: "newest" });
     } else {
-      const categoryFunctionMap = {
+      const categoryFunctionMap: Record<
+        string,
+        (...args: any[]) => Promise<any>
+      > = {
         luxury: getLuxuryCars,
         sports: getSportsCars,
         suv: getSUVCars,
@@ -583,16 +610,17 @@ const CarsPage = () => {
 
   // Debug effect
   useEffect(() => {
-    console.log("=== DEBUG INFO ===");
-    console.log("Active Tab:", activeTab);
-    console.log("All Cars Length:", cars.length);
-    console.log("Sports Cars Length:", sportsCars.length);
-    console.log("Filtered Cars Length:", filteredCars.length);
-    console.log("Is Loading:", isLoading);
-    console.log("Is Category Loading:", isCategoryLoading);
-    console.log("Error:", error);
-    console.log("Filtered Cars Data:", filteredCars);
-    console.log("=================");
+    // Uncomment below for debugging
+    // console.log("=== DEBUG INFO ===", {
+    //   ActiveTab: activeTab,
+    //   Cars: cars.length,
+    //   SportsCars: sportsCars.length,
+    //   FilteredCars: filteredCars.length,
+    //   IsLoading: isLoading,
+    //   IsCategoryLoading: isCategoryLoading,
+    //   Error: error,
+    //   FilteredCarsData: filteredCars,
+    // });
   }, [
     cars,
     sportsCars,
@@ -1221,7 +1249,7 @@ const CarsPage = () => {
                       : "space-y-4"
                   }
                 >
-                  {filteredCars.map((car) => (
+                  {filteredCars.map((car: any) => (
                     <CarCard key={car._id} car={car} viewMode={viewMode} />
                   ))}
                 </div>

@@ -99,7 +99,7 @@ const initialState: AuthState = {
   lastLoginTime: null,
 };
 
-const handleApiError = (error: any): string => {
+const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
       const message = error.response.data?.message || error.response.statusText;
@@ -110,7 +110,10 @@ const handleApiError = (error: any): string => {
       return `Request Error: ${error.message}`;
     }
   }
-  return error.message || "An unexpected error occurred";
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "An unexpected error occurred";
 };
 
 // Async thunks
@@ -131,7 +134,7 @@ export const loginAdmin = createAsyncThunk<LoginResponse, LoginCredentials>(
       localStorage.setItem("adminToken", response.data.accessToken);
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -154,7 +157,7 @@ export const logoutAdmin = createAsyncThunk<LogoutResponse, void>(
       sessionStorage.removeItem("adminToken");
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       // Even if the request fails, clear local tokens
       localStorage.removeItem("adminToken");
       sessionStorage.removeItem("adminToken");
@@ -179,7 +182,7 @@ export const refreshToken = createAsyncThunk<{ accessToken: string }, void>(
       localStorage.setItem("adminToken", response.data.accessToken);
 
       return { accessToken: response.data.accessToken };
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -210,7 +213,7 @@ export const checkAuthStatus = createAsyncThunk<User, void>(
       }
 
       return response.data.user;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -236,7 +239,7 @@ export const changePassword = createAsyncThunk<
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -258,7 +261,7 @@ export const forgotPassword = createAsyncThunk<
     }
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -279,7 +282,7 @@ export const resetPassword = createAsyncThunk<
     }
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -349,7 +352,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
-        state.lastLoginTime = "2025-07-20 16:41:26";
+        state.lastLoginTime = new Date().toISOString();
         state.error = null;
       })
       .addCase(loginAdmin.rejected, (state, action) => {

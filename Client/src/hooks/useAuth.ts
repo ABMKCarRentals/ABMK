@@ -25,17 +25,17 @@ import {
   selectUserInfo,
 } from "../store/auth-slice";
 
-interface LoginCredentials {
+export interface LoginCredentials {
   email: string;
   password: string;
 }
 
-interface ChangePasswordData {
+export interface ChangePasswordData {
   currentPassword: string;
   newPassword: string;
 }
 
-interface ResetPasswordData {
+export interface ResetPasswordData {
   token: string;
   newPassword: string;
 }

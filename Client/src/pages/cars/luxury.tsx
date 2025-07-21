@@ -7,7 +7,7 @@ import CarCard from "../../components/cars/car-card";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import CategoryHero from "../../components/cars/category-hero";
 
-const LuxuryCars = () => {
+const LuxuryCars: React.FC = () => {
   const { luxuryCars, isCategoryLoading, categoryError, getLuxuryCars } =
     useCars();
 
@@ -80,7 +80,7 @@ const LuxuryCars = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {luxuryCars.map((car) => (
+              {luxuryCars.map((car: any) => (
                 <CarCard key={car._id} car={car} />
               ))}
             </div>
@@ -88,7 +88,7 @@ const LuxuryCars = () => {
         )}
 
         {/* Luxury Services Section */}
-        <div className="mt-16 bg-white rounded-lg p-8">
+        <div className="mt-16 bg-white rounded-lg p-8 shadow">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Luxury Car Rental Services
           </h3>

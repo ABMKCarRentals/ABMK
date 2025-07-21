@@ -7,32 +7,54 @@ import {
 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
+
+// Type for image file slot
+interface CarImageUploadFile {
+  file?: File;
+  url: string | null;
+  alt?: string;
+}
+
+interface CarImageUploadProps {
+  images: (CarImageUploadFile | null)[];
+  setImages: React.Dispatch<
+    React.SetStateAction<(CarImageUploadFile | null)[]>
+  >;
+  imageLoadingStates: boolean[];
+  setImageLoadingStates: React.Dispatch<React.SetStateAction<boolean[]>>;
+}
+
+type ErrorsType = { [index: number]: string | null };
+type DragActiveType = { [index: number]: boolean };
 
 export default function CarImageUpload({
   images = [],
   setImages,
   imageLoadingStates = [],
   setImageLoadingStates,
-}) {
-  const [errors, setErrors] = useState({});
-  const [dragActive, setDragActive] = useState({});
+}: CarImageUploadProps) {
+  const [errors, setErrors] = useState<ErrorsType>({});
+  const [dragActive, setDragActive] = useState<DragActiveType>({});
 
   // Get backend URL from environment variable
   const backendUrl =
     import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-  function handleImageFileChange(event, index) {
+  function handleImageFileChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       validateAndSetFile(selectedFile, index);
     }
   }
 
-  function validateAndSetFile(selectedFile, index) {
+  function validateAndSetFile(selectedFile: File, index: number) {
     // Reset previous errors
     setErrors((prev) => ({ ...prev, [index]: null }));
 
@@ -64,19 +86,25 @@ export default function CarImageUpload({
     uploadImageToCloudinary(selectedFile, index);
   }
 
-  function handleDragOver(event, index) {
+  function handleDragOver(
+    event: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) {
     event.preventDefault();
     event.stopPropagation();
     setDragActive((prev) => ({ ...prev, [index]: true }));
   }
 
-  function handleDragLeave(event, index) {
+  function handleDragLeave(
+    event: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) {
     event.preventDefault();
     event.stopPropagation();
     setDragActive((prev) => ({ ...prev, [index]: false }));
   }
 
-  function handleDrop(event, index) {
+  function handleDrop(event: React.DragEvent<HTMLDivElement>, index: number) {
     event.preventDefault();
     event.stopPropagation();
     setDragActive((prev) => ({ ...prev, [index]: false }));
@@ -87,7 +115,7 @@ export default function CarImageUpload({
     }
   }
 
-  function handleRemoveImage(index) {
+  function handleRemoveImage(index: number) {
     const newImages = [...images];
     newImages[index] = null;
     setImages(newImages);
@@ -99,7 +127,7 @@ export default function CarImageUpload({
     setImageLoadingStates(newLoadingStates);
   }
 
-  async function uploadImageToCloudinary(file, index) {
+  async function uploadImageToCloudinary(file: File, index: number) {
     if (!file) return;
 
     try {
@@ -143,19 +171,39 @@ export default function CarImageUpload({
       } else {
         throw new Error(response.data.message || "Upload failed");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Upload error:", error);
 
       let errorMessage = "Failed to upload image. Please try again.";
 
-      if (error.code === "ECONNABORTED") {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as any).code === "ECONNABORTED"
+      ) {
         errorMessage = "Upload timeout. Please try again.";
-      } else if (error.response?.status === 401) {
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        (error as any).response?.status === 401
+      ) {
         errorMessage = "Authentication failed. Please login again.";
-      } else if (error.response?.status === 413) {
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        (error as any).response?.status === 413
+      ) {
         errorMessage = "File too large. Maximum size is 5MB.";
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        (error as any).response?.data?.message
+      ) {
+        errorMessage = (error as any).response.data.message;
       }
 
       setErrors((prev) => ({ ...prev, [index]: errorMessage }));
@@ -168,7 +216,7 @@ export default function CarImageUpload({
   }
 
   // Format file size for display
-  const formatFileSize = (bytes) => {
+  const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB"];
@@ -177,7 +225,7 @@ export default function CarImageUpload({
   };
 
   // Render multiple upload slots
-  const renderImageSlot = (index) => {
+  const renderImageSlot = (index: number) => {
     const image = images[index];
     const isLoading = imageLoadingStates[index];
     const error = errors[index];
@@ -264,7 +312,7 @@ export default function CarImageUpload({
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <img
-                      src={image.url}
+                      src={image.url!}
                       alt={`Car image ${index + 1}`}
                       className="w-20 h-20 object-cover rounded-lg border border-gray-600"
                     />

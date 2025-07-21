@@ -42,7 +42,7 @@ adminApiClient.interceptors.response.use(
 );
 
 // Types
-interface Car {
+export interface Car {
   _id: string;
   name: string;
   brand: string;
@@ -201,7 +201,7 @@ const buildQueryString = (filters: FilterOptions): string => {
   return params.toString();
 };
 
-const handleApiError = (error: any): string => {
+const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
       const message = error.response.data?.message || error.response.statusText;
@@ -212,7 +212,10 @@ const handleApiError = (error: any): string => {
       return `Request Error: ${error.message}`;
     }
   }
-  return error.message || "An unexpected error occurred";
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "An unexpected error occurred";
 };
 
 // Async thunks
@@ -240,7 +243,7 @@ export const uploadCarImage = createAsyncThunk<ImageUploadResponse, File>(
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -263,7 +266,7 @@ export const fetchAllCars = createAsyncThunk<
     }
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -281,7 +284,7 @@ export const getSingleCar = createAsyncThunk<SingleCarResponse, string>(
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -301,7 +304,7 @@ export const addNewCar = createAsyncThunk<SingleCarResponse, Partial<Car>>(
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -322,7 +325,7 @@ export const editCar = createAsyncThunk<
     }
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -342,7 +345,7 @@ export const deleteCar = createAsyncThunk<
     }
 
     return { ...response.data, carId };
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -363,7 +366,7 @@ export const toggleCarAvailability = createAsyncThunk<
     }
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(handleApiError(error));
   }
 });
@@ -383,7 +386,7 @@ export const getCarStats = createAsyncThunk<CarStatsResponse, void>(
       }
 
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
   }

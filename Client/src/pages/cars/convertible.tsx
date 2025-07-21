@@ -7,7 +7,7 @@ import CarCard from "../../components/cars/car-card";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import CategoryHero from "../../components/cars/category-hero";
 
-const ConvertibleCars = () => {
+const ConvertibleCars: React.FC = () => {
   const {
     convertibleCars,
     isCategoryLoading,
@@ -21,7 +21,7 @@ const ConvertibleCars = () => {
 
   const categoryData = {
     title: "Convertible Cars",
-    subtitle: "Feel the freedom of open-air driving",
+    subtitle: "Feel the Freedom of Open-Air Driving",
     description:
       "Experience Dubai's perfect weather with our stunning convertible collection. From romantic sunset drives to exhilarating coastal cruises, enjoy the ultimate open-air luxury experience.",
     icon: Sun,
@@ -91,7 +91,7 @@ const ConvertibleCars = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {convertibleCars.map((car) => (
+              {convertibleCars.map((car: any) => (
                 <CarCard key={car._id} car={car} />
               ))}
             </div>
@@ -99,7 +99,7 @@ const ConvertibleCars = () => {
         )}
 
         {/* Scenic Routes Section */}
-        <div className="mt-16 bg-gradient-to-r from-orange-600 to-yellow-500 rounded-lg p-8 text-white">
+        <div className="mt-16 bg-gradient-to-r from-orange-600 to-yellow-500 rounded-lg p-8 text-white shadow-lg">
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold mb-4">Scenic Routes Package</h3>
             <p className="text-xl opacity-90">
@@ -140,7 +140,7 @@ const ConvertibleCars = () => {
         </div>
 
         {/* Top Destinations */}
-        <div className="mt-16 bg-white rounded-lg p-8">
+        <div className="mt-16 bg-white rounded-lg p-8 shadow">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Top Convertible Destinations
           </h3>

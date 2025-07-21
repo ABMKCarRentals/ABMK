@@ -26,6 +26,55 @@ import LoadingSpinner from "../../components/common/loading-spinner";
 import CarCard from "../../components/cars/car-card";
 import ImageGallery from "../../components/cars/image-gallery";
 
+interface Specification {
+  engine?: string;
+  horsepower?: number;
+  topSpeed?: number;
+  acceleration?: string;
+  mileage?: string;
+  color?: string;
+  interiorColor?: string;
+}
+
+interface CarImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
+interface Car {
+  _id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: number;
+  category: string;
+  transmission: string;
+  fuelType: string;
+  seats: number;
+  pricePerDay?: number;
+  pricePerWeek?: number;
+  pricePerMonth?: number;
+  images: CarImage[];
+  features: string[];
+  specifications: Specification;
+  location: string;
+  description: string;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  viewCount: number;
+  bookingCount: number;
+  isAvailable: boolean;
+  status: string;
+  isFeatured: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
 const CarDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const {
@@ -39,7 +88,8 @@ const CarDetails: React.FC = () => {
     incrementCarViewCount,
   } = useCars();
 
-  const [selectedImage, setSelectedImage] = useState(0);
+  // Image selection for gallery (if needed for thumbnails)
+  const [selectedImage, setSelectedImage] = useState<number>(0);
 
   useEffect(() => {
     if (id) {
@@ -55,7 +105,6 @@ const CarDetails: React.FC = () => {
   }, [currentCar?._id, getRelatedCars]);
 
   const handleBookNow = () => {
-    // Handle booking logic here
     const message = `Hi, I'm interested in renting the ${
       currentCar?.brand || ""
     } ${currentCar?.model || ""} ${currentCar?.name || ""}`;
@@ -66,16 +115,17 @@ const CarDetails: React.FC = () => {
   };
 
   const handleShare = () => {
+    if (!currentCar) return;
     if (navigator.share) {
       navigator.share({
-        title: `${currentCar?.brand || ""} ${currentCar?.model || ""} ${
-          currentCar?.name || ""
-        }`,
+        title: `${currentCar.brand} ${currentCar.model} ${currentCar.name}`,
         text: `Check out this amazing car for rent in Dubai!`,
         url: window.location.href,
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        // Optionally show a toast/feedback here for copied link
+      });
     }
   };
 
@@ -116,26 +166,36 @@ const CarDetails: React.FC = () => {
     );
   }
 
+  // Professional formatting for numbers & fallback for missing fields
+  const formatNumber = (num?: number) =>
+    typeof num === "number" ? num.toLocaleString() : "-";
+
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
 
       {/* Breadcrumb */}
-      <div className="bg-gray-800 border-b border-gray-700 mt-30">
+      <div className="bg-gray-800 border-b border-gray-700">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center text-sm text-gray-400">
-            <Link to="/" className="hover:text-yellow-400">
+          <nav
+            className="flex items-center text-sm text-gray-400"
+            aria-label="Breadcrumb"
+          >
+            <Link to="/" className="hover:text-yellow-400 transition-colors">
               Home
             </Link>
             <span className="mx-2">/</span>
-            <Link to="/cars" className="hover:text-yellow-400">
+            <Link
+              to="/cars"
+              className="hover:text-yellow-400 transition-colors"
+            >
               Cars
             </Link>
             <span className="mx-2">/</span>
             <span className="text-white">
               {currentCar.brand} {currentCar.model}
             </span>
-          </div>
+          </nav>
         </div>
       </div>
 
@@ -144,8 +204,8 @@ const CarDetails: React.FC = () => {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Car Header */}
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6">
-              <div className="flex items-start justify-between mb-4">
+            <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 shadow-lg">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-4">
                 <div>
                   <h1 className="text-3xl font-bold text-white mb-2">
                     {currentCar.brand} {currentCar.model}
@@ -153,10 +213,10 @@ const CarDetails: React.FC = () => {
                   <p className="text-xl text-gray-300 mb-4">
                     {currentCar.name}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
                     <div className="flex items-center">
                       <Eye className="w-4 h-4 mr-1" />
-                      {currentCar.viewCount || 0} views
+                      {formatNumber(currentCar.viewCount)} views
                     </div>
                     <div className="flex items-center">
                       <MapPin className="w-4 h-4 mr-1" />
@@ -164,11 +224,12 @@ const CarDetails: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 mt-4 sm:mt-0">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleShare}
+                    aria-label="Share"
                     className="border-gray-600 text-gray-300 hover:bg-gray-700"
                   >
                     <Share2 className="w-4 h-4" />
@@ -176,6 +237,7 @@ const CarDetails: React.FC = () => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add to Favorites"
                     className="border-gray-600 text-gray-300 hover:bg-gray-700"
                   >
                     <Heart className="w-4 h-4" />
@@ -185,9 +247,11 @@ const CarDetails: React.FC = () => {
 
               {/* Badges */}
               <div className="flex flex-wrap gap-2 mb-6">
-                <Badge className="bg-yellow-600 text-black">
-                  {currentCar.category}
-                </Badge>
+                {currentCar.category && (
+                  <Badge className="bg-yellow-600 text-black capitalize">
+                    {currentCar.category}
+                  </Badge>
+                )}
                 {currentCar.isFeatured && (
                   <Badge className="bg-green-600 text-white">
                     <Star className="w-3 h-3 mr-1" />
@@ -202,7 +266,7 @@ const CarDetails: React.FC = () => {
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="border-gray-600 text-gray-300"
+                  className="border-gray-600 text-gray-300 capitalize"
                 >
                   {currentCar.status}
                 </Badge>
@@ -215,7 +279,7 @@ const CarDetails: React.FC = () => {
                   <div>
                     <p className="text-xs text-gray-400">Seats</p>
                     <p className="font-semibold text-white">
-                      {currentCar.seats}
+                      {formatNumber(currentCar.seats)}
                     </p>
                   </div>
                 </div>
@@ -242,20 +306,20 @@ const CarDetails: React.FC = () => {
                   <div>
                     <p className="text-xs text-gray-400">Year</p>
                     <p className="font-semibold text-white">
-                      {currentCar.year}
+                      {formatNumber(currentCar.year)}
                     </p>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* Image Gallery */}
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6">
+            <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 shadow-lg">
               <ImageGallery images={currentCar.images || []} />
-            </div>
+            </section>
 
             {/* Details Tabs */}
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+            <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 shadow-lg">
               <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="grid w-full grid-cols-3 bg-gray-700">
                   <TabsTrigger
@@ -300,19 +364,23 @@ const CarDetails: React.FC = () => {
                         </span>
                       </div>
                     )}
-                    {currentCar.specifications?.horsepower && (
+                    {typeof currentCar.specifications?.horsepower !==
+                      "undefined" && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Horsepower</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.horsepower} HP
+                          {formatNumber(currentCar.specifications.horsepower)}{" "}
+                          HP
                         </span>
                       </div>
                     )}
-                    {currentCar.specifications?.topSpeed && (
+                    {typeof currentCar.specifications?.topSpeed !==
+                      "undefined" && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Top Speed</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.topSpeed} km/h
+                          {formatNumber(currentCar.specifications.topSpeed)}{" "}
+                          km/h
                         </span>
                       </div>
                     )}
@@ -340,7 +408,6 @@ const CarDetails: React.FC = () => {
                         </span>
                       </div>
                     )}
-
                     {/* Default specifications if none exist */}
                     {(!currentCar.specifications ||
                       Object.keys(currentCar.specifications).length === 0) && (
@@ -372,21 +439,23 @@ const CarDetails: React.FC = () => {
                   </div>
                 </TabsContent>
               </Tabs>
-            </div>
+            </section>
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <aside className="lg:col-span-1">
             {/* Contact Card */}
-            <Card className="sticky top-4 mb-6 bg-gray-800 border-gray-700">
+            <Card className="sticky top-4 mb-6 bg-gray-800 border-gray-700 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-white">Get a Quote</CardTitle>
+                <CardTitle className="text-white text-lg font-semibold">
+                  Get a Quote
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {/* Contact Info */}
                   <div className="text-center p-4 bg-gray-700 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-400 mb-2">
+                    <div className="text-2xl font-bold text-yellow-400 mb-2 uppercase tracking-wider">
                       Premium Rental
                     </div>
                     <div className="text-sm text-gray-300">
@@ -422,7 +491,7 @@ const CarDetails: React.FC = () => {
 
                   {/* Additional Info */}
                   <div className="bg-gray-700 p-4 rounded-lg">
-                    <h4 className="font-semibold text-white mb-2">
+                    <h4 className="font-semibold text-white mb-2 text-base">
                       Why Choose Us?
                     </h4>
                     <ul className="text-sm text-gray-300 space-y-1">
@@ -435,12 +504,12 @@ const CarDetails: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </aside>
         </div>
 
         {/* Related Cars */}
         {relatedCars && relatedCars.length > 0 && (
-          <div className="mt-12">
+          <section className="mt-12">
             <h2 className="text-2xl font-bold text-white mb-6">Similar Cars</h2>
             {isRelatedLoading ? (
               <div className="flex justify-center py-8">
@@ -448,12 +517,12 @@ const CarDetails: React.FC = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedCars.map((car) => (
+                {relatedCars.map((car: Car) => (
                   <CarCard key={car._id} car={car} />
                 ))}
               </div>
             )}
-          </div>
+          </section>
         )}
       </div>
 

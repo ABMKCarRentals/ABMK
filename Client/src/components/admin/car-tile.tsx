@@ -21,13 +21,22 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import React from "react";
+import type { Car } from "@/store/admin/car-slice"; // Adjust path as needed
+
+interface AdminCarTileProps {
+  car: Car;
+  handleEdit: (car: Car) => void;
+  handleDelete: (carId: string) => void;
+  handleToggleAvailability: (carId: string) => void;
+}
 
 function AdminCarTile({
   car,
   handleEdit,
   handleDelete,
   handleToggleAvailability,
-}) {
+}: AdminCarTileProps) {
   const primaryImage =
     car.images?.find((img) => img.isPrimary) || car.images?.[0];
   const imageUrl = primaryImage?.url || "/api/placeholder/300/200";
@@ -40,8 +49,8 @@ function AdminCarTile({
           src={imageUrl}
           alt={car.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          onError={(e) => {
-            e.target.src = "/api/placeholder/300/200";
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            e.currentTarget.src = "/api/placeholder/300/200";
           }}
         />
 

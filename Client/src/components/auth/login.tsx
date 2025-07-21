@@ -34,7 +34,7 @@ const AdminLogin: React.FC = () => {
     if (error) clearAuthError();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccess("");
 
@@ -63,7 +63,7 @@ const AdminLogin: React.FC = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -81,7 +81,7 @@ const AdminLogin: React.FC = () => {
               className="w-16 h-16 object-contain"
             />
             <div>
-              <h1 className="text-3xl font-bold text- gold tracking-widest">
+              <h1 className="text-3xl font-bold text-gold tracking-widest">
                 ABMK RENTALS
               </h1>
               <p className="text-yellow-400 text-sm font-medium">
@@ -120,7 +120,7 @@ const AdminLogin: React.FC = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text- gold mb-2"
+                className="block text-sm font-medium text-gold mb-2"
               >
                 Admin Email
               </label>
@@ -146,7 +146,7 @@ const AdminLogin: React.FC = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text- gold mb-2"
+                className="block text-sm font-medium text-gold mb-2"
               >
                 Password
               </label>

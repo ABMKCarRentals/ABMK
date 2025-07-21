@@ -1,8 +1,13 @@
 import { AlignJustify, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import React from "react";
 
-function AdminHeader({ setOpen }) {
+interface AdminHeaderProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AdminHeader({ setOpen }: AdminHeaderProps) {
   const { logout } = useAuth();
 
   function handleLogout() {
