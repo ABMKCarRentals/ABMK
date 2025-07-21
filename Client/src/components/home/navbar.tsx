@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown, Play, Pause } from "lucide-react";
 import logo from "../../assets/images/logonav.png";
 import anthem from "../../assets/videos/Anthem.mp3";
@@ -12,15 +12,17 @@ import porsche from "../../assets/images/brands/porsche.png";
 import benz from "../../assets/images/brands/benz.png";
 
 const brands = [
-  { name: "Ferrari", logo: ferrari },
-  { name: "Lamborghini", logo: lambo },
-  { name: "Bentley", logo: bentley },
-  { name: "Rolls Royce", logo: rollsroyce },
-  { name: "Porsche", logo: porsche },
-  { name: "Mercedes", logo: benz },
+  { name: "Ferrari", logo: ferrari, slug: "ferrari" },
+  { name: "Lamborghini", logo: lambo, slug: "lamborghini" },
+  { name: "Bentley", logo: bentley, slug: "bentley" },
+  { name: "Rolls Royce", logo: rollsroyce, slug: "rolls-royce" },
+  { name: "Porsche", logo: porsche, slug: "porsche" },
+  { name: "Mercedes", logo: benz, slug: "mercedes" },
 ];
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [brandsDropdownOpen, setBrandsDropdownOpen] = useState(false);
@@ -31,8 +33,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      // Set volume to very low (0.1 = 10% volume, adjust as needed)
-      audio.volume = 0.1; // You can change this value between 0.0 (silent) and 1.0 (full volume)
+      audio.volume = 0.1;
     }
   }, []);
 
@@ -54,13 +55,11 @@ const Navbar: React.FC = () => {
           await audio.play();
           setIsPlaying(true);
         } catch (error) {
-          // Handle autoplay policy restrictions
           console.log("Autoplay was prevented:", error);
           setIsPlaying(false);
         }
       };
 
-      // Small delay to ensure audio element is ready
       const timer = setTimeout(playAudio, 100);
       return () => clearTimeout(timer);
     }
@@ -78,7 +77,6 @@ const Navbar: React.FC = () => {
         setMobileMenuOpen(false);
       }
 
-      // Close brands dropdown when clicking outside
       if (
         brandsDropdownOpen &&
         !target.closest(".brands-dropdown") &&
@@ -110,14 +108,21 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
   };
 
-  const handleBrandClick = (brandName: string) => {
-    console.log(`Navigate to ${brandName} cars`);
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    handleCloseMenu();
+  };
+
+  const handleBrandClick = (brandSlug: string) => {
+    navigate(`/cars?brand=${brandSlug}`);
     setBrandsDropdownOpen(false);
+    handleCloseMenu();
   };
 
   const handleViewAllBrands = () => {
-    console.log("Navigate to all brands page");
+    navigate("/brands");
     setBrandsDropdownOpen(false);
+    handleCloseMenu();
   };
 
   const toggleAudio = (e: React.MouseEvent) => {
@@ -141,8 +146,7 @@ const Navbar: React.FC = () => {
     if (audio) {
       const handleEnded = () => setIsPlaying(false);
       const handleLoadedData = () => {
-        // Set volume again when audio loads and try to play
-        audio.volume = 0.1; // Ensure volume is set when audio loads
+        audio.volume = 0.1;
         audio.play().catch((error) => {
           console.log("Autoplay was prevented:", error);
           setIsPlaying(false);
@@ -159,13 +163,20 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
+  // Check if current path is active
+  const isActiveRoute = (path: string) => {
+    if (path === "/" && location.pathname === "/") return true;
+    if (path !== "/" && location.pathname.startsWith(path)) return true;
+    return false;
+  };
+
   const navigationItems = [
-    "All Cars",
-    "Brands",
-    "Car Types",
-    "About us",
-    "Contact us",
-    "Anthem",
+    { label: "All Cars", path: "/cars" },
+    { label: "Brands", path: "/brands", hasDropdown: true },
+    { label: "Car Types", path: "/categories" },
+    { label: "About us", path: "/about" },
+    { label: "Contact us", path: "/contact" },
+    { label: "Anthem", path: "", isAudio: true },
   ];
 
   return (
@@ -177,12 +188,15 @@ const Navbar: React.FC = () => {
       <nav
         className={`${
           scrolled
-            ? "bg-black/95 backdrop-blur border-b border- gold"
+            ? "bg-black/95 backdrop-blur border-b border-yellow-400"
             : "bg-transparent"
-        } text- gold px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300 mont`}
+        } text-yellow-400 px-6 py-4 fixed top-0 left-0 w-full z-40 flex items-center justify-between transition-all duration-300 mont`}
       >
         {/* Logo */}
-        <div className="text-xl font-bold tracking-widest flex items-center gap-2">
+        <div
+          className="text-xl font-bold tracking-widest flex items-center gap-2 cursor-pointer hover:text-yellow-300 transition-colors duration-200"
+          onClick={() => handleNavigation("/")}
+        >
           <img src={logo} alt="logo" width={50} height={25} />
           <span className="hidden sm:block">ABMK Car Rentals</span>
           <span className="sm:hidden">ABMK</span>
@@ -191,15 +205,18 @@ const Navbar: React.FC = () => {
         {/* Desktop Nav */}
         <ul className="hidden md:flex items-center space-x-6 font-medium uppercase text-sm tracking-wide">
           {navigationItems.map((item) => (
-            <li key={item} className="relative">
-              {item === "Brands" ? (
+            <li key={item.label} className="relative">
+              {item.hasDropdown ? (
                 <div className="relative">
                   <button
                     type="button"
-                    className="brands-trigger flex items-center gap-1 hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2"
+                    className={`brands-trigger flex items-center gap-1 hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 ${
+                      isActiveRoute("/brands") || isActiveRoute("/cars")
+                        ? "text-yellow-300"
+                        : ""
+                    }`}
                     onMouseEnter={() => setBrandsDropdownOpen(true)}
                     onMouseLeave={() => {
-                      // Delay closing to allow moving to dropdown
                       setTimeout(() => {
                         const dropdown = document.querySelector(
                           ".brands-dropdown:hover"
@@ -208,7 +225,7 @@ const Navbar: React.FC = () => {
                       }, 100);
                     }}
                   >
-                    {item}
+                    {item.label}
                     <ChevronDown
                       size={16}
                       className={`transition-transform duration-200 ${
@@ -217,7 +234,7 @@ const Navbar: React.FC = () => {
                     />
                   </button>
 
-                  {/* Brands Dropdown - Matches Image */}
+                  {/* Brands Dropdown */}
                   {brandsDropdownOpen && (
                     <div
                       className="brands-dropdown absolute top-full left-1/2 transform -translate-x-1/2 mt-4 bg-black rounded-2xl shadow-2xl z-50 p-6"
@@ -225,56 +242,68 @@ const Navbar: React.FC = () => {
                       onMouseEnter={() => setBrandsDropdownOpen(true)}
                       onMouseLeave={() => setBrandsDropdownOpen(false)}
                     >
-                      {/* Brands Grid - 3 columns, 2 rows */}
                       <div className="grid grid-cols-3 gap-4">
                         {brands.map((brand) => (
                           <button
                             key={brand.name}
                             type="button"
-                            onClick={() => handleBrandClick(brand.name)}
-                            className="bg-gray-900/50 border border-gray-700 rounded-xl p-6 hover:border- gold transition-all duration-300 group flex flex-col items-center justify-center h-32"
+                            onClick={() => handleBrandClick(brand.slug)}
+                            className="bg-gray-900/50 border border-gray-700 rounded-xl p-6 hover:border-yellow-400 transition-all duration-300 group flex flex-col items-center justify-center h-32"
                           >
                             <img
                               src={brand.logo}
                               alt={brand.name}
                               className="w-12 h-12 object-contain mb-3 filter brightness-90 group-hover:brightness-110 transition-all duration-200"
                             />
-                            <span className="text- gold group-hover:text-yellow-300 transition-colors duration-200 font-medium text-sm">
+                            <span className="text-yellow-400 group-hover:text-yellow-300 transition-colors duration-200 font-medium text-sm">
                               {brand.name}
                             </span>
                           </button>
                         ))}
                       </div>
+                      <button
+                        type="button"
+                        onClick={handleViewAllBrands}
+                        className="w-full mt-4 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg py-3 transition-colors duration-200"
+                      >
+                        View All Brands
+                      </button>
                     </div>
                   )}
                 </div>
-              ) : item === "Anthem" ? (
+              ) : item.isAudio ? (
                 <button
                   type="button"
                   onClick={toggleAudio}
                   className="flex items-center gap-2 hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black rounded-md px-2"
                   aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
                 >
-                  <span>{item}</span>
+                  <span>{item.label}</span>
                   {isPlaying ? (
                     <Pause size={16} className="text-yellow-300" />
                   ) : (
-                    <Play size={16} className="text- gold" />
+                    <Play size={16} className="text-yellow-400" />
                   )}
                 </button>
               ) : (
-                <span className="hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 block">
-                  {item}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => handleNavigation(item.path)}
+                  className={`hover:text-yellow-300 cursor-pointer transition-colors duration-200 py-2 block ${
+                    isActiveRoute(item.path) ? "text-yellow-300" : ""
+                  }`}
+                >
+                  {item.label}
+                </button>
               )}
             </li>
           ))}
         </ul>
 
-        {/* Hamburger Button - Fixed */}
+        {/* Hamburger Button */}
         <button
           type="button"
-          className="md:hidden hamburger-button text- gold hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black"
+          className="md:hidden hamburger-button text-yellow-400 hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-black"
           onClick={handleToggleMenu}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -298,21 +327,24 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Slide Menu */}
       <div
-        className={`mobile-menu fixed top-0 right-0 h-full w-72 bg-black/95 backdrop-blur-md border-l border- gold z-50 transition-transform duration-300 ease-in-out md:hidden ${
+        className={`mobile-menu fixed top-0 right-0 h-full w-72 bg-black/95 backdrop-blur-md border-l border-yellow-400 z-50 transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-yellow-400/30">
-            <div className="text-lg font-bold tracking-widest flex items-center gap-3">
+            <div
+              className="text-lg font-bold tracking-widest flex items-center gap-3 cursor-pointer"
+              onClick={() => handleNavigation("/")}
+            >
               <img src={logo} alt="logo" width={40} height={20} />
-              AMBK Rentals
+              ABMK Rentals
             </div>
             <button
               type="button"
               onClick={handleCloseMenu}
-              className="text- gold hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="text-yellow-400 hover:text-yellow-300 transition-colors duration-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
               aria-label="Close mobile menu"
             >
               <X size={24} />
@@ -322,15 +354,19 @@ const Navbar: React.FC = () => {
           {/* Menu Items */}
           <ul className="flex flex-col space-y-1 p-6 flex-1 overflow-y-auto">
             {navigationItems.map((item) => (
-              <li key={item}>
-                {item === "Brands" ? (
+              <li key={item.label}>
+                {item.hasDropdown ? (
                   <div>
                     <button
                       type="button"
-                      className="w-full text-left py-3 px-4 text- gold hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between"
+                      className={`w-full text-left py-3 px-4 hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between ${
+                        isActiveRoute("/brands") || isActiveRoute("/cars")
+                          ? "text-yellow-300 bg-yellow-400/10"
+                          : "text-yellow-400"
+                      }`}
                       onClick={() => setBrandsDropdownOpen(!brandsDropdownOpen)}
                     >
-                      {item}
+                      {item.label}
                       <ChevronDown
                         size={16}
                         className={`transition-transform duration-200 ${
@@ -346,10 +382,7 @@ const Navbar: React.FC = () => {
                           <button
                             key={brand.name}
                             type="button"
-                            onClick={() => {
-                              handleBrandClick(brand.name);
-                              handleCloseMenu();
-                            }}
+                            onClick={() => handleBrandClick(brand.slug)}
                             className="w-full text-left py-2 px-3 flex items-center gap-3 text-gray-300 hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 text-sm"
                           >
                             <img
@@ -362,10 +395,7 @@ const Navbar: React.FC = () => {
                         ))}
                         <button
                           type="button"
-                          onClick={() => {
-                            handleViewAllBrands();
-                            handleCloseMenu();
-                          }}
+                          onClick={handleViewAllBrands}
                           className="w-full text-left py-2 px-3 mt-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors duration-200 text-sm"
                         >
                           View All Brands
@@ -373,34 +403,36 @@ const Navbar: React.FC = () => {
                       </div>
                     )}
                   </div>
-                ) : item === "Anthem" ? (
+                ) : item.isAudio ? (
                   <button
                     type="button"
                     onClick={toggleAudio}
-                    className="w-full text-left py-3 px-4 text- gold hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between"
+                    className="w-full text-left py-3 px-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between"
                     aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
                   >
-                    <span>{item}</span>
+                    <span>{item.label}</span>
                     {isPlaying ? (
                       <Pause size={16} className="text-yellow-300" />
                     ) : (
-                      <Play size={16} className="text- gold" />
+                      <Play size={16} className="text-yellow-400" />
                     )}
                   </button>
                 ) : (
                   <button
                     type="button"
-                    className="w-full text-left py-3 px-4 text- gold hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    onClick={handleCloseMenu}
+                    className={`w-full text-left py-3 px-4 hover:text-yellow-300 hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+                      isActiveRoute(item.path)
+                        ? "text-yellow-300 bg-yellow-400/10"
+                        : "text-yellow-400"
+                    }`}
+                    onClick={() => handleNavigation(item.path)}
                   >
-                    {item}
+                    {item.label}
                   </button>
                 )}
               </li>
             ))}
           </ul>
-
-          {/* Footer */}
         </div>
       </div>
     </>

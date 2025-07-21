@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   fetchAllCars,
@@ -50,12 +50,27 @@ import {
 
 interface FilterOptions {
   search?: string;
-  brand?: string[];
-  category?: string[];
-  transmission?: string[];
-  fuelType?: string[];
-  seats?: number[];
-  year?: number[];
+  brand?: string | string[];
+  category?: string | string[];
+  transmission?: string | string[];
+  fuelType?: string | string[];
+  seats?: number | number[] | string;
+  year?: number | number[] | string;
+  priceMin?: number | string;
+  priceMax?: number | string;
+  sort?: string;
+  page?: number | string;
+  limit?: number | string;
+}
+
+interface CleanFilterOptions {
+  search?: string;
+  brand?: string;
+  category?: string;
+  transmission?: string;
+  fuelType?: string;
+  seats?: string;
+  year?: string;
   priceMin?: number;
   priceMax?: number;
   sort?: string;
@@ -63,9 +78,18 @@ interface FilterOptions {
   limit?: number;
 }
 
+interface RequestQueueItem {
+  apiFunction: any;
+  params: any;
+  resolve: (value: any) => void;
+  reject: (reason: any) => void;
+  timestamp: number;
+}
+
 export const useCars = () => {
   const dispatch = useAppDispatch();
 
+  // Redux state selectors
   const carState = useAppSelector(selectCarState);
   const cars = useAppSelector(selectCars);
   const featuredCars = useAppSelector(selectFeaturedCars);
@@ -100,133 +124,380 @@ export const useCars = () => {
   const pagination = useAppSelector(selectPagination);
   const cacheInfo = useAppSelector(selectCacheInfo);
 
+  // Rate limiting state
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [retryAfter, setRetryAfter] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
+
+  // Rate limiting refs
+  const lastApiCall = useRef(0);
+  const requestQueue = useRef<RequestQueueItem[]>([]);
+  const isProcessingQueue = useRef(false);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Rate limiting constants
+  const MIN_API_INTERVAL = 2000; // 2 seconds between API calls
+  const MAX_RETRIES = 3;
+  const DEBOUNCE_DELAY = 1000; // 1 second debounce
+
+  // Utility function to clean filters and remove "all" values
+  const cleanFilters = useCallback(
+    (filters: FilterOptions): CleanFilterOptions => {
+      const cleanedFilters: CleanFilterOptions = {};
+
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key as keyof FilterOptions];
+
+        if (
+          value === null ||
+          value === undefined ||
+          value === "" ||
+          value === "all"
+        ) {
+          return;
+        }
+
+        switch (key) {
+          case "search":
+            if (
+              typeof value === "string" &&
+              value.trim() !== "" &&
+              value !== "all"
+            ) {
+              cleanedFilters.search = value.trim();
+            }
+            break;
+
+          case "brand":
+          case "category":
+          case "transmission":
+          case "fuelType":
+            if (Array.isArray(value)) {
+              const filtered = value.filter(
+                (v) => v && v !== "all" && v !== ""
+              );
+              if (filtered.length > 0) {
+                cleanedFilters[key] = filtered.join(",");
+              }
+            } else if (
+              typeof value === "string" &&
+              value !== "all" &&
+              value !== ""
+            ) {
+              cleanedFilters[key] = value;
+            }
+            break;
+
+          case "seats":
+          case "year":
+            if (Array.isArray(value)) {
+              const filtered = value.filter(
+                (v) => v !== null && v !== undefined && v !== "all"
+              );
+              if (filtered.length > 0) {
+                cleanedFilters[key] = filtered.join(",");
+              }
+            } else if (typeof value === "number" && value > 0) {
+              cleanedFilters[key] = value.toString();
+            } else if (
+              typeof value === "string" &&
+              value !== "all" &&
+              value !== "" &&
+              !isNaN(Number(value))
+            ) {
+              cleanedFilters[key] = value;
+            }
+            break;
+
+          case "priceMin":
+          case "priceMax":
+            if (typeof value === "number" && value > 0) {
+              cleanedFilters[key] = value;
+            } else if (
+              typeof value === "string" &&
+              value !== "" &&
+              !isNaN(Number(value))
+            ) {
+              const numValue = Number(value);
+              if (numValue > 0) {
+                cleanedFilters[key] = numValue;
+              }
+            }
+            break;
+
+          case "page":
+          case "limit":
+            if (typeof value === "number" && value > 0) {
+              cleanedFilters[key] = value;
+            } else if (typeof value === "string" && !isNaN(Number(value))) {
+              const numValue = Number(value);
+              if (numValue > 0) {
+                cleanedFilters[key] = numValue;
+              }
+            }
+            break;
+
+          case "sort":
+            if (typeof value === "string" && value !== "all" && value !== "") {
+              cleanedFilters.sort = value;
+            }
+            break;
+
+          default:
+            break;
+        }
+      });
+
+      return cleanedFilters;
+    },
+    []
+  );
+
+  // Enhanced queue processing system
+  const processRequestQueue = useCallback(async () => {
+    if (isProcessingQueue.current || requestQueue.current.length === 0) {
+      return;
+    }
+
+    isProcessingQueue.current = true;
+
+    while (requestQueue.current.length > 0) {
+      const queueItem = requestQueue.current.shift();
+      if (!queueItem) continue;
+
+      const { apiFunction, params, resolve, reject, timestamp } = queueItem;
+
+      // Check if request is too old (more than 30 seconds)
+      if (Date.now() - timestamp > 30000) {
+        reject(new Error("Request timeout"));
+        continue;
+      }
+
+      try {
+        const now = Date.now();
+        const timeSinceLastCall = now - lastApiCall.current;
+
+        if (timeSinceLastCall < MIN_API_INTERVAL) {
+          const delay = MIN_API_INTERVAL - timeSinceLastCall;
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+
+        lastApiCall.current = Date.now();
+        const result = await dispatch(apiFunction(params)).unwrap();
+        setIsRateLimited(false);
+        setRetryCount(0);
+        resolve(result);
+      } catch (error: any) {
+        console.error("API call error:", error);
+
+        if (
+          error?.status === 429 ||
+          error?.message?.includes("429") ||
+          error?.message?.includes("Too many requests")
+        ) {
+          const retryAfterSeconds = error?.retryAfter || 5;
+          setIsRateLimited(true);
+          setRetryAfter(retryAfterSeconds);
+
+          if (retryCount < MAX_RETRIES) {
+            setTimeout(() => {
+              requestQueue.current.unshift({
+                apiFunction,
+                params,
+                resolve,
+                reject,
+                timestamp: Date.now(),
+              });
+              setRetryCount((prev) => prev + 1);
+              processRequestQueue();
+            }, retryAfterSeconds * 1000);
+          } else {
+            reject(new Error("Maximum retries exceeded due to rate limiting"));
+          }
+        } else {
+          reject(error);
+        }
+      }
+
+      // Small delay between successful requests
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    isProcessingQueue.current = false;
+  }, [dispatch, retryCount]);
+
+  // Enhanced API call function with queue
+  const makeApiCall = useCallback(
+    (apiFunction: any, params: any) => {
+      return new Promise((resolve, reject) => {
+        // Remove duplicate requests from queue
+        requestQueue.current = requestQueue.current.filter(
+          (req) =>
+            !(
+              JSON.stringify(req.params) === JSON.stringify(params) &&
+              req.apiFunction === apiFunction
+            )
+        );
+
+        requestQueue.current.push({
+          apiFunction,
+          params,
+          resolve,
+          reject,
+          timestamp: Date.now(),
+        });
+
+        processRequestQueue();
+      });
+    },
+    [processRequestQueue]
+  );
+
+  // Debounced API call function
+  const debouncedApiCall = useCallback(
+    (apiFunction: any, params: any) => {
+      return new Promise((resolve, reject) => {
+        if (debounceTimer.current) {
+          clearTimeout(debounceTimer.current);
+        }
+
+        debounceTimer.current = setTimeout(() => {
+          makeApiCall(apiFunction, params).then(resolve).catch(reject);
+        }, DEBOUNCE_DELAY);
+      });
+    },
+    [makeApiCall]
+  );
+
+  // Countdown timer for retry
+  useEffect(() => {
+    if (retryAfter > 0) {
+      const timer = setInterval(() => {
+        setRetryAfter((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [retryAfter]);
+
+  // Cache validation
   useEffect(() => {
     dispatch(validateCache());
   }, [dispatch]);
 
+  // Main API functions with rate limiting
   const getAllCars = useCallback(
     (filters: FilterOptions = {}) => {
-      return dispatch(fetchAllCars(filters));
+      const cleanedFilters = cleanFilters(filters);
+      return makeApiCall(fetchAllCars, cleanedFilters);
     },
-    [dispatch]
+    [makeApiCall, cleanFilters]
   );
 
   const getFeaturedCars = useCallback(
     (limit: number = 6) => {
-      return dispatch(fetchFeaturedCars({ limit }));
+      return makeApiCall(fetchFeaturedCars, { limit });
     },
-    [dispatch]
+    [makeApiCall]
   );
 
   const getCarsByCategory = useCallback(
     (category: string, filters: FilterOptions = {}) => {
-      return dispatch(fetchCarsByCategory({ category, filters }));
+      if (!category || category === "all") {
+        return getAllCars(filters);
+      }
+      const cleanedFilters = cleanFilters(filters);
+      return makeApiCall(fetchCarsByCategory, {
+        category,
+        filters: cleanedFilters,
+      });
     },
-    [dispatch]
+    [makeApiCall, cleanFilters, getAllCars]
   );
 
   const getCarsByBrand = useCallback(
     (brand: string, filters: FilterOptions = {}) => {
-      return dispatch(fetchCarsByBrand({ brand, filters }));
+      if (!brand || brand === "all") {
+        return getAllCars(filters);
+      }
+      const cleanedFilters = cleanFilters(filters);
+      return makeApiCall(fetchCarsByBrand, { brand, filters: cleanedFilters });
     },
-    [dispatch]
+    [makeApiCall, cleanFilters, getAllCars]
   );
 
   const getCarById = useCallback(
     (carId: string) => {
-      return dispatch(fetchCarById(carId));
+      if (
+        !carId ||
+        carId === "all" ||
+        carId === "undefined" ||
+        carId === "null"
+      ) {
+        return Promise.reject(new Error("Invalid car ID"));
+      }
+      return makeApiCall(fetchCarById, carId);
     },
-    [dispatch]
+    [makeApiCall]
   );
 
   const getRelatedCars = useCallback(
     (carId: string, limit: number = 4) => {
-      return dispatch(fetchRelatedCars({ carId, limit }));
-    },
-    [dispatch]
-  );
-
-  const incrementCarViewCount = useCallback(
-    (carId: string) => {
-      dispatch(incrementViewCountLocal(carId));
-      dispatch(incrementCarViewCount(carId));
-    },
-    [dispatch]
-  );
-
-  const updateFilters = useCallback(
-    (filters: FilterOptions) => {
-      dispatch(setActiveFilters(filters));
-    },
-    [dispatch]
-  );
-
-  const clearFilters = useCallback(() => {
-    dispatch(clearActiveFilters());
-  }, [dispatch]);
-
-  const updateSearchQuery = useCallback(
-    (query: string) => {
-      dispatch(setSearchQuery(query));
-    },
-    [dispatch]
-  );
-
-  const clearSearch = useCallback(() => {
-    dispatch(clearSearchQuery());
-  }, [dispatch]);
-
-  const clearCar = useCallback(() => {
-    dispatch(clearCurrentCar());
-  }, [dispatch]);
-
-  const clearBrandCars = useCallback(() => {
-    dispatch(clearCarsByBrand());
-  }, [dispatch]);
-
-  const clearErrors = useCallback(() => {
-    dispatch(clearAllErrors());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (featuredCars.length === 0 && !isFeaturedLoading && !featuredError) {
-      if (cacheInfo.isExpired || !featuredCars.length) {
-        getFeaturedCars();
+      if (
+        !carId ||
+        carId === "all" ||
+        carId === "undefined" ||
+        carId === "null"
+      ) {
+        return Promise.reject(new Error("Invalid car ID for related cars"));
       }
-    }
-  }, [
-    featuredCars.length,
-    isFeaturedLoading,
-    featuredError,
-    cacheInfo.isExpired,
-    getFeaturedCars,
-  ]);
+      return makeApiCall(fetchRelatedCars, { carId, limit });
+    },
+    [makeApiCall]
+  );
 
+  // Search and filter functions with debouncing
   const searchCars = useCallback(
     (query: string, filters: FilterOptions = {}) => {
-      const searchFilters = { ...filters, search: query };
-      updateSearchQuery(query);
-      return getAllCars(searchFilters);
+      if (!query || query.trim() === "" || query === "all") {
+        return getAllCars(filters);
+      }
+
+      const searchFilters = { ...filters, search: query.trim() };
+      const cleanedFilters = cleanFilters(searchFilters);
+      dispatch(setSearchQuery(query.trim()));
+      return debouncedApiCall(fetchAllCars, cleanedFilters);
     },
-    [getAllCars, updateSearchQuery]
+    [getAllCars, cleanFilters, debouncedApiCall, dispatch]
   );
 
   const filterAndSortCars = useCallback(
     (filters: FilterOptions) => {
-      updateFilters(filters);
-      return getAllCars(filters);
+      const cleanedFilters = cleanFilters(filters);
+      dispatch(setActiveFilters(cleanedFilters));
+      return debouncedApiCall(fetchAllCars, cleanedFilters);
     },
-    [getAllCars, updateFilters]
+    [cleanFilters, debouncedApiCall, dispatch]
   );
 
   const loadMoreCars = useCallback(
     (page: number) => {
+      if (page < 1) return Promise.reject(new Error("Invalid page number"));
+
       const filters = { ...activeFilters, page };
-      return getAllCars(filters);
+      const cleanedFilters = cleanFilters(filters);
+      return makeApiCall(fetchAllCars, cleanedFilters);
     },
-    [getAllCars, activeFilters]
+    [makeApiCall, activeFilters, cleanFilters]
   );
 
+  // Category-specific functions
   const getLuxuryCars = useCallback(
     (filters: FilterOptions = {}) => {
       return getCarsByCategory("Luxury", filters);
@@ -269,7 +540,104 @@ export const useCars = () => {
     [getCarsByCategory]
   );
 
+  // Utility functions
+  const incrementCarViewCountSafe = useCallback(
+    (carId: string) => {
+      if (
+        !carId ||
+        carId === "all" ||
+        carId === "undefined" ||
+        carId === "null"
+      ) {
+        return;
+      }
+      dispatch(incrementViewCountLocal(carId));
+      makeApiCall(incrementCarViewCount, carId).catch((error) => {
+        console.warn("Failed to increment view count:", error);
+      });
+    },
+    [dispatch, makeApiCall]
+  );
+
+  const updateFilters = useCallback(
+    (filters: FilterOptions) => {
+      const cleanedFilters = cleanFilters(filters);
+      dispatch(setActiveFilters(cleanedFilters));
+    },
+    [dispatch, cleanFilters]
+  );
+
+  const clearFilters = useCallback(() => {
+    dispatch(clearActiveFilters());
+  }, [dispatch]);
+
+  const updateSearchQuery = useCallback(
+    (query: string) => {
+      if (query && query !== "all") {
+        dispatch(setSearchQuery(query.trim()));
+      } else {
+        dispatch(clearSearchQuery());
+      }
+    },
+    [dispatch]
+  );
+
+  const clearSearch = useCallback(() => {
+    dispatch(clearSearchQuery());
+  }, [dispatch]);
+
+  const clearCar = useCallback(() => {
+    dispatch(clearCurrentCar());
+  }, [dispatch]);
+
+  const clearBrandCars = useCallback(() => {
+    dispatch(clearCarsByBrand());
+  }, [dispatch]);
+
+  const clearErrors = useCallback(() => {
+    dispatch(clearAllErrors());
+    setIsRateLimited(false);
+    setRetryAfter(0);
+    setRetryCount(0);
+  }, [dispatch]);
+
+  const retryLastRequest = useCallback(() => {
+    setIsRateLimited(false);
+    setRetryAfter(0);
+    setRetryCount(0);
+    processRequestQueue();
+  }, [processRequestQueue]);
+
+  // Auto-load featured cars
+  useEffect(() => {
+    if (featuredCars.length === 0 && !isFeaturedLoading && !featuredError) {
+      if (cacheInfo.isExpired || !featuredCars.length) {
+        getFeaturedCars().catch((error) => {
+          console.warn("Failed to load featured cars:", error);
+        });
+      }
+    }
+  }, [
+    featuredCars.length,
+    isFeaturedLoading,
+    featuredError,
+    cacheInfo.isExpired,
+    getFeaturedCars,
+  ]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+      requestQueue.current = [];
+      isProcessingQueue.current = false;
+    };
+  }, []);
+
   return {
+    // State
     carState,
     cars,
     featuredCars,
@@ -284,6 +652,7 @@ export const useCars = () => {
     convertibleCars,
     coupeCars,
 
+    // Loading states
     isLoading,
     isFeaturedLoading,
     isCategoryLoading,
@@ -291,6 +660,12 @@ export const useCars = () => {
     isCarLoading,
     isRelatedLoading,
 
+    // Rate limiting state
+    isRateLimited,
+    retryAfter,
+    retryCount,
+
+    // Errors
     error,
     featuredError,
     categoryError,
@@ -298,11 +673,13 @@ export const useCars = () => {
     carError,
     relatedError,
 
+    // Filters and pagination
     activeFilters,
     searchQuery,
     pagination,
     cacheInfo,
 
+    // Main API functions
     getAllCars,
     getFeaturedCars,
     getCarsByCategory,
@@ -310,6 +687,7 @@ export const useCars = () => {
     getCarById,
     getRelatedCars,
 
+    // Category functions
     getLuxuryCars,
     getSportsCars,
     getSUVCars,
@@ -317,6 +695,7 @@ export const useCars = () => {
     getConvertibleCars,
     getCoupeCars,
 
+    // Search and filtering
     searchCars,
     filterAndSortCars,
     loadMoreCars,
@@ -325,9 +704,14 @@ export const useCars = () => {
     updateSearchQuery,
     clearSearch,
 
+    // Utility functions
     clearCar,
     clearBrandCars,
-    incrementCarViewCount,
+    incrementCarViewCount: incrementCarViewCountSafe,
     clearErrors,
+    retryLastRequest,
+
+    // Helper functions
+    cleanFilters,
   };
 };

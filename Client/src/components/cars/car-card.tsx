@@ -1,163 +1,141 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  Star, 
-  Users, 
-  Fuel, 
-  Settings, 
-  Calendar,
-  MapPin,
-  Eye,
+import {
   Heart,
+  Eye,
+  Star,
+  Calendar,
+  Fuel,
+  Settings,
+  Users,
+  MapPin,
   ArrowRight,
-  Badge as BadgeIcon
+  Car,
 } from "lucide-react";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const CarCard = ({ car, viewMode = "grid" }) => {
-  const primaryImage = car?.images?.find(img => img.isPrimary)?.url || car?.images?.[0]?.url || '/placeholder-car.jpg';
-  
-  const handleImageError = (e) => {
-    e.target.src = '/placeholder-car.jpg';
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-AE", {
+      style: "currency",
+      currency: "AED",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
-  const handleWishlist = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Handle wishlist functionality
-    console.log("Added to wishlist:", car._id);
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "available":
+        return "bg-green-600 text-white";
+      case "rented":
+        return "bg-red-600 text-white";
+      case "maintenance":
+        return "bg-yellow-600 text-black";
+      default:
+        return "bg-gray-600 text-white";
+    }
   };
+
+  const primaryImage =
+    car.images?.find((img) => img.isPrimary) || car.images?.[0];
+  const imageUrl = primaryImage?.url || "/api/placeholder/300/200";
 
   if (viewMode === "list") {
     return (
-      <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Image Section */}
-          <div className="md:w-1/3 relative">
-            <Link to={`/cars/${car._id}`}>
-              <img
-                src={primaryImage}
-                alt={`${car.brand} ${car.model} ${car.name}`}
-                className="w-full h-48 md:h-full object-cover hover:scale-105 transition-transform duration-300"
-                onError={handleImageError}
-              />
-            </Link>
-            
-            {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-1">
+          <div className="md:w-1/3 relative group">
+            <img
+              src={imageUrl}
+              alt={car.name}
+              className="w-full h-48 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.target.src = "/api/placeholder/300/200";
+              }}
+            />
+
+            {/* Overlay badges */}
+            <div className="absolute top-3 left-3 flex flex-col gap-2">
               {car.isFeatured && (
-                <Badge className="bg-yellow-600 hover:bg-yellow-700 text-black text-xs">
+                <Badge className="bg-yellow-600 text-black font-semibold">
                   <Star className="w-3 h-3 mr-1" />
                   Featured
                 </Badge>
               )}
-              <Badge 
-                className={`text-xs ${
-                  car.isAvailable 
-                    ? 'bg-green-600 hover:bg-green-700' 
-                    : 'bg-red-600 hover:bg-red-700'
-                }`}
-              >
-                {car.isAvailable ? 'Available' : 'Unavailable'}
+              <Badge className={getStatusColor(car.status)}>
+                {car.status || "Available"}
               </Badge>
             </div>
 
-            {/* Wishlist */}
-            <button
-              onClick={handleWishlist}
-              className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full flex items-center justify-center transition-all duration-200 group"
-            >
-              <Heart className="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors duration-200" />
+            {/* Heart icon */}
+            <button className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors">
+              <Heart className="w-4 h-4" />
             </button>
           </div>
 
           {/* Content Section */}
-          <div className="md:w-2/3 p-6">
-            <div className="flex flex-col h-full">
+          <div className="md:w-2/3 p-6 flex flex-col justify-between">
+            <div>
               {/* Header */}
-              <div className="mb-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">
-                      {car.brand} {car.model}
-                    </h3>
-                    <p className="text-gray-600 font-medium">
-                      {car.name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-yellow-600">
-                      AED {car.pricePerDay?.toLocaleString()}
-                    </div>
-                    <div className="text-sm text-gray-500">per day</div>
-                  </div>
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h3 className="text-xl font-bold text-white racing mb-1">
+                    {car.brand} {car.model || car.name}
+                  </h3>
+                  <p className="text-gray-400 text-sm mont">{car.name}</p>
                 </div>
-                
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center">
-                    <Eye className="w-4 h-4 mr-1" />
-                    {car.viewCount || 0}
+
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-yellow-400">
+                    {formatPrice(car.pricePerDay)}
                   </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {car.location}
-                  </div>
+                  <div className="text-gray-400 text-sm">per day</div>
                 </div>
               </div>
 
               {/* Specifications */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <div className="flex items-center text-sm text-gray-600">
-                  <Calendar className="w-4 h-4 mr-2 text-yellow-600" />
-                  <span>{car.year}</span>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Calendar className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm">{car.year}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Users className="w-4 h-4 mr-2 text-yellow-600" />
-                  <span>{car.seats} Seats</span>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Users className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm">{car.seats} Seats</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Fuel className="w-4 h-4 mr-2 text-yellow-600" />
-                  <span>{car.fuelType}</span>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Fuel className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm">{car.fuelType}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Settings className="w-4 h-4 mr-2 text-yellow-600" />
-                  <span>{car.transmission}</span>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Settings className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm">{car.transmission}</span>
                 </div>
               </div>
 
-              {/* Categories and Features */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="outline" className="text-xs">
-                  {car.category}
-                </Badge>
-                {car.features?.slice(0, 2).map((feature, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {feature}
-                  </Badge>
-                ))}
-                {car.features?.length > 2 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{car.features.length - 2} more
-                  </Badge>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between mt-auto">
-                <div className="text-sm text-gray-600">
-                  {car.pricePerWeek && (
-                    <span>Weekly: AED {car.pricePerWeek?.toLocaleString()}</span>
-                  )}
+              {/* Location and Views */}
+              <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4" />
+                  <span>{car.location || "Dubai, UAE"}</span>
                 </div>
-                <Link to={`/cars/${car._id}`}>
-                  <Button className="bg-yellow-600 hover:bg-yellow-700 text-black">
-                    View Details
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
+                <div className="flex items-center gap-1">
+                  <Eye className="w-4 h-4" />
+                  <span>{car.viewCount || 0} views</span>
+                </div>
               </div>
             </div>
+
+            {/* Action Button */}
+            <Link to={`/cars/${car._id}`}>
+              <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-semibold transition-colors group">
+                View Details
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -166,121 +144,91 @@ const CarCard = ({ car, viewMode = "grid" }) => {
 
   // Grid view (default)
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group">
+    <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:border-yellow-400">
       {/* Image Section */}
-      <div className="relative">
-        <Link to={`/cars/${car._id}`}>
-          <img
-            src={primaryImage}
-            alt={`${car.brand} ${car.model} ${car.name}`}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={handleImageError}
-          />
-        </Link>
-        
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
+      <div className="relative overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={car.name}
+          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            e.target.src = "/api/placeholder/300/200";
+          }}
+        />
+
+        {/* Overlay badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
           {car.isFeatured && (
-            <Badge className="bg-yellow-600 hover:bg-yellow-700 text-black text-xs">
+            <Badge className="bg-yellow-600 text-black font-semibold">
               <Star className="w-3 h-3 mr-1" />
               Featured
             </Badge>
           )}
-          <Badge 
-            className={`text-xs ${
-              car.isAvailable 
-                ? 'bg-green-600 hover:bg-green-700' 
-                : 'bg-red-600 hover:bg-red-700'
-            }`}
-          >
-            {car.isAvailable ? 'Available' : 'Unavailable'}
+          <Badge className={getStatusColor(car.status)}>
+            {car.status || "Available"}
           </Badge>
         </div>
 
-        {/* Wishlist */}
-        <button
-          onClick={handleWishlist}
-          className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full flex items-center justify-center transition-all duration-200 group"
-        >
-          <Heart className="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors duration-200" />
+        {/* Heart icon */}
+        <button className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors">
+          <Heart className="w-4 h-4" />
         </button>
 
-        {/* View Count */}
-        <div className="absolute bottom-3 right-3">
-          <Badge variant="secondary" className="text-xs bg-black bg-opacity-50 text-white border-none">
-            <Eye className="w-3 h-3 mr-1" />
-            {car.viewCount || 0}
-          </Badge>
-        </div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
       </div>
 
       {/* Content Section */}
-      <div className="p-4">
+      <div className="p-6">
         {/* Header */}
-        <div className="mb-3">
-          <h3 className="text-lg font-bold text-gray-900 mb-1 truncate">
-            {car.brand} {car.model}
+        <div className="mb-4">
+          <h3 className="text-lg text-white racing mb-1 group-hover:text-yellow-400 transition-colors">
+            {car.brand} {car.model || car.name}
           </h3>
-          <p className="text-sm text-gray-600 font-medium truncate">
-            {car.name}
-          </p>
+          <p className="text-gray-400 text-sm mont">{car.name}</p>
         </div>
 
-        {/* Specifications Grid */}
-        <div className="grid grid-cols-2 gap-2 mb-3 text-xs text-gray-600">
-          <div className="flex items-center">
-            <Calendar className="w-3 h-3 mr-1 text-yellow-600" />
-            {car.year}
+        {/* Specifications */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="flex items-center gap-2 text-gray-300">
+            <Calendar className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm">{car.year}</span>
           </div>
-          <div className="flex items-center">
-            <Users className="w-3 h-3 mr-1 text-yellow-600" />
-            {car.seats} Seats
+          <div className="flex items-center gap-2 text-gray-300">
+            <Users className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm">{car.seats} Seats</span>
           </div>
-          <div className="flex items-center">
-            <Fuel className="w-3 h-3 mr-1 text-yellow-600" />
-            {car.fuelType}
+          <div className="flex items-center gap-2 text-gray-300">
+            <Fuel className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm">{car.fuelType}</span>
           </div>
-          <div className="flex items-center">
-            <Settings className="w-3 h-3 mr-1 text-yellow-600" />
-            {car.transmission}
+          <div className="flex items-center gap-2 text-gray-300">
+            <Settings className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm">{car.transmission}</span>
           </div>
-        </div>
-
-        {/* Category */}
-        <div className="mb-3">
-          <Badge variant="outline" className="text-xs">
-            {car.category}
-          </Badge>
         </div>
 
         {/* Location */}
-        <div className="flex items-center text-xs text-gray-600 mb-3">
-          <MapPin className="w-3 h-3 mr-1" />
-          {car.location}
+        <div className="flex items-center gap-2 text-gray-400 text-sm mb-4">
+          <MapPin className="w-4 h-4" />
+          <span>{car.location || "Business Bay, Dubai"}</span>
         </div>
 
-        {/* Pricing */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold text-yellow-600">
-              AED {car.pricePerDay?.toLocaleString()}
-            </div>
-            <div className="text-xs text-gray-500">
-              per day
-            </div>
+        {/* Price and Action */}
+        <div className="flex items-center justify-between mb-4">
+          
+
+          <div className="flex items-center gap-1 text-gray-400 text-sm">
+            <Eye className="w-4 h-4" />
+            <span>{car.viewCount || 0}</span>
           </div>
-          {car.pricePerWeek && (
-            <div className="text-xs text-gray-600 mt-1">
-              Weekly: AED {car.pricePerWeek?.toLocaleString()}
-            </div>
-          )}
         </div>
 
-        {/* Action Button */}
-        <Link to={`/cars/${car._id}`} className="block">
-          <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-semibold">
+        {/* View Details Button */}
+        <Link to={`/cars/${car._id}`}>
+          <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-semibold transition-colors group">
             View Details
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>
       </div>

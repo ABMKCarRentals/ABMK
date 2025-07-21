@@ -26,10 +26,12 @@ import ConvertibleCars from "./pages/cars/convertible";
 import CoupeCars from "./pages/cars/coupe";
 import AboutPage from "./pages/about";
 import ContactPage from "./pages/contact";
+import Categories from "./pages/cars/categories"; // Add this import
 
 // Redux
 import { useAuth } from "./hooks/useAuth";
 import AdminCars from "./pages/admin/Cars";
+import Brands from "./pages/cars/brands";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -93,6 +95,16 @@ function App() {
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <CarDetails />
+            </CheckAuth>
+          }
+        />
+
+        {/* Categories Overview Route */}
+        <Route
+          path="/categories"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Categories />
             </CheckAuth>
           }
         />
@@ -167,6 +179,15 @@ function App() {
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <ContactPage />
+            </CheckAuth>
+          }
+        />
+
+        <Route
+          path="/brands"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Brands />
             </CheckAuth>
           }
         />
