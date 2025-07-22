@@ -22,7 +22,7 @@ import {
   XCircle,
 } from "lucide-react";
 import React from "react";
-import type { Car } from "@/store/admin/car-slice"; // Adjust path as needed
+import type { Car } from "@/types/Car"; // Adjust path as needed
 
 interface AdminCarTileProps {
   car: Car;

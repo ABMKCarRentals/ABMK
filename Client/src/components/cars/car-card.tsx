@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 // Import the Car type from your slice or define it here as needed
-import type { Car } from "@/store/admin/car-slice"; // Adjust path if needed
+import type { Car } from "@/types/Car"; // Adjust path if needed
 
 interface CarCardProps {
   car: Car;
@@ -23,15 +23,6 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-AE", {
-      style: "currency",
-      currency: "AED",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
   const getStatusColor = (status?: string) => {
     switch (status?.toLowerCase()) {
       case "available":
@@ -93,13 +84,6 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
                     {car.brand} {car.model || car.name}
                   </h3>
                   <p className="text-gray-400 text-sm mont">{car.name}</p>
-                </div>
-
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-yellow-400">
-                    {formatPrice(car.pricePerDay)}
-                  </div>
-                  <div className="text-gray-400 text-sm">per day</div>
                 </div>
               </div>
 

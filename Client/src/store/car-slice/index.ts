@@ -871,9 +871,8 @@ const carSlice = createSlice({
           state.featuredCars[featuredIndex].viewCount = newViewCount;
         }
       })
-      .addCase(incrementCarViewCount.rejected, (state, action) => {
-        // Silently handle view count errors
-        console.warn("View count increment failed:", action.payload);
+      .addCase(incrementCarViewCount.rejected, () => {
+        console.warn("View count increment failed");
       });
   },
 });

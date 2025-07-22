@@ -11,54 +11,8 @@ import LoadingSpinner from "../../components/common/loading-spinner";
 import CarCard from "../../components/cars/car-card";
 import ImageGallery from "../../components/cars/image-gallery";
 
-interface Specification {
-  engine?: string;
-  horsepower?: number;
-  topSpeed?: number;
-  acceleration?: string;
-  mileage?: string;
-  color?: string;
-  interiorColor?: string;
-}
-
-interface CarImage {
-  url: string;
-  alt: string;
-  isPrimary: boolean;
-}
-
-interface Car {
-  _id: string;
-  name: string;
-  brand: string;
-  model: string;
-  year: number;
-  category: string;
-  transmission: string;
-  fuelType: string;
-  seats: number;
-  pricePerDay?: number;
-  pricePerWeek?: number;
-  pricePerMonth?: number;
-  images: CarImage[];
-  features: string[];
-  specifications: Specification;
-  location: string;
-  description: string;
-  slug: string;
-  metaTitle: string;
-  metaDescription: string;
-  viewCount: number;
-  bookingCount: number;
-  isAvailable: boolean;
-  status: string;
-  isFeatured: boolean;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: string;
-  updatedBy: string;
-}
+// Import shared Car type to avoid interface mismatches
+import type { Car } from "@/types/Car";
 
 const CarDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -350,8 +304,9 @@ const CarDetails: React.FC = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedCars.map((car: Car) => (
-                  <CarCard key={car._id} car={car} />
+                {relatedCars.map((car: Car, idx: number) => (
+                  // Fix: Ensure correct type is passed to CarCard
+                  <CarCard key={car._id || idx} car={car} />
                 ))}
               </div>
             )}

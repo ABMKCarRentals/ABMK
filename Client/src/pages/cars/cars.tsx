@@ -6,7 +6,6 @@ import {
   Filter,
   Grid,
   List,
-  Car,
   Zap,
   Crown,
   Mountain,
@@ -15,6 +14,7 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
+import { FaCar } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,20 +37,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import CarCard from "../../components/cars/car-card";
 import Navbar from "../../components/home/navbar";
 import Footer from "../../components/home/footer";
+import type { Car } from "@/types/Car";
 
-// CarTypeTab and LocalFilters types remain unchanged
-
-type CarTypeTab = {
-  id: string;
-  name: string;
-  icon: React.ElementType;
-  description: string;
-  count: number;
-  color: string;
-};
-
-// Add index signature to LocalFilters to allow string-based access
-type LocalFilters = {
+// Explicit type for newFilters
+type newFilters = {
   brand: string;
   category: string;
   transmission: string;
@@ -59,6 +49,15 @@ type LocalFilters = {
   year: string;
   sort: string;
   [key: string]: string;
+};
+
+type CarTypeTab = {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  description: string;
+  count: number;
+  color: string;
 };
 
 const CarsPage: React.FC = () => {
@@ -97,7 +96,7 @@ const CarsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(
     searchParams.get("category") || "all"
   );
-  const [localFilters, setLocalFilters] = useState<LocalFilters>({
+  const [localFilters, setLocalFilters] = useState<newFilters>({
     brand: searchParams.get("brand") || "all",
     category: searchParams.get("category") || "all",
     transmission: "all",
@@ -120,7 +119,7 @@ const CarsPage: React.FC = () => {
   const MAX_RETRIES = 3;
 
   // Get current category cars based on active tab
-  const getCurrentCategoryCars = useCallback(() => {
+  const getCurrentCategoryCars = useCallback((): Car[] => {
     switch (activeTab) {
       case "luxury":
         return luxuryCars;
@@ -150,14 +149,14 @@ const CarsPage: React.FC = () => {
   ]);
 
   // Get filtered cars for display
-  const filteredCars = getCurrentCategoryCars();
+  const filteredCars: Car[] = getCurrentCategoryCars();
 
   // Car type categories with dynamic counts
   const carTypes: CarTypeTab[] = [
     {
       id: "all",
       name: "All Cars",
-      icon: Car,
+      icon: FaCar,
       description: "Browse our entire fleet",
       count: cars.length,
       color: "text-gray-400",
@@ -205,7 +204,7 @@ const CarsPage: React.FC = () => {
     {
       id: "coupe",
       name: "Coupe",
-      icon: Car,
+      icon: FaCar,
       description: "Stylish 2-door vehicles",
       count: coupeCars.length,
       color: "text-orange-400",
@@ -312,7 +311,7 @@ const CarsPage: React.FC = () => {
     const category = searchParams.get("category");
     const search = searchParams.get("search");
 
-    const initialFilters: LocalFilters = {
+    const initialFilters: newFilters = {
       brand: brand || "all",
       category: category || "all",
       transmission: "all",
@@ -375,7 +374,7 @@ const CarsPage: React.FC = () => {
   // Handle tab change with category-specific endpoints
   const handleTabChange = (tabValue: string) => {
     setActiveTab(tabValue);
-    const newFilters = { ...localFilters, category: tabValue };
+    const newFilters: newFilters = { ...localFilters, category: tabValue };
     setLocalFilters(newFilters);
 
     const newSearchParams = new URLSearchParams(searchParams);
@@ -395,13 +394,13 @@ const CarsPage: React.FC = () => {
     };
 
     // Add other filters (excluding category)
-    Object.keys(newFilters).forEach((key) => {
+    Object.keys(newFilters).forEach((filterKey) => {
       if (
-        newFilters[key] !== "all" &&
-        newFilters[key] !== "" &&
-        key !== "category"
+        newFilters[filterKey] !== "all" &&
+        newFilters[filterKey] !== "" &&
+        filterKey !== "category"
       ) {
-        apiFilters[key] = newFilters[key];
+        apiFilters[filterKey] = newFilters[filterKey];
       }
     });
 
@@ -426,7 +425,6 @@ const CarsPage: React.FC = () => {
       if (categoryFunction) {
         debouncedApiCall(categoryFunction, apiFilters);
       } else {
-        // Fallback to generic category function
         debouncedApiCall(getCarsByCategory, [tabValue, apiFilters]);
       }
     }
@@ -439,13 +437,13 @@ const CarsPage: React.FC = () => {
       newSearchParams.set("search", localSearchQuery);
 
       const apiFilters: Record<string, any> = { page: 1, limit: 12 };
-      Object.keys(localFilters).forEach((key) => {
+      Object.keys(localFilters).forEach((filterKey) => {
         if (
-          localFilters[key] !== "all" &&
-          localFilters[key] !== "" &&
-          key !== "category"
+          localFilters[filterKey] !== "all" &&
+          localFilters[filterKey] !== "" &&
+          filterKey !== "category"
         ) {
-          apiFilters[key] = localFilters[key];
+          apiFilters[filterKey] = localFilters[filterKey];
         }
       });
 
@@ -454,13 +452,13 @@ const CarsPage: React.FC = () => {
       newSearchParams.delete("search");
 
       const apiFilters: Record<string, any> = { page: 1, limit: 12 };
-      Object.keys(localFilters).forEach((key) => {
+      Object.keys(localFilters).forEach((filterKey) => {
         if (
-          localFilters[key] !== "all" &&
-          localFilters[key] !== "" &&
-          key !== "category"
+          localFilters[filterKey] !== "all" &&
+          localFilters[filterKey] !== "" &&
+          filterKey !== "category"
         ) {
-          apiFilters[key] = localFilters[key];
+          apiFilters[filterKey] = localFilters[filterKey];
         }
       });
 
@@ -487,8 +485,8 @@ const CarsPage: React.FC = () => {
     setSearchParams(newSearchParams);
   };
 
-  const handleFilterChange = (key: keyof LocalFilters, value: string) => {
-    const newFilters = { ...localFilters, [key]: value };
+  const handleFilterChange = (key: keyof newFilters, value: string) => {
+    const newFilters: newFilters = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
 
     const newSearchParams = new URLSearchParams(searchParams);
@@ -540,7 +538,7 @@ const CarsPage: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    const resetFilters: LocalFilters = {
+    const resetFilters: newFilters = {
       brand: "all",
       category: "all",
       transmission: "all",
@@ -922,7 +920,7 @@ const CarsPage: React.FC = () => {
             ) : filteredCars.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
-                  <Car className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <FaCar className="w-16 h-16 mx-auto mb-4 opacity-50" />
                   <p className="text-lg font-medium text-gray-200">
                     No{" "}
                     {activeTab !== "all"
@@ -963,8 +961,12 @@ const CarsPage: React.FC = () => {
                       : "space-y-4"
                   }
                 >
-                  {filteredCars.map((car: any) => (
-                    <CarCard key={car._id} car={car} viewMode={viewMode} />
+                  {filteredCars.map((car: Car, idx: number) => (
+                    <CarCard
+                      key={car._id || idx}
+                      car={car}
+                      viewMode={viewMode}
+                    />
                   ))}
                 </div>
                 {/* Load More */}

@@ -1,319 +1,130 @@
-import React from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { AlertCircle, Check } from "lucide-react";
+import React, { useState } from "react";
+import type { FormControl } from "@/types/Form";
+import { Button } from "@/components/ui/button";
 
-// Types for props
-type Option = {
-  id: string;
-  label: string;
-};
-
-type FormControl = {
-  name: string;
-  label: string;
-  placeholder?: string;
-  description?: string;
-  tooltip?: string;
-  required?: boolean;
-  type?: string;
-  componentType: "input" | "select" | "textarea" | string;
-  options?: Option[];
-  fullWidth?: boolean;
-};
-
-interface CommonFormProps {
+interface FormProps {
   formControls: FormControl[];
-  formData: Record<string, any>;
-  setFormData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  buttonText?: string;
-  isBtnDisabled?: boolean;
-  className?: string;
+  onSubmit: (data: Record<string, any>) => void;
 }
 
-function CommonForm({
-  formControls,
-  formData,
-  setFormData,
-  onSubmit,
-  buttonText,
-  isBtnDisabled = false,
-  className = "",
-}: CommonFormProps) {
-  function renderInputsByComponentType(getControlItem: FormControl) {
-    let element = null;
-    const value = formData[getControlItem.name] || "";
-    const isRequired = getControlItem.required || false;
-    const hasError = isRequired && !value;
+const Form: React.FC<FormProps> = ({ formControls, onSubmit }) => {
+  const [formData, setFormData] = useState<Record<string, any>>({});
 
-    switch (getControlItem.componentType) {
-      case "input":
-        element = (
-          <div className="relative">
-            <Input
-              name={getControlItem.name}
-              placeholder={getControlItem.placeholder}
-              id={getControlItem.name}
-              type={getControlItem.type}
-              value={value}
-              onChange={(event) =>
-                setFormData({
-                  ...formData,
-                  [getControlItem.name]: event.target.value,
-                })
-              }
-              className={`
-                bg-gray-800 border-gray-600 text-white placeholder-gray-400
-                focus:border-yellow-500 focus:ring-yellow-500/20 focus:ring-2 focus:outline-none
-                transition-all duration-200 ease-in-out
-                px-4 py-3 rounded-lg
-                ${
-                  hasError
-                    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                    : ""
-                }
-                ${value && !hasError ? "border-green-500" : ""}
-              `}
-            />
-            {value && !hasError && (
-              <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-500" />
-            )}
-            {hasError && (
-              <AlertCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-red-500" />
-            )}
-          </div>
-        );
-        break;
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value, type } = e.target;
 
-      case "select":
-        element = (
-          <div className="relative">
-            <Select
-              onValueChange={(value) =>
-                setFormData({
-                  ...formData,
-                  [getControlItem.name]: value,
-                })
-              }
-              value={value}
-            >
-              <SelectTrigger
-                className={`
-                  bg-gray-800 border-gray-600 text-white
-                  focus:border-yellow-500 focus:ring-yellow-500/20 focus:ring-2 focus:outline-none
-                  transition-all duration-200 ease-in-out
-                  px-4 py-3 rounded-lg h-12
-                  ${
-                    hasError
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                      : ""
-                  }
-                  ${value && !hasError ? "border-green-500" : ""}
-                `}
-              >
-                <SelectValue
-                  placeholder={
-                    getControlItem.placeholder || getControlItem.label
-                  }
-                  className="text-gray-400"
-                />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-gray-600 text-white max-h-60 overflow-y-auto">
-                {getControlItem.options?.map((optionItem) => (
-                  <SelectItem
-                    key={optionItem.id}
-                    value={optionItem.id}
-                    className="text-white hover:bg-gray-700 focus:bg-gray-700 cursor-pointer py-3 px-4"
-                  >
-                    {optionItem.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {value && !hasError && (
-              <Check className="absolute right-8 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-500 pointer-events-none" />
-            )}
-            {hasError && (
-              <AlertCircle className="absolute right-8 top-1/2 transform -translate-y-1/2 w-4 h-4 text-red-500 pointer-events-none" />
-            )}
-          </div>
-        );
-        break;
+    let parsedValue: any = value;
 
-      case "textarea":
-        element = (
-          <div className="relative">
-            <Textarea
-              name={getControlItem.name}
-              placeholder={getControlItem.placeholder}
-              id={getControlItem.name}
-              value={value}
-              onChange={(event) =>
-                setFormData({
-                  ...formData,
-                  [getControlItem.name]: event.target.value,
-                })
-              }
-              className={`
-                bg-gray-800 border-gray-600 text-white placeholder-gray-400
-                focus:border-yellow-500 focus:ring-yellow-500/20 focus:ring-2 focus:outline-none
-                transition-all duration-200 ease-in-out
-                px-4 py-3 rounded-lg min-h-[100px] resize-vertical
-                ${
-                  hasError
-                    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                    : ""
-                }
-                ${value && !hasError ? "border-green-500" : ""}
-              `}
-            />
-            {value && !hasError && (
-              <Check className="absolute right-3 top-3 w-4 h-4 text-green-500" />
-            )}
-            {hasError && (
-              <AlertCircle className="absolute right-3 top-3 w-4 h-4 text-red-500" />
-            )}
-          </div>
-        );
-        break;
-
-      default:
-        element = (
-          <div className="relative">
-            <Input
-              name={getControlItem.name}
-              placeholder={getControlItem.placeholder}
-              id={getControlItem.name}
-              type={getControlItem.type}
-              value={value}
-              onChange={(event) =>
-                setFormData({
-                  ...formData,
-                  [getControlItem.name]: event.target.value,
-                })
-              }
-              className={`
-                bg-gray-800 border-gray-600 text-white placeholder-gray-400
-                focus:border-yellow-500 focus:ring-yellow-500/20 focus:ring-2 focus:outline-none
-                transition-all duration-200 ease-in-out
-                px-4 py-3 rounded-lg
-                ${
-                  hasError
-                    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                    : ""
-                }
-                ${value && !hasError ? "border-green-500" : ""}
-              `}
-            />
-            {value && !hasError && (
-              <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-500" />
-            )}
-            {hasError && (
-              <AlertCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-red-500" />
-            )}
-          </div>
-        );
-        break;
+    // Only access checked for checkboxes/radios
+    if (type === "checkbox" || type === "radio") {
+      // TypeScript knows e.target is HTMLInputElement if type is checkbox or radio
+      parsedValue = (e.target as HTMLInputElement).checked;
+    } else if (type === "number") {
+      parsedValue = value === "" ? "" : parseFloat(value);
     }
 
-    return element;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: parsedValue,
+    }));
+  };
+
+  // Helper for defaultValue type compatibility
+  function getDefaultValue(
+    control: FormControl
+  ): string | number | readonly string[] | undefined {
+    if (control.defaultValue === undefined || control.defaultValue === null) {
+      return undefined;
+    }
+    // If it's boolean, convert to string for inputs/selects
+    if (typeof control.defaultValue === "boolean") {
+      return control.defaultValue ? "true" : "false";
+    }
+    // If it's array, ensure it's a string[]
+    if (Array.isArray(control.defaultValue)) {
+      return control.defaultValue.map(String);
+    }
+    return control.defaultValue as string | number;
   }
 
   return (
-    <div className={`w-full ${className}`}>
-      <form onSubmit={onSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {formControls.map((controlItem) => {
-            const isRequired = controlItem.required || false;
-            const isFullWidth =
-              controlItem.fullWidth ||
-              controlItem.componentType === "textarea" ||
-              controlItem.name === "description" ||
-              controlItem.name === "metaDescription" ||
-              controlItem.name === "metaTitle";
-
-            return (
-              <div
-                className={`space-y-2 ${isFullWidth ? "md:col-span-2" : ""}`}
-                key={controlItem.name}
-              >
-                <Label
-                  htmlFor={controlItem.name}
-                  className="text-sm font-medium text-gray-200 flex items-center gap-2"
-                >
-                  {controlItem.label}
-                  {isRequired && (
-                    <span className="text-red-400 text-xs">*</span>
-                  )}
-                  {controlItem.tooltip && (
-                    <span className="text-gray-400 text-xs">
-                      ({controlItem.tooltip})
-                    </span>
-                  )}
-                </Label>
-                {renderInputsByComponentType(controlItem)}
-                {controlItem.description && (
-                  <p className="text-xs text-gray-400 mt-1">
-                    {controlItem.description}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Form Actions */}
-        <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-700">
-          <Button
-            type="button"
-            variant="outline"
-            className="px-6 py-2 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
-            onClick={() => {
-              // Reset form or close modal logic can be added here
-              const resetData: Record<string, any> = {};
-              formControls.forEach((control) => {
-                resetData[control.name] = "";
-              });
-              setFormData(resetData);
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            disabled={isBtnDisabled}
-            type="submit"
-            className={`
-              px-8 py-2 font-medium rounded-lg transition-all duration-200
-              ${
-                isBtnDisabled
-                  ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                  : "bg-yellow-600 hover:bg-yellow-700 text-black shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit(formData);
+      }}
+      className="space-y-4"
+    >
+      {formControls.map((control) => (
+        <div key={control.name} className="flex flex-col gap-2">
+          <label className="text-sm font-medium">{control.label}</label>
+          {control.componentType === "input" && (
+            <input
+              type={control.type || "text"}
+              name={control.name}
+              placeholder={control.placeholder}
+              min={control.min}
+              max={control.max}
+              defaultValue={getDefaultValue(control)}
+              onChange={handleChange}
+              className="border rounded px-3 py-2"
+            />
+          )}
+          {control.componentType === "textarea" && (
+            <textarea
+              name={control.name}
+              placeholder={control.placeholder}
+              rows={control.rows || 3}
+              defaultValue={
+                typeof control.defaultValue === "boolean"
+                  ? control.defaultValue
+                    ? "true"
+                    : "false"
+                  : Array.isArray(control.defaultValue)
+                  ? control.defaultValue.join(", ")
+                  : (control.defaultValue as string | number | undefined)
               }
-            `}
-          >
-            {isBtnDisabled ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
-                Processing...
-              </div>
-            ) : (
-              buttonText || "Submit"
-            )}
-          </Button>
+              onChange={handleChange}
+              className="border rounded px-3 py-2"
+            />
+          )}
+          {control.componentType === "select" && control.options && (
+            <select
+              name={control.name}
+              defaultValue={
+                typeof control.defaultValue === "boolean"
+                  ? control.defaultValue
+                    ? "true"
+                    : "false"
+                  : Array.isArray(control.defaultValue)
+                  ? control.defaultValue[0] ?? ""
+                  : (control.defaultValue as string | number | undefined) ?? ""
+              }
+              onChange={handleChange}
+              className="border rounded px-3 py-2"
+            >
+              <option value="" disabled>
+                {control.placeholder || "Select an option"}
+              </option>
+              {control.options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          )}
+          {/* If you implement switch/multiselect, add components here */}
         </div>
-      </form>
-    </div>
+      ))}
+      <Button type="submit" className="w-full">
+        Submit
+      </Button>
+    </form>
   );
-}
+};
 
-export default CommonForm;
+export default Form;
