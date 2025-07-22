@@ -82,7 +82,7 @@ const AboutPage = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white py-20">
+      <div className="bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white py-20 mt-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">

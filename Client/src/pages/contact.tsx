@@ -182,7 +182,7 @@ const ContactPage: React.FC = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-black via-gray-900 to-black py-16 shadow-lg">
+      <div className="bg-gradient-to-b from-black via-gray-900 to-black py-16 shadow-lg mt-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-yellow-400 drop-shadow-lg">
