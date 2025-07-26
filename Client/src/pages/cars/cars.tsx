@@ -606,7 +606,7 @@ const CarsPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Premium Car <span className="text-yellow-400">Collection</span>
+              Premium Car <span className="gold">Collection</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8">
               Discover our fleet of luxury and sports cars available for rent in
@@ -628,7 +628,7 @@ const CarsPage: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isLoading || isRateLimited}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-black h-12 px-6 font-semibold disabled:opacity-50"
+                  className="goldbg hover:goldbg text-black h-12 px-6 font-semibold disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>
@@ -648,7 +648,7 @@ const CarsPage: React.FC = () => {
       {/* Enhanced Rate Limit Warning */}
       {isRateLimited && (
         <div className="container mx-auto px-4 py-4">
-          <Alert className="bg-yellow-900 border-yellow-600 text-yellow-200">
+          <Alert className="bg-yellow-900 border-yellow-600 gold">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Rate Limited - Too Many Requests</AlertTitle>
             <AlertDescription>
@@ -662,7 +662,7 @@ const CarsPage: React.FC = () => {
                   size="sm"
                   variant="outline"
                   disabled={retryAfter > 0}
-                  className="ml-4 border-yellow-600 text-yellow-200 hover:bg-yellow-800"
+                  className="ml-4 border-yellow-600 gold hover:bg-yellow-800"
                 >
                   {retryAfter > 0 ? `Wait ${retryAfter}s` : "Retry Now"}
                 </Button>
@@ -689,11 +689,11 @@ const CarsPage: React.FC = () => {
                     disabled={isLoading || isRateLimited || isCategoryLoading}
                     className={`
                       flex-shrink-0 flex flex-col items-center gap-2 px-6 py-4 rounded-lg border-2 transition-all duration-200 bg-gray-800
-                      data-[state=active]:border-yellow-400 data-[state=active]:bg-yellow-900 data-[state=active]:text-yellow-200
+                      data-[state=active]:border-yellow-400 data-[state=active]:bg-yellow-900 data-[state=active]:gold
                       hover:border-gray-500 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed
                       ${
                         activeTab === type.id
-                          ? "border-yellow-400 bg-yellow-900 text-yellow-200"
+                          ? "border-yellow-400 bg-yellow-900 gold"
                           : "border-gray-600 bg-gray-800 text-gray-300"
                       }
                     `}
@@ -701,7 +701,7 @@ const CarsPage: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <type.icon
                         className={`w-5 h-5 ${
-                          activeTab === type.id ? "text-yellow-400" : type.color
+                          activeTab === type.id ? "gold" : type.color
                         }`}
                       />
                       <div className="text-left">
@@ -716,7 +716,7 @@ const CarsPage: React.FC = () => {
                           text-xs px-2 py-1 rounded-full font-medium
                           ${
                             activeTab === type.id
-                              ? "bg-yellow-600 text-black"
+                              ? "goldbg text-black"
                               : "bg-gray-600 text-gray-200"
                           }
                         `}
@@ -877,7 +877,7 @@ const CarsPage: React.FC = () => {
                     disabled={isLoading || isRateLimited}
                     className={`rounded-r-none ${
                       viewMode === "grid"
-                        ? "bg-yellow-600 text-black"
+                        ? "goldbg text-black"
                         : "text-gray-300 hover:bg-gray-700"
                     } disabled:opacity-50`}
                   >
@@ -890,7 +890,7 @@ const CarsPage: React.FC = () => {
                     disabled={isLoading || isRateLimited}
                     className={`rounded-l-none ${
                       viewMode === "list"
-                        ? "bg-yellow-600 text-black"
+                        ? "goldbg text-black"
                         : "text-gray-300 hover:bg-gray-700"
                     } disabled:opacity-50`}
                   >
@@ -903,7 +903,7 @@ const CarsPage: React.FC = () => {
             {/* Cars Grid/List */}
             {(isLoading || isCategoryLoading) && filteredCars.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <RefreshCw className="w-8 h-8 animate-spin text-yellow-400 mb-4" />
+                <RefreshCw className="w-8 h-8 animate-spin gold mb-4" />
                 <p className="text-gray-300">Loading cars...</p>
               </div>
             ) : error ? (
@@ -911,7 +911,7 @@ const CarsPage: React.FC = () => {
                 <p className="text-red-400 mb-4">{error}</p>
                 <Button
                   onClick={handleRetry}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-black"
+                  className="goldbg hover:goldbg text-black"
                   disabled={isRateLimited}
                 >
                   {isRateLimited ? "Rate Limited" : "Try Again"}
@@ -945,7 +945,7 @@ const CarsPage: React.FC = () => {
                   {activeTab !== "all" && (
                     <Button
                       onClick={() => handleTabChange("all")}
-                      className="bg-yellow-600 hover:bg-yellow-700 text-black"
+                      className="goldbg hover:goldbg text-black"
                     >
                       Browse All Cars
                     </Button>
@@ -975,7 +975,7 @@ const CarsPage: React.FC = () => {
                     <Button
                       onClick={handleLoadMore}
                       disabled={isLoading || isRateLimited}
-                      className="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold px-8 py-3 disabled:opacity-50"
+                      className="goldbg hover:goldbg text-black font-semibold px-8 py-3 disabled:opacity-50"
                     >
                       {isLoading ? (
                         <>

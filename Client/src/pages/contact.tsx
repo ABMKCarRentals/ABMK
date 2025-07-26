@@ -136,7 +136,7 @@ const ContactPage: React.FC = () => {
         "Saturday - Sunday: 9:00 AM - 9:00 PM",
         "24/7 Emergency & VIP Support",
       ],
-      color: "text-yellow-400",
+      color: "gold",
       bg: "bg-yellow-900/20",
     },
   ];
@@ -185,8 +185,8 @@ const ContactPage: React.FC = () => {
       <div className="bg-gradient-to-b from-black via-gray-900 to-black py-16 shadow-lg mt-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-yellow-400 drop-shadow-lg">
-              Get in <span className="text-yellow-600">Touch</span>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 gold drop-shadow-lg">
+              Get in <span className="gold">Touch</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 font-medium">
               Ready to experience luxury? Our team of experts is here to help
@@ -197,8 +197,8 @@ const ContactPage: React.FC = () => {
                 const Icon = stat.icon;
                 return (
                   <div key={index} className="text-center">
-                    <Icon className="w-10 h-10 text-yellow-400 mx-auto mb-2 drop-shadow" />
-                    <div className="text-2xl font-bold text-yellow-400">
+                    <Icon className="w-10 h-10 gold mx-auto mb-2 drop-shadow" />
+                    <div className="text-2xl font-bold gold">
                       {stat.number}
                     </div>
                     <div className="text-gray-400">{stat.label}</div>
@@ -214,7 +214,7 @@ const ContactPage: React.FC = () => {
       <div className="py-12 bg-[#23232b] border-b border-[#27272f]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-yellow-400 mb-4">
+            <h2 className="text-3xl font-bold text-center gold mb-4">
               Quick Ways to Reach Us
             </h2>
             <p className="text-center text-gray-400 mb-8">
@@ -234,12 +234,12 @@ const ContactPage: React.FC = () => {
                     >
                       <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-lg font-semibold text-yellow-400 mb-2">
+                    <h3 className="text-lg font-semibold gold mb-2">
                       {action.title}
                     </h3>
                     <p className="text-gray-400 mb-4">{action.description}</p>
                     <Button
-                      className={`w-full ${action.bgColor} ${action.hoverColor} text-yellow-100 font-semibold tracking-wide border-0 shadow group-hover:shadow-md`}
+                      className={`w-full ${action.bgColor} ${action.hoverColor} gold font-semibold tracking-wide border-0 shadow group-hover:shadow-md`}
                       onClick={() => window.open(action.link, "_blank")}
                     >
                       {action.action}
@@ -259,7 +259,7 @@ const ContactPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Contact Form */}
               <div className="bg-[#1f2128] p-8 rounded-2xl shadow-2xl border border-[#292934]">
-                <h2 className="text-3xl font-bold text-yellow-400 mb-2">
+                <h2 className="text-3xl font-bold gold mb-2">
                   Send Us a Message
                 </h2>
                 <p className="text-gray-400 mb-6">
@@ -269,7 +269,7 @@ const ContactPage: React.FC = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name" className="text-yellow-400">
+                      <Label htmlFor="name" className="gold">
                         Full Name *
                       </Label>
                       <Input
@@ -284,7 +284,7 @@ const ContactPage: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="email" className="text-yellow-400">
+                      <Label htmlFor="email" className="gold">
                         Email Address *
                       </Label>
                       <Input
@@ -301,7 +301,7 @@ const ContactPage: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="phone" className="text-yellow-400">
+                      <Label htmlFor="phone" className="gold">
                         Phone Number
                       </Label>
                       <Input
@@ -315,7 +315,7 @@ const ContactPage: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="subject" className="text-yellow-400">
+                      <Label htmlFor="subject" className="gold">
                         Subject *
                       </Label>
                       <Input
@@ -332,7 +332,7 @@ const ContactPage: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="carInterest" className="text-yellow-400">
+                      <Label htmlFor="carInterest" className="gold">
                         Car Category Interest
                       </Label>
                       <select
@@ -352,7 +352,7 @@ const ContactPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <Label htmlFor="rentalPeriod" className="text-yellow-400">
+                      <Label htmlFor="rentalPeriod" className="gold">
                         Rental Period
                       </Label>
                       <select
@@ -371,7 +371,7 @@ const ContactPage: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="message" className="text-yellow-400">
+                    <Label htmlFor="message" className="gold">
                       Message *
                     </Label>
                     <Textarea
@@ -388,7 +388,7 @@ const ContactPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="preferredContact"
-                      className="text-yellow-400"
+                      className="gold"
                     >
                       Preferred Contact Method
                     </Label>
@@ -427,7 +427,7 @@ const ContactPage: React.FC = () => {
               {/* Contact Information */}
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-yellow-400 mb-6">
+                  <h2 className="text-3xl font-bold gold mb-6">
                     Visit Us Today
                   </h2>
                   <p className="text-gray-400 mb-8">
@@ -449,7 +449,7 @@ const ContactPage: React.FC = () => {
                         <Icon className={`w-7 h-7 ${info.color}`} />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-yellow-400 mb-1">
+                        <h3 className="text-lg font-semibold gold mb-1">
                           {info.title}
                         </h3>
                         <div className="space-y-1">
@@ -482,12 +482,12 @@ const ContactPage: React.FC = () => {
       <div className="py-16 bg-[#1f2128] border-t border-[#292934]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-yellow-400 text-center mb-12">
+            <h2 className="text-3xl font-bold gold text-center mb-12">
               Frequently Asked Questions
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
+                <h3 className="text-lg font-semibold gold mb-3">
                   What documents do I need to rent a car?
                 </h3>
                 <p className="text-gray-300 mb-6">
@@ -497,7 +497,7 @@ const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
+                <h3 className="text-lg font-semibold gold mb-3">
                   Do you offer delivery and pickup services?
                 </h3>
                 <p className="text-gray-300 mb-6">
@@ -506,7 +506,7 @@ const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
+                <h3 className="text-lg font-semibold gold mb-3">
                   What's included in the rental price?
                 </h3>
                 <p className="text-gray-300 mb-6">
@@ -516,7 +516,7 @@ const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-yellow-300 mb-3">
+                <h3 className="text-lg font-semibold gold mb-3">
                   Can I extend my rental period?
                 </h3>
                 <p className="text-gray-300 mb-6">

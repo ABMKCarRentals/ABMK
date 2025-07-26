@@ -86,7 +86,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About <span className="text-yellow-400">ABMK Rentals</span>
+              About <span className="gold">ABMK Rentals</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
               Dubai's premier luxury car rental service, delivering
@@ -94,12 +94,12 @@ const AboutPage = () => {
               unmatched customer service.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button className="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold px-8 py-3">
+              <Button className="goldbg hover:bg-yellow-700 text-black font-semibold px-8 py-3">
                 Our Fleet
               </Button>
               <Button
                 variant="outline"
-                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-3"
+                className="border gold hover:goldbg hover:text-black px-8 py-3"
               >
                 Contact Us
               </Button>
@@ -114,7 +114,7 @@ const AboutPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-yellow-500 mb-2">
+                <div className="text-4xl md:text-5xl font-bold gold mb-2">
                   {stat.number}
                 </div>
                 <div className="text-gray-300 font-medium">{stat.label}</div>
@@ -130,7 +130,7 @@ const AboutPage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold gold mb-6">
                   Our Story
                 </h2>
                 <div className="space-y-4 text-gray-300 leading-relaxed">
@@ -177,7 +177,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
                 Our Values
               </h2>
               <p className="text-xl text-gray-300">
@@ -190,8 +190,8 @@ const AboutPage = () => {
                 const Icon = value.icon;
                 return (
                   <div key={index} className="text-center p-6">
-                    <div className="w-16 h-16 bg-yellow-800 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon className="w-8 h-8 text-yellow-400" />
+                    <div className="w-16 h-16 goldbg bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-8 h-8 text-black" />
                     </div>
                     <h3 className="text-lg font-semibold text-yellow-200 mb-3">
                       {value.title}
@@ -212,7 +212,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="bg-gradient-to-br from-yellow-600 to-orange-500 p-8 rounded-xl text-black shadow-lg">
+              <div className="bg-gradient-to-br goldbg p-8 rounded-xl text-black shadow-lg">
                 <div className="flex items-center mb-6">
                   <Target className="w-8 h-8 mr-3" />
                   <h3 className="text-2xl font-bold">Our Mission</h3>
@@ -227,7 +227,7 @@ const AboutPage = () => {
 
               <div className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-xl text-white shadow-lg">
                 <div className="flex items-center mb-6">
-                  <Globe className="w-8 h-8 mr-3 text-yellow-400" />
+                  <Globe className="w-8 h-8 mr-3 gold" />
                   <h3 className="text-2xl font-bold">Our Vision</h3>
                 </div>
                 <p className="text-lg leading-relaxed">
@@ -247,7 +247,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
                 Meet Our Team
               </h2>
               <p className="text-xl text-gray-300">
@@ -269,9 +269,7 @@ const AboutPage = () => {
                   <h3 className="text-lg font-semibold text-yellow-200 mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-yellow-400 font-medium mb-2">
-                    {member.position}
-                  </p>
+                  <p className="gold font-medium mb-2">{member.position}</p>
                   <p className="text-gray-300 text-sm">{member.description}</p>
                 </div>
               ))}
@@ -285,7 +283,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
                 Why Choose ABMK Rentals?
               </h2>
               <p className="text-xl text-gray-300">
@@ -295,7 +293,7 @@ const AboutPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center p-6">
-                <Award className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                <Award className="w-12 h-12 gold mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3 text-yellow-200">
                   Premium Fleet
                 </h3>
@@ -306,7 +304,7 @@ const AboutPage = () => {
               </div>
 
               <div className="text-center p-6">
-                <Clock className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                <Clock className="w-12 h-12 gold mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3 text-yellow-200">
                   24/7 Service
                 </h3>
@@ -316,7 +314,7 @@ const AboutPage = () => {
               </div>
 
               <div className="text-center p-6">
-                <Users className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                <Users className="w-12 h-12 gold mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3 text-yellow-200">
                   Expert Team
                 </h3>
@@ -331,7 +329,7 @@ const AboutPage = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 bg-yellow-600">
+      <div className="py-16 goldbg">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
             Ready to Experience Luxury?
