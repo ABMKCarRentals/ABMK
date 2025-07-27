@@ -3,8 +3,10 @@ import logo from "../../assets/images/logonavhero.png";
 import video from "../../assets/videos/w1-launch-film-v2-9x16.mp4";
 
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-screen overflow-hidden relative">
       {/* Video Background */}
@@ -30,7 +32,12 @@ function Hero() {
         </h1>
 
         <div className="flex justify-center items-center text- gold bg-black">
-          <Button className="flex justify-center border items-center text-md gap-2 mont ">
+          <Button
+            className="flex justify-center border items-center text-md gap-2 mont"
+            onClick={() => {
+              navigate("/cars");
+            }}
+          >
             Explore all Cars <FastForwardIcon />
           </Button>
         </div>

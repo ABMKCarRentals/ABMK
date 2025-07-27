@@ -179,7 +179,7 @@ const Navbar: React.FC = () => {
         >
           <img src={logo} alt="logo" width={50} height={25} />
           <span className="hidden sm:block">ABMK Car Rentals</span>
-          <span className="sm:hidden">ABMK</span>
+          <span className="sm:hidden">ABMK Car Rentals</span>
         </div>
 
         <ul className="hidden md:flex items-center space-x-6 font-medium uppercase text-sm tracking-wide gold">

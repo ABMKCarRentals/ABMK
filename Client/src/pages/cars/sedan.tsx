@@ -21,7 +21,7 @@ const SedanCars: React.FC = () => {
     description:
       "Experience sophisticated travel with our premium sedan collection. Perfect for business meetings, airport transfers, or stylish city driving with optimal comfort and professional appeal.",
     icon: Briefcase,
-    color: "from-blue-900 to-indigo-700",
+    color: "bg-black",
     features: [
       { icon: Briefcase, text: "Business Class" },
       { icon: Star, text: "Premium Comfort" },
@@ -36,23 +36,23 @@ const SedanCars: React.FC = () => {
 
       <CategoryHero data={categoryData} />
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 bg-black">
         {/* Business Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-blue-600 mb-2">4-5</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">4-5</div>
             <div className="text-gray-600">Passenger Seats</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-blue-600 mb-2">Premium</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">Premium</div>
             <div className="text-gray-600">Interior Quality</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">24/7</div>
             <div className="text-gray-600">Available Service</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-blue-600 mb-2">
+          <div className=" p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               {sedanCars.length}+
             </div>
             <div className="text-gray-600">Sedan Models</div>
@@ -93,7 +93,7 @@ const SedanCars: React.FC = () => {
 
         {/* Business Services Section */}
         <div className="mt-16">
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-700 rounded-lg p-8 text-white mb-8">
+          <div className="bg-gradient-to-r goldbg rounded-lg p-8 text-white mb-8">
             <div className="text-center">
               <h3 className="text-3xl font-bold mb-4">Corporate Solutions</h3>
               <p className="text-xl opacity-90 mb-6">
@@ -104,9 +104,9 @@ const SedanCars: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-8 h-8 text-blue-600" />
+            <div className=" p-6 rounded-lg text-center shadow-sm">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-8 h-8 gold" />
               </div>
               <h4 className="font-semibold mb-2">Airport Transfers</h4>
               <p className="text-sm text-gray-600">
@@ -114,9 +114,9 @@ const SedanCars: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Briefcase className="w-8 h-8 text-blue-600" />
+            <div className=" p-6 rounded-lg text-center shadow-sm">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Briefcase className="w-8 h-8 gold" />
               </div>
               <h4 className="font-semibold mb-2">Business Meetings</h4>
               <p className="text-sm text-gray-600">
@@ -124,9 +124,9 @@ const SedanCars: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-blue-600" />
+            <div className=" p-6 rounded-lg text-center shadow-sm">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 gold" />
               </div>
               <h4 className="font-semibold mb-2">VIP Service</h4>
               <p className="text-sm text-gray-600">
@@ -135,9 +135,9 @@ const SedanCars: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-blue-600" />
+            <div className=" p-6 rounded-lg text-center shadow-sm">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 gold" />
               </div>
               <h4 className="font-semibold mb-2">Chauffeur Available</h4>
               <p className="text-sm text-gray-600">

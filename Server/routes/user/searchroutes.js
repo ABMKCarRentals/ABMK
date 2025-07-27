@@ -1,7 +1,6 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
-
-const { searchProducts } = require("../../controllers/user/searchcontroller");
+const { searchCars } = require("../../controllers/user/searchcontroller");
 
 const router = express.Router();
 
@@ -11,6 +10,6 @@ const limiter = rateLimit({
 });
 
 router.use(limiter);
-router.get("/:keyword", limiter, searchProducts);
+router.get("/:keyword", limiter, searchCars);
 
 module.exports = router;

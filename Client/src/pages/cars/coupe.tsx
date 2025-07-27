@@ -21,7 +21,7 @@ const CoupeCars: React.FC = () => {
     description:
       "Discover the perfect balance of style and sophistication with our coupe collection. These two-door masterpieces combine stunning design with impressive performance for the ultimate driving pleasure.",
     icon: Gem,
-    color: "from-purple-900 to-pink-600",
+    color: "bg-black",
     features: [
       { icon: Gem, text: "Elegant Design" },
       { icon: Sparkles, text: "Distinctive Style" },
@@ -31,7 +31,7 @@ const CoupeCars: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <Navbar />
 
       <CategoryHero data={categoryData} />
@@ -39,26 +39,26 @@ const CoupeCars: React.FC = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Style Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="b p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               2-Door
             </div>
             <div className="text-gray-600">Exclusive Design</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="b p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               Sport+
             </div>
             <div className="text-gray-600">Performance Mode</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="b p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               Premium
             </div>
             <div className="text-gray-600">Luxury Interior</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="b p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               {coupeCars.length}+
             </div>
             <div className="text-gray-600">Coupe Models</div>
@@ -99,7 +99,7 @@ const CoupeCars: React.FC = () => {
         )}
 
         {/* Design Philosophy Section */}
-        <div className="mt-16 bg-white rounded-lg p-8 shadow">
+        <div className="mt-16 goldbg rounded-lg p-8 shadow">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               The Art of Automotive Design
@@ -112,10 +112,10 @@ const CoupeCars: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-10 h-10 text-purple-600" />
+              <div className="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-10 h-10 gold" />
               </div>
-              <h4 className="text-lg font-semibold mb-2">
+              <h4 className="text-lg font-semibold mb-2 text-black">
                 Distinctive Silhouette
               </h4>
               <p className="text-gray-600">
@@ -125,10 +125,10 @@ const CoupeCars: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-10 h-10 text-purple-600" />
+              <div className="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-10 h-10 gold" />
               </div>
-              <h4 className="text-lg font-semibold mb-2">
+              <h4 className="text-lg font-semibold mb-2 text-black">
                 Award-Winning Design
               </h4>
               <p className="text-gray-600">
@@ -138,10 +138,10 @@ const CoupeCars: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Eye className="w-10 h-10 text-purple-600" />
+              <div className="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Eye className="w-10 h-10 gold" />
               </div>
-              <h4 className="text-lg font-semibold mb-2">
+              <h4 className="text-lg font-semibold mb-2 text-black">
                 Head-Turning Presence
               </h4>
               <p className="text-gray-600">
@@ -153,8 +153,8 @@ const CoupeCars: React.FC = () => {
         </div>
 
         {/* Occasions Section */}
-        <div className="mt-16 bg-gradient-to-r from-purple-900 to-pink-600 rounded-lg p-8 text-white shadow-lg">
-          <div className="text-center mb-8">
+        <div className="mt-16 bg-gradient-to-r rounded-lg p-8 gold shadow-lg">
+          <div className="text-center mb-12">
             <h3 className="text-3xl font-bold mb-4">
               Perfect for Every Occasion
             </h3>
@@ -163,7 +163,7 @@ const CoupeCars: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  ">
             <div className="text-center">
               <h4 className="font-semibold mb-2">Date Nights</h4>
               <p className="text-sm opacity-90">

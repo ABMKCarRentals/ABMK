@@ -32,6 +32,7 @@ import Categories from "./pages/cars/categories"; // Add this import
 import { useAuth } from "./hooks/useAuth";
 import AdminCars from "./pages/admin/Cars";
 import Brands from "./pages/cars/brands";
+import WhatsappFloatButton from "./components/common/whatsappFloating";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -219,6 +220,7 @@ function App() {
         <Route path="/unauth" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <WhatsappFloatButton />
     </div>
   );
 }

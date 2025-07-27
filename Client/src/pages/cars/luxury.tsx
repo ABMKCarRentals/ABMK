@@ -21,7 +21,7 @@ const LuxuryCars: React.FC = () => {
     description:
       "Our luxury car collection features the world's most prestigious brands, offering unparalleled comfort, performance, and sophistication for the most discerning clients.",
     icon: Crown,
-    color: "from-purple-900 to-black",
+    color: "bg-black",
     features: [
       { icon: Crown, text: "Premium Brands" },
       { icon: Star, text: "5-Star Service" },
@@ -31,7 +31,7 @@ const LuxuryCars: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <Navbar />
 
       <CategoryHero data={categoryData} />
@@ -39,18 +39,18 @@ const LuxuryCars: React.FC = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold text-black mb-2">
               {luxuryCars.length}+
             </div>
             <div className="text-gray-600">Luxury Vehicles</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">24/7</div>
+          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold text-black mb-2">24/7</div>
             <div className="text-gray-600">Concierge Service</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-purple-600 mb-2">VIP</div>
+          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold text-black mb-2">VIP</div>
             <div className="text-gray-600">Treatment</div>
           </div>
         </div>
@@ -88,43 +88,43 @@ const LuxuryCars: React.FC = () => {
         )}
 
         {/* Luxury Services Section */}
-        <div className="mt-16 bg-white rounded-lg p-8 shadow">
+        <div className="mt-16 goldbg rounded-lg p-8 shadow">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Luxury Car Rental Services
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Crown className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Crown className="w-8 h-8 gold" />
               </div>
-              <h4 className="font-semibold mb-2">VIP Delivery</h4>
+              <h4 className="font-semibold mb-2 text-black">VIP Delivery</h4>
               <p className="text-sm text-gray-600">
                 White-glove delivery service to your location
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 gold" />
               </div>
-              <h4 className="font-semibold mb-2">24/7 Support</h4>
+              <h4 className="font-semibold mb-2 text-black">24/7 Support</h4>
               <p className="text-sm text-gray-600">
                 Round-the-clock concierge assistance
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Gem className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Gem className="w-8 h-8 gold" />
               </div>
-              <h4 className="font-semibold mb-2">Premium Insurance</h4>
+              <h4 className="font-semibold mb-2 text-black">Premium Insurance</h4>
               <p className="text-sm text-gray-600">
                 Comprehensive coverage included
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Crown className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                <Crown className="w-8 h-8 gold" />
               </div>
-              <h4 className="font-semibold mb-2">Chauffeur Service</h4>
+              <h4 className="font-semibold mb-2 text-black">Chauffeur Service</h4>
               <p className="text-sm text-gray-600">
                 Professional drivers available
               </p>

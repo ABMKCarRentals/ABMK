@@ -62,8 +62,8 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/admin/cars", adminCarRouter);
 app.use("/api/cars", userCarRouter);
-app.use("/api/shop/search", userSearchRouter);
-app.use("/api/shop/review", reviewRouter);
+app.use("/api/car/search", userSearchRouter);
+app.use("/api/car/review", reviewRouter);
 
 // Root route
 app.get("/", (req, res) => {

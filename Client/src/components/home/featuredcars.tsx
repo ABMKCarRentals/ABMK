@@ -3,6 +3,8 @@ import { Button } from "../ui/button";
 import CommonCardLayout from "../common/cardlayout";
 import x5 from "../../assets/images/x5.png";
 
+import { useNavigate } from "react-router-dom";
+
 const cars = [
   {
     name: "BMW X5",
@@ -44,26 +46,6 @@ const cars = [
     price: "$300",
     img: x5,
   },
-  {
-    name: "BMW X5",
-    type: "SUV · 2006",
-    seats: "4 Seats",
-    transmission: "Semi-Automatic",
-    fuel: "Hybrid",
-    location: "New York",
-    price: "$300",
-    img: x5,
-  },
-  {
-    name: "BMW X5",
-    type: "SUV · 2006",
-    seats: "4 Seats",
-    transmission: "Semi-Automatic",
-    fuel: "Hybrid",
-    location: "New York",
-    price: "$300",
-    img: x5,
-  },
 ];
 
 const FeaturedVehicles = () => {
@@ -71,6 +53,7 @@ const FeaturedVehicles = () => {
     console.log("Card clicked:", car, index);
     // Add your card click logic here
   };
+  const navigate = useNavigate();
 
   return (
     <section className="py-12 bg-black text- gold">
@@ -92,7 +75,12 @@ const FeaturedVehicles = () => {
       </div>
 
       <div className="mt-12 flex justify-center items-center">
-        <Button className="flex justify-center border items-center text-md gap-2 mont">
+        <Button
+          className="flex justify-center border items-center text-md gap-2 mont"
+          onClick={() => {
+            navigate("/cars");
+          }}
+        >
           Explore all Cars <FastForwardIcon />
         </Button>
       </div>

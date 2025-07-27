@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { useCars } from "../../hooks/useCars";
 import {
@@ -39,7 +40,6 @@ import Navbar from "../../components/home/navbar";
 import Footer from "../../components/home/footer";
 import type { Car } from "@/types/Car";
 
-// Explicit type for newFilters
 type newFilters = {
   brand: string;
   category: string;
@@ -68,12 +68,10 @@ const CarsPage: React.FC = () => {
     error,
     pagination,
     getAllCars,
-    searchCars,
     filterAndSortCars,
     loadMoreCars,
     clearFilters,
     // Category-specific functions
-    getCarsByCategory,
     getLuxuryCars,
     getSportsCars,
     getSUVCars,
@@ -110,15 +108,15 @@ const CarsPage: React.FC = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [retryAfter, setRetryAfter] = useState(0);
 
-  // Enhanced debounce and rate limiting
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  const lastApiCall = useRef<number>(0);
-  const requestQueue = useRef<any[]>([]);
-  const isProcessingQueue = useRef<boolean>(false);
-  const MIN_API_INTERVAL = 2000;
-  const MAX_RETRIES = 3;
+  // Search dropdown for car results
+  const [searchDropdownResults, setSearchDropdownResults] = useState<Car[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [dropdownLoading, setDropdownLoading] = useState(false);
 
-  // Get current category cars based on active tab
+  // Debounce timer for search dropdown
+  const searchDropdownTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Category car selection
   const getCurrentCategoryCars = useCallback((): Car[] => {
     switch (activeTab) {
       case "luxury":
@@ -147,8 +145,6 @@ const CarsPage: React.FC = () => {
     convertibleCars,
     coupeCars,
   ]);
-
-  // Get filtered cars for display
   const filteredCars: Car[] = getCurrentCategoryCars();
 
   // Car type categories with dynamic counts
@@ -211,100 +207,6 @@ const CarsPage: React.FC = () => {
     },
   ];
 
-  // Enhanced queue processing system
-  const processRequestQueue = useCallback(async () => {
-    if (isProcessingQueue.current || requestQueue.current.length === 0) {
-      return;
-    }
-
-    isProcessingQueue.current = true;
-
-    while (requestQueue.current.length > 0) {
-      const { apiFunction, params, resolve, reject } =
-        requestQueue.current.shift();
-
-      try {
-        const now = Date.now();
-        const timeSinceLastCall = now - lastApiCall.current;
-
-        if (timeSinceLastCall < MIN_API_INTERVAL) {
-          const delay = MIN_API_INTERVAL - timeSinceLastCall;
-          await new Promise((resolve) => setTimeout(resolve, delay));
-        }
-
-        lastApiCall.current = Date.now();
-        const result = await apiFunction(
-          ...(Array.isArray(params) ? params : [params])
-        );
-        setIsRateLimited(false);
-        setRetryCount(0);
-        resolve(result);
-      } catch (error: any) {
-        if (error.response?.status === 429) {
-          const retryAfterSeconds =
-            parseInt(error.response.headers["retry-after"]) || 5;
-          setIsRateLimited(true);
-          setRetryAfter(retryAfterSeconds);
-
-          if (retryCount < MAX_RETRIES) {
-            setTimeout(() => {
-              requestQueue.current.unshift({
-                apiFunction,
-                params,
-                resolve,
-                reject,
-              });
-              setRetryCount((prev) => prev + 1);
-              processRequestQueue();
-            }, retryAfterSeconds * 1000);
-          } else {
-            reject(new Error("Max retries exceeded"));
-          }
-        } else {
-          reject(error);
-        }
-      }
-    }
-
-    isProcessingQueue.current = false;
-  }, [retryCount]);
-
-  // Enhanced API call function with queue
-  const makeApiCall = useCallback(
-    (apiFunction: (...args: any[]) => Promise<any>, params: any) => {
-      return new Promise((resolve, reject) => {
-        requestQueue.current = requestQueue.current.filter(
-          (req) =>
-            !(
-              req.apiFunction === apiFunction &&
-              JSON.stringify(req.params) === JSON.stringify(params)
-            )
-        );
-
-        requestQueue.current.push({ apiFunction, params, resolve, reject });
-        processRequestQueue();
-      });
-    },
-    [processRequestQueue]
-  );
-
-  // Countdown timer for retry
-  useEffect(() => {
-    if (retryAfter > 0) {
-      const timer = setInterval(() => {
-        setRetryAfter((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }
-  }, [retryAfter]);
-
   // Initial load effect
   useEffect(() => {
     const brand = searchParams.get("brand");
@@ -335,16 +237,13 @@ const CarsPage: React.FC = () => {
     if (brand && brand !== "all") apiFilters.brand = brand;
     if (search) apiFilters.search = search;
 
-    // Load all cars first
-    makeApiCall(getAllCars, apiFilters);
-
-    // Load all category data for counts
-    makeApiCall(getLuxuryCars, {});
-    makeApiCall(getSportsCars, {});
-    makeApiCall(getSUVCars, {});
-    makeApiCall(getSedanCars, {});
-    makeApiCall(getConvertibleCars, {});
-    makeApiCall(getCoupeCars, {});
+    getAllCars(apiFilters);
+    getLuxuryCars({});
+    getSportsCars({});
+    getSUVCars({});
+    getSedanCars({});
+    getConvertibleCars({});
+    getCoupeCars({});
     // eslint-disable-next-line
   }, [
     getAllCars,
@@ -355,21 +254,7 @@ const CarsPage: React.FC = () => {
     getConvertibleCars,
     getCoupeCars,
     searchParams,
-    makeApiCall,
   ]);
-
-  const debouncedApiCall = useCallback(
-    (apiFunction: (...args: any[]) => Promise<any>, params: any) => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
-      }
-
-      debounceTimer.current = setTimeout(() => {
-        makeApiCall(apiFunction, params);
-      }, 1000);
-    },
-    [makeApiCall]
-  );
 
   // Handle tab change with category-specific endpoints
   const handleTabChange = (tabValue: string) => {
@@ -393,7 +278,6 @@ const CarsPage: React.FC = () => {
       sort: newFilters.sort,
     };
 
-    // Add other filters (excluding category)
     Object.keys(newFilters).forEach((filterKey) => {
       if (
         newFilters[filterKey] !== "all" &&
@@ -404,9 +288,8 @@ const CarsPage: React.FC = () => {
       }
     });
 
-    // Use category-specific endpoints
     if (tabValue === "all") {
-      debouncedApiCall(getAllCars, apiFilters);
+      getAllCars(apiFilters);
     } else {
       const categoryFunctionMap: Record<
         string,
@@ -423,66 +306,61 @@ const CarsPage: React.FC = () => {
       const categoryFunction = categoryFunctionMap[tabValue];
 
       if (categoryFunction) {
-        debouncedApiCall(categoryFunction, apiFilters);
-      } else {
-        debouncedApiCall(getCarsByCategory, [tabValue, apiFilters]);
+        categoryFunction(apiFilters);
       }
     }
   };
 
+  // --- SEARCH DROPDOWN LOGIC ---
+  const handleDropdownSearch = (query: string) => {
+    setLocalSearchQuery(query);
+
+    if (searchDropdownTimer.current) {
+      clearTimeout(searchDropdownTimer.current);
+    }
+
+    if (!query || query.length < 2) {
+      setShowDropdown(false);
+      setSearchDropdownResults([]);
+      return;
+    }
+
+    setDropdownLoading(true);
+    searchDropdownTimer.current = setTimeout(async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/car/search/${encodeURIComponent(query)}`
+        );
+        if (response.data.success && Array.isArray(response.data.data)) {
+          setSearchDropdownResults(response.data.data);
+        } else {
+          setSearchDropdownResults([]);
+        }
+        setShowDropdown(true);
+      } catch (err) {
+        setSearchDropdownResults([]);
+        setShowDropdown(false);
+      } finally {
+        setDropdownLoading(false);
+      }
+    }, 500); // Debounce time
+  };
+
+  // --- END SEARCH DROPDOWN LOGIC ---
+
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (localSearchQuery.trim()) {
-      newSearchParams.set("search", localSearchQuery);
+    setShowDropdown(false);
+    // ... rest of your search logic as before ...
+    // You can trigger your redux/axios search here as needed
+  };
 
-      const apiFilters: Record<string, any> = { page: 1, limit: 12 };
-      Object.keys(localFilters).forEach((filterKey) => {
-        if (
-          localFilters[filterKey] !== "all" &&
-          localFilters[filterKey] !== "" &&
-          filterKey !== "category"
-        ) {
-          apiFilters[filterKey] = localFilters[filterKey];
-        }
-      });
-
-      makeApiCall(searchCars, [localSearchQuery, apiFilters]);
-    } else {
-      newSearchParams.delete("search");
-
-      const apiFilters: Record<string, any> = { page: 1, limit: 12 };
-      Object.keys(localFilters).forEach((filterKey) => {
-        if (
-          localFilters[filterKey] !== "all" &&
-          localFilters[filterKey] !== "" &&
-          filterKey !== "category"
-        ) {
-          apiFilters[filterKey] = localFilters[filterKey];
-        }
-      });
-
-      if (activeTab === "all") {
-        makeApiCall(getAllCars, apiFilters);
-      } else {
-        const categoryFunctionMap: Record<
-          string,
-          (...args: any[]) => Promise<any>
-        > = {
-          luxury: getLuxuryCars,
-          sports: getSportsCars,
-          suv: getSUVCars,
-          sedan: getSedanCars,
-          convertible: getConvertibleCars,
-          coupe: getCoupeCars,
-        };
-        const categoryFunction = categoryFunctionMap[activeTab];
-        if (categoryFunction) {
-          makeApiCall(categoryFunction, apiFilters);
-        }
-      }
-    }
-    setSearchParams(newSearchParams);
+  const handleDropdownCarClick = (car: Car) => {
+    // Optionally: navigate to car-details or set main display to this car
+    setShowDropdown(false);
+    setLocalSearchQuery(""); // Clear search input
+    // You could navigate, or just show details as needed
+    // e.g. navigate(`/cars/${car._id}`)
   };
 
   const handleFilterChange = (key: keyof newFilters, value: string) => {
@@ -517,7 +395,7 @@ const CarsPage: React.FC = () => {
     });
 
     if (activeTab === "all") {
-      debouncedApiCall(filterAndSortCars, apiFilters);
+      filterAndSortCars(apiFilters);
     } else {
       const categoryFunctionMap: Record<
         string,
@@ -532,7 +410,7 @@ const CarsPage: React.FC = () => {
       };
       const categoryFunction = categoryFunctionMap[activeTab];
       if (categoryFunction) {
-        debouncedApiCall(categoryFunction, apiFilters);
+        categoryFunction(apiFilters);
       }
     }
   };
@@ -552,12 +430,12 @@ const CarsPage: React.FC = () => {
     setActiveTab("all");
     setSearchParams({});
     clearFilters();
-    makeApiCall(getAllCars, { page: 1, limit: 12, sort: "newest" });
+    getAllCars({ page: 1, limit: 12, sort: "newest" });
   };
 
   const handleLoadMore = () => {
     if (pagination.hasNextPage && !isLoading) {
-      makeApiCall(loadMoreCars, pagination.currentPage + 1);
+      loadMoreCars(pagination.currentPage + 1);
     }
   };
 
@@ -566,7 +444,7 @@ const CarsPage: React.FC = () => {
     setRetryCount(0);
     setRetryAfter(0);
     if (activeTab === "all") {
-      makeApiCall(getAllCars, { page: 1, limit: 12, sort: "newest" });
+      getAllCars({ page: 1, limit: 12, sort: "newest" });
     } else {
       const categoryFunctionMap: Record<
         string,
@@ -581,7 +459,7 @@ const CarsPage: React.FC = () => {
       };
       const categoryFunction = categoryFunctionMap[activeTab];
       if (categoryFunction) {
-        makeApiCall(categoryFunction, { page: 1, limit: 12, sort: "newest" });
+        categoryFunction({ page: 1, limit: 12, sort: "newest" });
       }
     }
   };
@@ -597,10 +475,40 @@ const CarsPage: React.FC = () => {
     "Audi",
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-900">
-      <Navbar />
+  // --- DROPDOWN CAR CARD ---
+  const DropdownCarCard: React.FC<{ car: Car }> = ({ car }) => (
+    <div
+      className="flex items-center bg-gray-900 hover:bg-gray-800 transition-all border-b border-gray-700 px-4 py-3 cursor-pointer w-full min-w-[350px] max-w-[500px]"
+      onClick={() => handleDropdownCarClick(car)}
+    >
+      <img
+        src={
+          car.images && car.images.length && car.images[0].url
+            ? car.images[0].url
+            : "/api/placeholder/300/200"
+        }
+        alt={car.name}
+        className="w-24 h-16 object-cover rounded-lg mr-4 flex-shrink-0"
+      />
+      <div className="flex flex-col justify-center w-1/2">
+        <span className="font-bold text-lg text-white truncate">
+          {car.name}
+        </span>
+        <span className="text-gray-400 text-sm font-semibold truncate">
+          {car.brand}
+        </span>
+        <span className="text-xs text-gray-500 truncate">{car.model}</span>
+      </div>
+      <span className="ml-auto text-xs text-yellow-500 px-2 py-1 rounded font-semibold bg-yellow-800">
+        {car.category}
+      </span>
+    </div>
+  );
+  // --- END DROPDOWN CAR CARD ---
 
+  return (
+    <div className="min-h-screen bg-black">
+      <Navbar />
       {/* Hero Section */}
       <div className="bg-black text-white py-16 mt-16">
         <div className="container mx-auto px-4">
@@ -612,7 +520,11 @@ const CarsPage: React.FC = () => {
               Discover our fleet of luxury and sports cars available for rent in
               Dubai
             </p>
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+            {/* SEARCH BAR + DROPDOWN */}
+            <form
+              onSubmit={handleSearch}
+              className="max-w-2xl mx-auto relative"
+            >
               <div className="flex gap-2">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -620,10 +532,31 @@ const CarsPage: React.FC = () => {
                     type="text"
                     placeholder="Search by brand, model, or car name..."
                     value={localSearchQuery}
-                    onChange={(e) => setLocalSearchQuery(e.target.value)}
+                    onChange={(e) => handleDropdownSearch(e.target.value)}
                     className="pl-10 h-12 text-base bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-yellow-400 focus:ring-yellow-400"
                     disabled={isLoading || isRateLimited}
+                    autoComplete="off"
                   />
+                  {/* DROPDOWN */}
+                  {showDropdown && localSearchQuery.length > 1 && (
+                    <div className="absolute left-0 top-full mt-2 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-40 w-full min-w-[350px] max-w-[500px]">
+                      {dropdownLoading && (
+                        <div className="flex items-center justify-center py-4">
+                          <RefreshCw className="w-5 h-5 animate-spin text-yellow-400 mr-2" />
+                          <span className="text-gray-400">Searching...</span>
+                        </div>
+                      )}
+                      {!dropdownLoading &&
+                        searchDropdownResults.length === 0 && (
+                          <div className="py-4 px-4 text-gray-400 text-center">
+                            No cars found.
+                          </div>
+                        )}
+                      {searchDropdownResults.map((car: Car, idx: number) => (
+                        <DropdownCarCard key={car._id || idx} car={car} />
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <Button
                   type="submit"
@@ -673,7 +606,7 @@ const CarsPage: React.FC = () => {
       )}
 
       {/* Car Type Tabs */}
-      <div className="bg-gray-900 border-b border-gray-700 sticky top-0 z-30 shadow-lg">
+      <div className="bg-black border-b border-gray-700 sticky top-0 z-30 shadow-lg">
         <div className="container mx-auto px-4">
           <Tabs
             value={activeTab}
@@ -681,7 +614,7 @@ const CarsPage: React.FC = () => {
             className="w-full"
           >
             <TabsList className="w-full justify-start h-auto p-0 bg-transparent border-b-0">
-              <div className="flex overflow-x-auto scrollbar-hide gap-1 py-4">
+              <div className="flex flex-row md:grid md:grid-cols-5 overflow-x-auto scrollbar-hide gap-1 py-4">
                 {carTypes.map((type) => (
                   <TabsTrigger
                     key={type.id}
