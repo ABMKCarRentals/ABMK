@@ -86,8 +86,7 @@ const CarDetails: React.FC = () => {
   }
 
   // Helper for number formatting
-  const formatNumber = (num?: number) =>
-    typeof num === "number" ? num.toLocaleString() : "-";
+ 
 
   // Extract specification fields gracefully
   const {
@@ -164,6 +163,9 @@ const CarDetails: React.FC = () => {
                 </TabsList>
                 <TabsContent value="overview" className="mt-6">
                   <div>
+                    <h3 className="text-lg font-semibold mb-4 text-white">
+                      {name}
+                    </h3>
                     <h3 className="text-lg font-semibold mb-4 text-white">
                       Description
                     </h3>
