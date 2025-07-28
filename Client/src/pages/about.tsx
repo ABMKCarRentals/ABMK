@@ -12,71 +12,80 @@ import Navbar from "../components/home/navbar";
 import Footer from "../components/home/footer";
 import { Button } from "@/components/ui/button";
 
+const stats = [
+  { number: "500+", label: "Premium Vehicles" },
+  { number: "50,000+", label: "Happy Customers" },
+  { number: "15+", label: "Years Experience" },
+  { number: "24/7", label: "Customer Support" },
+];
+
+const values = [
+  {
+    icon: Shield,
+    title: "Trust & Reliability",
+    description:
+      "Every vehicle in our fleet undergoes rigorous safety checks and maintenance to ensure your complete peace of mind.",
+  },
+  {
+    icon: Star,
+    title: "Excellence in Service",
+    description:
+      "We strive to exceed expectations with personalized service, attention to detail, and commitment to customer satisfaction.",
+  },
+  {
+    icon: Heart,
+    title: "Passion for Cars",
+    description:
+      "Our team shares a genuine passion for automobiles, helping you find the perfect vehicle for your unique needs.",
+  },
+  {
+    icon: Target,
+    title: "Customer-Centric",
+    description:
+      "Every decision we make is guided by what's best for our customers, ensuring an exceptional rental experience.",
+  },
+];
+
+const team = [
+  {
+    name: "Ahmed Al Maktoum",
+    position: "Founder & CEO",
+    image: "/images/team/ahmed.jpg",
+    description:
+      "Visionary leader with 20+ years in luxury automotive industry",
+  },
+  {
+    name: "Sarah Johnson",
+    position: "Operations Director",
+    image: "/images/team/sarah.jpg",
+    description: "Expert in fleet management and customer service excellence",
+  },
+  {
+    name: "Mohammed Hassan",
+    position: "Fleet Manager",
+    image: "/images/team/mohammed.jpg",
+    description:
+      "Specialist in luxury and sports car maintenance and operations",
+  },
+  {
+    name: "Lisa Chen",
+    position: "Customer Relations",
+    image: "/images/team/lisa.jpg",
+    description:
+      "Dedicated to ensuring every customer has an unforgettable experience",
+  },
+];
+
+const fleet = [
+  "Supercars – Lamborghini, Ferrari, McLaren",
+  "Luxury Sedans – Mercedes-Benz S-Class, BMW 7 Series, Audi A8",
+  "SUVs – Range Rover, G-Wagon, Cadillac Escalade",
+  "Economy – Nissan Sunny, Toyota Camry, Kia Sportage, Jetour etc",
+  "Convertibles & Exotic Cars – Rolls Royce Dawn, Bentley Continental GT",
+  "Airport Transfers – First-class arrivals, every time",
+];
+
 const AboutPage = () => {
-  const stats = [
-    { number: "500+", label: "Premium Vehicles" },
-    { number: "50,000+", label: "Happy Customers" },
-    { number: "15+", label: "Years Experience" },
-    { number: "24/7", label: "Customer Support" },
-  ];
-
-  const values = [
-    {
-      icon: Shield,
-      title: "Trust & Reliability",
-      description:
-        "Every vehicle in our fleet undergoes rigorous safety checks and maintenance to ensure your complete peace of mind.",
-    },
-    {
-      icon: Star,
-      title: "Excellence in Service",
-      description:
-        "We strive to exceed expectations with personalized service, attention to detail, and commitment to customer satisfaction.",
-    },
-    {
-      icon: Heart,
-      title: "Passion for Cars",
-      description:
-        "Our team shares a genuine passion for automobiles, helping you find the perfect vehicle for your unique needs.",
-    },
-    {
-      icon: Target,
-      title: "Customer-Centric",
-      description:
-        "Every decision we make is guided by what's best for our customers, ensuring an exceptional rental experience.",
-    },
-  ];
-
-  const team = [
-    {
-      name: "Ahmed Al Maktoum",
-      position: "Founder & CEO",
-      image: "/images/team/ahmed.jpg",
-      description:
-        "Visionary leader with 20+ years in luxury automotive industry",
-    },
-    {
-      name: "Sarah Johnson",
-      position: "Operations Director",
-      image: "/images/team/sarah.jpg",
-      description: "Expert in fleet management and customer service excellence",
-    },
-    {
-      name: "Mohammed Hassan",
-      position: "Fleet Manager",
-      image: "/images/team/mohammed.jpg",
-      description:
-        "Specialist in luxury and sports car maintenance and operations",
-    },
-    {
-      name: "Lisa Chen",
-      position: "Customer Relations",
-      image: "/images/team/lisa.jpg",
-      description:
-        "Dedicated to ensuring every customer has an unforgettable experience",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-950 text-white">
       <Navbar />
@@ -89,9 +98,11 @@ const AboutPage = () => {
               About <span className="gold">ABMK Rentals</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              Dubai's premier luxury car rental service, delivering
-              extraordinary experiences since 2008 with the finest fleet and
-              unmatched customer service.
+              With Every Mile, We Make You Smile.
+              <br />
+              Welcome to ABMK Rent A Car, Dubai’s leading premium car rental
+              service where luxury meets convenience, and comfort is
+              standard—not a feature.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button className="goldbg hover:bg-yellow-700 text-black font-semibold px-8 py-3">
@@ -124,35 +135,33 @@ const AboutPage = () => {
         </div>
       </div>
 
-      {/* Our Story Section */}
+      {/* About Us Story Section */}
       <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold gold mb-6">
-                  Our Story
+                  Who We Are
                 </h2>
                 <div className="space-y-4 text-gray-300 leading-relaxed">
                   <p>
-                    Founded in 2008 by Ahmed Al Maktoum, ABMK Rentals began with
-                    a simple vision: to provide Dubai's residents and visitors
-                    with access to the world's most prestigious automobiles,
-                    coupled with service that exceeds all expectations.
+                    Founded with a passion for luxury, performance, and top-tier
+                    service, ABMK is more than just a rental company—we’re your
+                    trusted partner in Dubai’s fast-paced lifestyle.
                   </p>
                   <p>
-                    What started as a small collection of luxury vehicles has
-                    grown into Dubai's most trusted premium car rental service.
-                    Today, we proudly maintain a fleet of over 500 vehicles,
-                    ranging from exotic supercars to elegant sedans, rugged SUVs
-                    to stunning convertibles.
+                    Our team consists of car enthusiasts, travel experts, and
+                    customer-first professionals who understand what it takes to
+                    deliver more than just a car—we deliver comfort, confidence,
+                    and class on four wheels.
                   </p>
                   <p>
-                    Our commitment to excellence has earned us the trust of
-                    discerning clients including business executives,
-                    celebrities, tourists, and car enthusiasts who demand
-                    nothing but the best. Every vehicle in our fleet represents
-                    our dedication to quality, performance, and style.
+                    We’ve served hundreds of happy customers from around the
+                    world—from tourists chasing thrills to business executives
+                    who demand reliability and class. For every client, we
+                    tailor the experience to meet their needs—because at ABMK,
+                    every ride matters.
                   </p>
                 </div>
               </div>
@@ -168,6 +177,141 @@ const AboutPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* What We Offer Section */}
+      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold gold mb-6 text-center">
+              What We Offer
+            </h2>
+            <ul className="list-disc pl-6 text-lg text-gray-300 mb-8 space-y-2">
+              {fleet.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+            <p className="text-gray-400 text-center mb-6">
+              All vehicles are meticulously maintained, regularly inspected, and
+              fully insured for your peace of mind.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* What Makes Us Different Section */}
+      <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold gold mb-6 text-center">
+              What Makes Us Different?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-semibold gold mb-2">
+                  Ultimate Comfort & Cleanliness
+                </h3>
+                <p className="text-gray-300">
+                  Each car is detailed to perfection, air-conditioned to Dubai’s
+                  heat, and comes with plush interiors for the most comfortable
+                  ride possible.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold gold mb-2">
+                  VIP-Level Service
+                </h3>
+                <p className="text-gray-300">
+                  From booking to drop-off, expect 5-star treatment. We deliver
+                  your chosen vehicle right to your hotel, airport, or
+                  doorstep—always on time, always spotless.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold gold mb-2">
+                  Simple, Transparent Booking
+                </h3>
+                <p className="text-gray-300">
+                  We keep it simple—no hidden costs. Browse, book, and drive—all
+                  in a few clicks or a WhatsApp message.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold gold mb-2">
+                  24/7 Support
+                </h3>
+                <p className="text-gray-300">
+                  Because your plans don’t run on a 9–5 clock, neither do we.
+                  Our team is available round-the-clock to assist with bookings,
+                  extensions, or anything you need.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold gold mb-2">
+                  Customized Experiences
+                </h3>
+                <p className="text-gray-300">
+                  Want a luxury car with a personal driver? Planning a surprise
+                  date night? A desert ride? Let us know—we go beyond rentals to
+                  create experiences.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Who We Serve Section */}
+      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
+              Who We Serve
+            </h2>
+            <ul className="list-disc pl-6 text-lg text-gray-300 mb-8 space-y-2 text-left inline-block">
+              <li>Tourists who want to explore Dubai in style</li>
+              <li>Business travelers needing punctual, professional rides</li>
+              <li>
+                Locals celebrating weddings, anniversaries, or special moments
+              </li>
+              <li>Car enthusiasts chasing performance and adrenaline</li>
+            </ul>
+            <p className="text-gray-400">
+              Whether it’s for a few hours, a full day, or a long-term lease,
+              ABMK makes luxury car rental easy, fast, and unforgettable.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Our Promise Section */}
+      <div className="py-16 bg-gradient-to-br from-black via-gray-900 to-gray-950">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
+              Our Promise
+            </h2>
+            <p className="text-lg text-gray-300 mb-2">
+              When you rent with ABMK, you’re not just getting a car.
+              <br />
+              You're getting:
+            </p>
+            <ul className="list-disc pl-6 text-lg text-gray-300 mb-6 space-y-2 text-left inline-block">
+              <li>Comfort that feels like home</li>
+              <li>Style that turns heads</li>
+              <li>Service that remembers your name</li>
+            </ul>
+            <p className="text-gray-400">
+              We’re committed to setting the benchmark for luxury car rental in
+              Dubai—and exceeding your expectations every single time.
+            </p>
+            <p className="text-xl gold font-bold mt-6">
+              Ready to turn the key to your next adventure?
+              <br />
+              Choose ABMK. Choose Excellence.
+            </p>
           </div>
         </div>
       </div>
