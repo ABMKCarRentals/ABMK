@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import FindUs from "@/components/home/findus";
 
 const ContactPage: React.FC = () => {
   const { toast } = useToast();
@@ -128,17 +129,6 @@ const ContactPage: React.FC = () => {
       color: "text-purple-400",
       bg: "bg-purple-900/30",
     },
-    {
-      icon: Clock,
-      title: "Operating Hours",
-      details: [
-        "Monday - Friday: 8:00 AM - 10:00 PM",
-        "Saturday - Sunday: 9:00 AM - 9:00 PM",
-        "24/7 Emergency & VIP Support",
-      ],
-      color: "gold",
-      bg: "bg-yellow-900/20",
-    },
   ];
 
   const quickActions = [
@@ -198,9 +188,7 @@ const ContactPage: React.FC = () => {
                 return (
                   <div key={index} className="text-center">
                     <Icon className="w-10 h-10 gold mx-auto mb-2 drop-shadow" />
-                    <div className="text-2xl font-bold gold">
-                      {stat.number}
-                    </div>
+                    <div className="text-2xl font-bold gold">{stat.number}</div>
                     <div className="text-gray-400">{stat.label}</div>
                   </div>
                 );
@@ -386,10 +374,7 @@ const ContactPage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <Label
-                      htmlFor="preferredContact"
-                      className="gold"
-                    >
+                    <Label htmlFor="preferredContact" className="gold">
                       Preferred Contact Method
                     </Label>
                     <select
@@ -465,18 +450,12 @@ const ContactPage: React.FC = () => {
                 })}
 
                 {/* Map Placeholder */}
-                <div className="bg-[#21212b] h-64 rounded-lg flex items-center justify-center border border-[#292934] shadow-inner">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-gray-500 mx-auto mb-2" />
-                    <p className="text-gray-500">Interactive Map</p>
-                    <p className="text-sm text-gray-600">Business Bay, Dubai</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <FindUs />
 
       {/* FAQ Section */}
       <div className="py-16 bg-[#1f2128] border-t border-[#292934]">
