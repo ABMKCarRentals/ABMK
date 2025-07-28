@@ -10,8 +10,6 @@ import Footer from "../../components/home/footer";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import CarCard from "../../components/cars/car-card";
 import ImageGallery from "../../components/cars/image-gallery";
-
-// Import shared Car type to avoid interface mismatches
 import type { Car } from "@/types/Car";
 
 const CarDetails: React.FC = () => {
@@ -45,7 +43,7 @@ const CarDetails: React.FC = () => {
       currentCar?.brand || ""
     } ${currentCar?.model || ""} ${currentCar?.name || ""}`;
     window.open(
-      `https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(message)}`,
+      `https://wa.me/971552082602?text=${encodeURIComponent(message)}`,
       "_blank"
     );
   };
@@ -64,7 +62,7 @@ const CarDetails: React.FC = () => {
 
   if (carError || !currentCar) {
     return (
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-black">
         <Navbar />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
@@ -87,8 +85,28 @@ const CarDetails: React.FC = () => {
     );
   }
 
+  // Helper for number formatting
   const formatNumber = (num?: number) =>
     typeof num === "number" ? num.toLocaleString() : "-";
+
+  // Extract specification fields gracefully
+  const {
+    specifications = {},
+    name,
+    brand,
+    model,
+    year,
+    category,
+    transmission,
+    fuelType,
+    seats,
+    images,
+    location,
+    description,
+    features,
+    status,
+    isAvailable,
+  } = currentCar;
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -111,7 +129,7 @@ const CarDetails: React.FC = () => {
             </Link>
             <span className="mx-2">/</span>
             <span className="text-white">
-              {currentCar.brand} {currentCar.model}
+              {brand} {model}
             </span>
           </nav>
         </div>
@@ -120,7 +138,7 @@ const CarDetails: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 shadow-lg">
-              <ImageGallery images={currentCar.images || []} />
+              <ImageGallery images={images || []} />
             </section>
             <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 shadow-lg">
               <Tabs defaultValue="overview" className="w-full">
@@ -149,68 +167,115 @@ const CarDetails: React.FC = () => {
                     <h3 className="text-lg font-semibold mb-4 text-white">
                       Description
                     </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                      {currentCar.description ||
-                        `Experience the ultimate luxury with this stunning ${currentCar.brand} ${currentCar.model}. Perfect for special occasions, business trips, or simply enjoying the finest automotive engineering Dubai has to offer.`}
+                    <p className="text-gray-300 leading-relaxed mb-4">
+                      {description ||
+                        `Experience the ultimate luxury with this stunning ${brand} ${model}. Perfect for special occasions, business trips, or simply enjoying the finest automotive engineering Dubai has to offer.`}
                     </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Brand</span>
+                        <span className="font-semibold text-white">
+                          {brand}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Model</span>
+                        <span className="font-semibold text-white">
+                          {model}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Year</span>
+                        <span className="font-semibold text-white">{year}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Category</span>
+                        <span className="font-semibold text-white">
+                          {category}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Transmission</span>
+                        <span className="font-semibold text-white">
+                          {transmission}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Fuel Type</span>
+                        <span className="font-semibold text-white">
+                          {fuelType}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Seats</span>
+                        <span className="font-semibold text-white">
+                          {seats}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Location</span>
+                        <span className="font-semibold text-white">
+                          {location}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Availability</span>
+                        <span
+                          className={`font-semibold ${
+                            isAvailable ? "text-green-400" : "text-red-400"
+                          }`}
+                        >
+                          {status ||
+                            (isAvailable ? "Available" : "Not Available")}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </TabsContent>
                 <TabsContent value="specifications" className="mt-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentCar.specifications?.engine && (
+                    {specifications?.engine && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Engine</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.engine}
+                          {specifications.engine}
                         </span>
                       </div>
                     )}
-                    {typeof currentCar.specifications?.horsepower !==
-                      "undefined" && (
-                      <div className="flex justify-between py-2 border-b border-gray-600">
-                        <span className="text-gray-400">Horsepower</span>
-                        <span className="font-semibold text-white">
-                          {formatNumber(currentCar.specifications.horsepower)}{" "}
-                          HP
-                        </span>
-                      </div>
-                    )}
-                    {typeof currentCar.specifications?.topSpeed !==
-                      "undefined" && (
-                      <div className="flex justify-between py-2 border-b border-gray-600">
-                        <span className="text-gray-400">Top Speed</span>
-                        <span className="font-semibold text-white">
-                          {formatNumber(currentCar.specifications.topSpeed)}{" "}
-                          km/h
-                        </span>
-                      </div>
-                    )}
-                    {currentCar.specifications?.acceleration && (
+                    {specifications?.acceleration && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">0-100 km/h</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.acceleration}
+                          {specifications.acceleration}
                         </span>
                       </div>
                     )}
-                    {currentCar.specifications?.color && (
+                    {specifications?.mileage && (
+                      <div className="flex justify-between py-2 border-b border-gray-600">
+                        <span className="text-gray-400">Mileage</span>
+                        <span className="font-semibold text-white">
+                          {specifications.mileage}
+                        </span>
+                      </div>
+                    )}
+                    {specifications?.color && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Exterior Color</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.color}
+                          {specifications.color}
                         </span>
                       </div>
                     )}
-                    {currentCar.specifications?.interiorColor && (
+                    {specifications?.interiorColor && (
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Interior Color</span>
                         <span className="font-semibold text-white">
-                          {currentCar.specifications.interiorColor}
+                          {specifications.interiorColor}
                         </span>
                       </div>
                     )}
-                    {(!currentCar.specifications ||
-                      Object.keys(currentCar.specifications).length === 0) && (
+                    {(!specifications ||
+                      Object.values(specifications).every((v) => !v)) && (
                       <div className="col-span-2 text-center py-8">
                         <p className="text-gray-400">
                           Detailed specifications will be provided upon inquiry.
@@ -221,8 +286,8 @@ const CarDetails: React.FC = () => {
                 </TabsContent>
                 <TabsContent value="features" className="mt-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentCar.features && currentCar.features.length > 0 ? (
-                      currentCar.features.map((feature, index) => (
+                    {features && features.length > 0 ? (
+                      features.map((feature, index) => (
                         <div key={index} className="flex items-center">
                           <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
                           <span className="text-gray-300">{feature}</span>
@@ -251,7 +316,7 @@ const CarDetails: React.FC = () => {
                 <div className="space-y-4">
                   <div className="text-center p-4 bg-gray-700 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-400 mb-2 uppercase tracking-wider">
-                      Premium Rental
+                      ABMK Car Rentals
                     </div>
                     <div className="text-sm text-gray-300">
                       Contact us for pricing
@@ -270,14 +335,20 @@ const CarDetails: React.FC = () => {
                       variant="outline"
                       className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
                       size="lg"
+                      asChild
                     >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Call Now
+                      <a href="tel:+971552082602">
+                        <Phone className="w-4 h-4 mr-2" />
+                        Call Now
+                      </a>
                     </Button>
                   </div>
                   <div className="text-center text-sm text-gray-400 pt-4 border-t border-gray-600">
                     <p>Need help? Contact us</p>
-                    <a className="font-semibold text-white" href="tel:">
+                    <a
+                      className="font-semibold text-white"
+                      href="tel:+971552082602"
+                    >
                       +971 552082602
                     </a>
                   </div>
@@ -307,7 +378,6 @@ const CarDetails: React.FC = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {relatedCars.map((car: Car, idx: number) => (
-                  // Fix: Ensure correct type is passed to CarCard
                   <CarCard key={car._id || idx} car={car} />
                 ))}
               </div>

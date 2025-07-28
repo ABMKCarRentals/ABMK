@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Car, Zap, Crown, Mountain, Users, Wind } from "lucide-react";
+import { Car, Zap, Crown, Mountain, Wind } from "lucide-react";
 import Navbar from "@/components/home/navbar";
 import Footer from "@/components/home/footer";
 
@@ -15,13 +15,22 @@ const categories = [
     shadow: "shadow-[0_0_32px_0_rgba(220,38,38,0.5)]",
   },
   {
-    name: "Luxury Sedans",
+    name: "Luxury Cars",
     slug: "luxury",
     icon: Crown,
     description: "Premium comfort and elegance for business and leisure.",
     count: 18,
     color: "from-purple-600 to-purple-900",
     shadow: "shadow-[0_0_32px_0_rgba(168,85,247,0.4)]",
+  },
+  {
+    name: "Sedans",
+    slug: "sedan",
+    icon: Car,
+    description: "Comfortable sedans for daily commutes and business trips.",
+    count: 17,
+    color: "from-blue-600 to-blue-900",
+    shadow: "shadow-[0_0_32px_0_rgba(59,130,246,0.4)]",
   },
   {
     name: "SUVs",
@@ -38,17 +47,8 @@ const categories = [
     icon: Wind,
     description: "Open-top driving experience with ultimate freedom.",
     count: 12,
-    color: "from-blue-600 to-blue-900",
-    shadow: "shadow-[0_0_32px_0_rgba(59,130,246,0.4)]",
-  },
-  {
-    name: "Family Cars",
-    slug: "family",
-    icon: Users,
-    description: "Comfortable and safe vehicles for family adventures.",
-    count: 20,
-    color: "from-teal-500 to-teal-900",
-    shadow: "shadow-[0_0_32px_0_rgba(20,184,166,0.4)]",
+    color: "from-orange-500 to-orange-900",
+    shadow: "shadow-[0_0_32px_0_rgba(251,146,60,0.4)]",
   },
   {
     name: "Coupes",
@@ -56,8 +56,8 @@ const categories = [
     icon: Car,
     description: "Stylish two-door vehicles combining luxury and performance.",
     count: 14,
-    color: "from-orange-500 to-orange-900",
-    shadow: "shadow-[0_0_32px_0_rgba(251,146,60,0.4)]",
+    color: "from-teal-500 to-teal-900",
+    shadow: "shadow-[0_0_32px_0_rgba(20,184,166,0.4)]",
   },
 ];
 
@@ -65,7 +65,7 @@ const Categories: React.FC = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (slug: string) => {
-    navigate(`/cars?category=${slug}`);
+    navigate(`/${slug}`);
   };
 
   return (
@@ -91,8 +91,8 @@ const Categories: React.FC = () => {
               style={{ fontFamily: "'Montserrat', serif" }}
             >
               Discover the perfect vehicle for your needs. From high-performance
-              sports cars to luxurious family vehicles, we have something for
-              every occasion.
+              sports cars to luxurious vehicles, we have something for every
+              occasion.
             </p>
           </div>
 
@@ -185,7 +185,7 @@ const Categories: React.FC = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
