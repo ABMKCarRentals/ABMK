@@ -20,13 +20,21 @@ const brands = [
   { name: "Mercedes", logo: benz, slug: "mercedes" },
 ];
 
+const ANTHEM_PLAY_KEY = "anthemPlay";
+
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [brandsDropdownOpen, setBrandsDropdownOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+
+  // Read anthem play state from localStorage, default true
+  const getAnthemPlayState = () => {
+    const stored = localStorage.getItem(ANTHEM_PLAY_KEY);
+    return stored === null ? true : stored === "true";
+  };
+  const [isPlaying, setIsPlaying] = useState(getAnthemPlayState());
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -43,21 +51,29 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const playAudio = async () => {
-        try {
-          await audio.play();
-          setIsPlaying(true);
-        } catch (error) {
-          console.log("Autoplay was prevented:", error);
-          setIsPlaying(false);
-        }
-      };
-      const timer = setTimeout(playAudio, 100);
-      return () => clearTimeout(timer);
+    // Only play if anthem is enabled (stored in localStorage)
+    if (isPlaying) {
+      const audio = audioRef.current;
+      if (audio) {
+        const playAudio = async () => {
+          try {
+            await audio.play();
+            setIsPlaying(true);
+          } catch (error) {
+            // Autoplay blocked
+            setIsPlaying(false);
+          }
+        };
+        const timer = setTimeout(playAudio, 100);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      // If paused, ensure audio is stopped
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
     }
-  }, []);
+  }, [isPlaying]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -113,6 +129,7 @@ const Navbar: React.FC = () => {
     handleCloseMenu();
   };
 
+  // The only change: anthemPlay localStorage and logic
   const toggleAudio = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -120,31 +137,37 @@ const Navbar: React.FC = () => {
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
+        localStorage.setItem(ANTHEM_PLAY_KEY, "false");
       } else {
         audioRef.current.play();
         setIsPlaying(true);
+        localStorage.setItem(ANTHEM_PLAY_KEY, "true");
       }
+    } else {
+      setIsPlaying((p) => {
+        localStorage.setItem(ANTHEM_PLAY_KEY, (!p).toString());
+        return !p;
+      });
     }
   };
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio) {
-      const handleEnded = () => setIsPlaying(false);
-      const handleLoadedData = () => {
-        audio.volume = 0.1;
-        audio.play().catch((error) => {
-          console.log("Autoplay was prevented:", error);
-          setIsPlaying(false);
-        });
-      };
-      audio.addEventListener("ended", handleEnded);
-      audio.addEventListener("loadeddata", handleLoadedData);
-      return () => {
-        audio.removeEventListener("ended", handleEnded);
-        audio.removeEventListener("loadeddata", handleLoadedData);
-      };
-    }
+    if (!audio) return;
+    const handleEnded = () => setIsPlaying(false);
+    const handleLoadedData = () => {
+      audio.volume = 0.1;
+      // Only auto-play if enabled in localStorage
+      if (getAnthemPlayState()) {
+        audio.play().catch(() => setIsPlaying(false));
+      }
+    };
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("loadeddata", handleLoadedData);
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("loadeddata", handleLoadedData);
+    };
   }, []);
 
   const isActiveRoute = (path: string) => {

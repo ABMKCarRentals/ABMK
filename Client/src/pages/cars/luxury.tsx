@@ -38,19 +38,19 @@ const LuxuryCars: React.FC = () => {
 
       <div className="container mx-auto px-4 py-12">
         {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-black mb-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12 ">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               {luxuryCars.length}+
             </div>
             <div className="text-gray-600">Luxury Vehicles</div>
           </div>
-          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-black mb-2">24/7</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">24/7</div>
             <div className="text-gray-600">Concierge Service</div>
           </div>
-          <div className="goldbg p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-black mb-2">VIP</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">VIP</div>
             <div className="text-gray-600">Treatment</div>
           </div>
         </div>

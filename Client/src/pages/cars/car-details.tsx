@@ -93,7 +93,7 @@ const CarDetails: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-gray-800 border-b border-gray-700 mt-16">
         <div className="container mx-auto px-4 py-4">
           <nav
             className="flex items-center text-sm text-gray-400"
@@ -127,19 +127,19 @@ const CarDetails: React.FC = () => {
                 <TabsList className="grid w-full grid-cols-3 bg-gray-700">
                   <TabsTrigger
                     value="overview"
-                    className="data-[state=active]:bg-yellow-600 data-[state=active]:text-black"
+                    className="data-[state=active]:bg-[#b08a53] data-[state=active]:text-black"
                   >
                     Overview
                   </TabsTrigger>
                   <TabsTrigger
                     value="specifications"
-                    className="data-[state=active]:bg-yellow-600 data-[state=active]:text-black"
+                    className="data-[state=active]:bg-[#b08a53] data-[state=active]:text-black"
                   >
                     Specifications
                   </TabsTrigger>
                   <TabsTrigger
                     value="features"
-                    className="data-[state=active]:bg-yellow-600 data-[state=active]:text-black"
+                    className="data-[state=active]:bg-[#b08a53] data-[state=active]:text-black"
                   >
                     Features
                   </TabsTrigger>
@@ -277,7 +277,9 @@ const CarDetails: React.FC = () => {
                   </div>
                   <div className="text-center text-sm text-gray-400 pt-4 border-t border-gray-600">
                     <p>Need help? Contact us</p>
-                    <p className="font-semibold text-white">+971 XX XXX XXXX</p>
+                    <a className="font-semibold text-white" href="tel:">
+                      +971 552082602
+                    </a>
                   </div>
                   <div className="bg-gray-700 p-4 rounded-lg">
                     <h4 className="font-semibold text-white mb-2 text-base">

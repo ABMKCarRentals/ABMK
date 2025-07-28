@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCars } from "../../hooks/useCars";
 import {
   Search,
@@ -146,6 +146,7 @@ const CarsPage: React.FC = () => {
     coupeCars,
   ]);
   const filteredCars: Car[] = getCurrentCategoryCars();
+  const navigate = useNavigate();
 
   // Car type categories with dynamic counts
   const carTypes: CarTypeTab[] = [
@@ -360,7 +361,7 @@ const CarsPage: React.FC = () => {
     setShowDropdown(false);
     setLocalSearchQuery(""); // Clear search input
     // You could navigate, or just show details as needed
-    // e.g. navigate(`/cars/${car._id}`)
+    navigate(`/cars/${car._id}`);
   };
 
   const handleFilterChange = (key: keyof newFilters, value: string) => {
@@ -442,6 +443,7 @@ const CarsPage: React.FC = () => {
   const handleRetry = () => {
     setIsRateLimited(false);
     setRetryCount(0);
+    console.log(retryCount);
     setRetryAfter(0);
     if (activeTab === "all") {
       getAllCars({ page: 1, limit: 12, sort: "newest" });

@@ -25,7 +25,7 @@ const ConvertibleCars: React.FC = () => {
     description:
       "Experience Dubai's perfect weather with our stunning convertible collection. From romantic sunset drives to exhilarating coastal cruises, enjoy the ultimate open-air luxury experience.",
     icon: Sun,
-    color: "from-orange-600 to-yellow-500",
+    color: "bg-black",
     features: [
       { icon: Sun, text: "Open-Air Experience" },
       { icon: Wind, text: "Perfect Weather" },
@@ -35,30 +35,28 @@ const ConvertibleCars: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <Navbar />
 
       <CategoryHero data={categoryData} />
 
       <div className="container mx-auto px-4 py-12">
         {/* Experience Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-orange-600 mb-2">365</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 bg-black">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">365</div>
             <div className="text-gray-600">Days Perfect Weather</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-orange-600 mb-2">100%</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">100%</div>
             <div className="text-gray-600">Memorable Experience</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-orange-600 mb-2">
-              Luxury
-            </div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">Luxury</div>
             <div className="text-gray-600">Open-Air Driving</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-orange-600 mb-2">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               {convertibleCars.length}+
             </div>
             <div className="text-gray-600">Convertible Models</div>
@@ -99,7 +97,7 @@ const ConvertibleCars: React.FC = () => {
         )}
 
         {/* Scenic Routes Section */}
-        <div className="mt-16 bg-gradient-to-r from-orange-600 to-yellow-500 rounded-lg p-8 text-white shadow-lg">
+        <div className="mt-16 bg-gradient-to-r goldbg rounded-lg p-8 text-black shadow-lg">
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold mb-4">Scenic Routes Package</h3>
             <p className="text-xl opacity-90">
@@ -110,7 +108,7 @@ const ConvertibleCars: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sun className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Sunset Coastal Drive</h4>
@@ -119,7 +117,7 @@ const ConvertibleCars: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Camera className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Photography Tour</h4>
@@ -128,7 +126,7 @@ const ConvertibleCars: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Romantic Getaway</h4>
@@ -140,46 +138,6 @@ const ConvertibleCars: React.FC = () => {
         </div>
 
         {/* Top Destinations */}
-        <div className="mt-16 bg-white rounded-lg p-8 shadow">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Top Convertible Destinations
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="text-center p-4">
-              <img
-                src="/images/palm-jumeirah.jpg"
-                alt="Palm Jumeirah"
-                className="w-full h-32 object-cover rounded-lg mb-4"
-              />
-              <h4 className="font-semibold mb-2">Palm Jumeirah</h4>
-              <p className="text-sm text-gray-600">
-                Cruise the iconic palm-shaped island with stunning views
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <img
-                src="/images/jumeirah-beach.jpg"
-                alt="Jumeirah Beach Road"
-                className="w-full h-32 object-cover rounded-lg mb-4"
-              />
-              <h4 className="font-semibold mb-2">Jumeirah Beach Road</h4>
-              <p className="text-sm text-gray-600">
-                Scenic coastal drive with beach and skyline views
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <img
-                src="/images/dubai-marina.jpg"
-                alt="Dubai Marina"
-                className="w-full h-32 object-cover rounded-lg mb-4"
-              />
-              <h4 className="font-semibold mb-2">Dubai Marina</h4>
-              <p className="text-sm text-gray-600">
-                Urban sophistication with waterfront dining stops
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <Footer />

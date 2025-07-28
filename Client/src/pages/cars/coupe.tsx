@@ -38,23 +38,17 @@ const CoupeCars: React.FC = () => {
 
       <div className="container mx-auto px-4 py-12">
         {/* Style Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <div className="b p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold gold mb-2">
-              2-Door
-            </div>
+            <div className="text-3xl font-bold gold mb-2">2-Door</div>
             <div className="text-gray-600">Exclusive Design</div>
           </div>
           <div className="b p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold gold mb-2">
-              Sport+
-            </div>
+            <div className="text-3xl font-bold gold mb-2">Sport+</div>
             <div className="text-gray-600">Performance Mode</div>
           </div>
           <div className="b p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold gold mb-2">
-              Premium
-            </div>
+            <div className="text-3xl font-bold gold mb-2">Premium</div>
             <div className="text-gray-600">Luxury Interior</div>
           </div>
           <div className="b p-6 rounded-lg text-center shadow-sm">
@@ -147,45 +141,6 @@ const CoupeCars: React.FC = () => {
               <p className="text-gray-600">
                 Make an unforgettable impression at any venue, from business
                 events to social gatherings
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Occasions Section */}
-        <div className="mt-16 bg-gradient-to-r rounded-lg p-8 gold shadow-lg">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">
-              Perfect for Every Occasion
-            </h3>
-            <p className="text-xl opacity-90">
-              Our coupes are designed to elevate any experience
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  ">
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">Date Nights</h4>
-              <p className="text-sm opacity-90">
-                Create romantic memories with style and sophistication
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">Special Events</h4>
-              <p className="text-sm opacity-90">
-                Make grand entrances at weddings, galas, and celebrations
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">Business Meetings</h4>
-              <p className="text-sm opacity-90">
-                Project success and attention to detail in professional settings
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">Weekend Escapes</h4>
-              <p className="text-sm opacity-90">
-                Turn ordinary trips into extraordinary adventures
               </p>
             </div>
           </div>

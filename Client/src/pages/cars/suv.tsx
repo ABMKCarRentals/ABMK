@@ -20,7 +20,7 @@ const SUVCars: React.FC = () => {
     description:
       "Explore Dubai and beyond with our premium SUV collection. Whether for family adventures, business trips, or desert expeditions, our SUVs offer the perfect blend of comfort, capability, and style.",
     icon: Mountain,
-    color: "from-green-900 to-teal-700",
+    color: "bg-black",
     features: [
       { icon: Mountain, text: "All-Terrain Capable" },
       { icon: Users, text: "Spacious Interior" },
@@ -30,30 +30,30 @@ const SUVCars: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <Navbar />
 
       <CategoryHero data={categoryData} />
 
       <div className="container mx-auto px-4 py-12">
         {/* Capability Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-green-700 mb-2">7+</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">7+</div>
             <div className="text-gray-600">Passenger Seating</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-green-700 mb-2">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               AWD/4WD
             </div>
             <div className="text-gray-600">All-Terrain Capability</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-green-700 mb-2">Luxury</div>
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">Luxury</div>
             <div className="text-gray-600">Premium Comfort</div>
           </div>
-          <div className="bg-white p-6 rounded-lg text-center shadow-sm">
-            <div className="text-3xl font-bold text-green-700 mb-2">
+          <div className="p-6 rounded-lg text-center shadow-sm">
+            <div className="text-3xl font-bold gold mb-2">
               {suvCars.length}+
             </div>
             <div className="text-gray-600">SUV Models</div>
@@ -93,7 +93,7 @@ const SUVCars: React.FC = () => {
         )}
 
         {/* Offroad Adventure Section */}
-        <div className="mt-16 bg-gradient-to-r from-green-900 to-teal-700 rounded-lg p-8 text-white">
+        <div className="mt-16 goldbg rounded-lg p-8 text-black">
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold mb-4">
               Offroad Adventure Packages
@@ -106,7 +106,7 @@ const SUVCars: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Compass className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Desert Safari</h4>
@@ -115,7 +115,7 @@ const SUVCars: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Safety First</h4>
@@ -124,7 +124,7 @@ const SUVCars: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8" />
               </div>
               <h4 className="font-semibold mb-2">Family-Friendly</h4>
