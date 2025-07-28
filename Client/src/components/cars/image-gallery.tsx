@@ -77,7 +77,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
               <img
                 src={image.url}
                 alt={image.alt}
-                className="w-full h-16 object-cover"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src = "/api/placeholder/64/64";
                 }}

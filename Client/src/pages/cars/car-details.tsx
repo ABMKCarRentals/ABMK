@@ -111,7 +111,7 @@ const CarDetails: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
-      <div className="bg-gray-800 border-b border-gray-700 mt-16">
+      <div className="bg-black border-b border-gray-700 mt-16">
         <div className="container mx-auto px-4 py-4">
           <nav
             className="flex items-center text-sm text-gray-400"
@@ -135,14 +135,14 @@ const CarDetails: React.FC = () => {
         </div>
       </div>
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 ">
           <div className="lg:col-span-2">
-            <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 shadow-lg">
+            <section className="bg-black border border-gray-700 rounded-lg p-6 mb-6 shadow-lg ">
               <ImageGallery images={images || []} />
             </section>
-            <section className="bg-gray-800 border border-gray-700 rounded-lg p-6 shadow-lg">
+            <section className="bg-black border border-gray-700 rounded-lg p-6 shadow-lg">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-gray-700">
+                <TabsList className="grid w-full grid-cols-3 bg-black">
                   <TabsTrigger
                     value="overview"
                     className="data-[state=active]:bg-[#b08a53] data-[state=active]:text-black"
@@ -306,7 +306,7 @@ const CarDetails: React.FC = () => {
             </section>
           </div>
           <aside className="lg:col-span-1">
-            <Card className="sticky top-4 mb-6 bg-gray-800 border-gray-700 shadow-lg">
+            <Card className="sticky top-4 mb-6 bg-black border-gray-700 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-white text-lg font-semibold">
                   Get a Quote
@@ -314,7 +314,7 @@ const CarDetails: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center p-4 bg-gray-700 rounded-lg">
+                  <div className="text-center p-4 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-400 mb-2 uppercase tracking-wider">
                       ABMK Car Rentals
                     </div>
@@ -352,7 +352,7 @@ const CarDetails: React.FC = () => {
                       +971 552082602
                     </a>
                   </div>
-                  <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className=" p-4 rounded-lg">
                     <h4 className="font-semibold text-white mb-2 text-base">
                       Why Choose Us?
                     </h4>

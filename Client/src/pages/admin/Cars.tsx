@@ -1083,43 +1083,23 @@ function AdminCars() {
                         <Label className="dark-label text-sm font-medium mb-2 block">
                           Exterior Color
                         </Label>
-                        <select
+                        <input
                           name="specifications.color"
                           value={formData.specifications.color}
                           onChange={handleFieldChange}
                           className="border rounded px-3 py-2 w-full dark-input"
-                        >
-                          <option value="">Select Color</option>
-                          {addCarFormElements
-                            .find((el) => el.name === "specifications.color")
-                            ?.options?.map((opt) => (
-                              <option key={opt.id} value={opt.id}>
-                                {opt.label}
-                              </option>
-                            ))}
-                        </select>
+                        />
                       </div>
                       <div>
                         <Label className="dark-label text-sm font-medium mb-2 block">
                           Interior Color
                         </Label>
-                        <select
+                        <input
                           name="specifications.interiorColor"
                           value={formData.specifications.interiorColor}
                           onChange={handleFieldChange}
                           className="border rounded px-3 py-2 w-full dark-input"
-                        >
-                          <option value="">Select Color</option>
-                          {addCarFormElements
-                            .find(
-                              (el) => el.name === "specifications.interiorColor"
-                            )
-                            ?.options?.map((opt) => (
-                              <option key={opt.id} value={opt.id}>
-                                {opt.label}
-                              </option>
-                            ))}
-                        </select>
+                        />
                       </div>
                     </div>
                   </div>
