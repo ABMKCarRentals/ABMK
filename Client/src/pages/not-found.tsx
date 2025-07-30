@@ -49,42 +49,7 @@ const NotFound: React.FC = () => {
           </p>
         </div>
 
-        {/* Search Section */}
-        <div className="bg-[#18181b] p-8 rounded-2xl shadow-xl mb-12 max-w-2xl mx-auto border border-[#23232b]">
-          <h2 className="text-2xl font-bold text-yellow-400 mb-4">
-            Looking for something specific?
-          </h2>
-          <p className="text-gray-400 mb-6">
-            Search our premium car collection or browse popular categories
-          </p>
-
-          <form onSubmit={handleSearch} className="flex gap-2 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-              <Input
-                name="search"
-                type="text"
-                placeholder="Search for luxury cars, brands, or models..."
-                className="pl-10 h-12 bg-[#23232b] border-[#23232b] text-white placeholder-gray-500"
-                autoComplete="off"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="bg-yellow-500 hover:bg-yellow-600 text-black h-12 px-6 font-semibold"
-            >
-              Search
-            </Button>
-          </form>
-
-          <div className="text-sm text-gray-500">
-            Try searching for:{" "}
-            <span className="text-yellow-400">"Ferrari"</span>,{" "}
-            <span className="text-yellow-400">"Luxury SUV"</span>,{" "}
-            <span className="text-yellow-400">"Convertible"</span>, or{" "}
-            <span className="text-yellow-400">"Sports Car"</span>
-          </div>
-        </div>
+        
 
         {/* Popular Links */}
         <div className="mb-12">

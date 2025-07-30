@@ -330,7 +330,9 @@ const CarsPage: React.FC = () => {
     searchDropdownTimer.current = setTimeout(async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/car/search/${encodeURIComponent(query)}`
+          `${import.meta.env.VITE_PORT}/api/car/search/${encodeURIComponent(
+            query
+          )}`
         );
         if (response.data.success && Array.isArray(response.data.data)) {
           setSearchDropdownResults(response.data.data);

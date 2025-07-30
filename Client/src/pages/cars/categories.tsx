@@ -10,7 +10,6 @@ const categories = [
     slug: "sports",
     icon: Zap,
     description: "High-performance vehicles built for speed and agility.",
-    count: 25,
     color: "from-red-600 to-red-900",
     shadow: "shadow-[0_0_32px_0_rgba(220,38,38,0.5)]",
   },
@@ -19,7 +18,6 @@ const categories = [
     slug: "luxury",
     icon: Crown,
     description: "Premium comfort and elegance for business and leisure.",
-    count: 18,
     color: "from-purple-600 to-purple-900",
     shadow: "shadow-[0_0_32px_0_rgba(168,85,247,0.4)]",
   },
@@ -28,7 +26,6 @@ const categories = [
     slug: "sedan",
     icon: Car,
     description: "Comfortable sedans for daily commutes and business trips.",
-    count: 17,
     color: "from-blue-600 to-blue-900",
     shadow: "shadow-[0_0_32px_0_rgba(59,130,246,0.4)]",
   },
@@ -37,7 +34,6 @@ const categories = [
     slug: "suv",
     icon: Mountain,
     description: "Spacious and powerful vehicles for any terrain.",
-    count: 15,
     color: "from-green-600 to-green-900",
     shadow: "shadow-[0_0_32px_0_rgba(34,197,94,0.4)]",
   },
@@ -46,7 +42,6 @@ const categories = [
     slug: "convertible",
     icon: Wind,
     description: "Open-top driving experience with ultimate freedom.",
-    count: 12,
     color: "from-orange-500 to-orange-900",
     shadow: "shadow-[0_0_32px_0_rgba(251,146,60,0.4)]",
   },
@@ -55,7 +50,6 @@ const categories = [
     slug: "coupe",
     icon: Car,
     description: "Stylish two-door vehicles combining luxury and performance.",
-    count: 14,
     color: "from-teal-500 to-teal-900",
     shadow: "shadow-[0_0_32px_0_rgba(20,184,166,0.4)]",
   },
@@ -113,7 +107,7 @@ const Categories: React.FC = () => {
                   background: "rgba(20,20,20,0.98)",
                 }}
               >
-                <div className="flex flex-col items-center p-8 w-72 h-96">
+                <div className="flex flex-col items-center p-6 w-64 h-64 sm:w-60 sm:h-72 md:w-64 md:h-72 lg:w-72 xl:w-80">
                   <div className="bg-[#b08a53] rounded-full w-20 h-20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <category.icon className="w-10 h-10 text-black" />
                   </div>
@@ -131,17 +125,7 @@ const Categories: React.FC = () => {
                   <p className="text-[#d8c7b0] text-sm mb-6 leading-relaxed font-medium text-center">
                     {category.description}
                   </p>
-                  <div className="flex items-center justify-center gap-2 mb-6">
-                    <span
-                      className="font-bold text-lg"
-                      style={{ color: "#b08a53" }}
-                    >
-                      {category.count}
-                    </span>
-                    <span className="text-[#b08a53] font-medium">
-                      vehicles available
-                    </span>
-                  </div>
+                 
                   <button
                     className="bg-[#b08a53] hover:bg-[#e4c489] text-black font-semibold py-3 px-6 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 w-full shadow"
                     style={{

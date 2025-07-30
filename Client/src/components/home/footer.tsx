@@ -1,4 +1,3 @@
-
 import {
   FaFacebookF,
   FaInstagram,
@@ -11,7 +10,7 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-black text-gold pt-28 px-6 mont">
+    <footer className="bg-black gold pt-28 px-6 mont">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-8">
         {/* Logo and Description */}
         <div>
@@ -108,15 +107,22 @@ const Footer = () => {
         </div>
 
         {/* Contact */}
-        <div>
+        <div className="gold">
           <h3 className="text-lg font-semibold mb-3">Contact</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>Business Bay</li>
-            <li>Dubai, UAE</li>
-            <li>
+          <ul className="space-y-2 text-sm cursor-pointer ">
+            <a
+              href="https://www.google.com/maps/place/Business+Bay+-+Dubai+-+United+Arab+Emirates/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white"
+            >
+              Business Bay, Dubai, UAE
+            </a>
+
+            <li className="hover:text-white mt-2">
               <a href="tel:+971552082602">+971 552082602</a>
             </li>
-            <li>
+            <li className="hover:text-white">
               <a href="mailto:info@ambkrentals.com">info@ambkrentals.com</a>
             </li>
           </ul>
