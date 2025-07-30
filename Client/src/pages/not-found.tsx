@@ -1,13 +1,9 @@
 import React from "react";
-import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AlertTriangle, ArrowLeft, Home, Search, Car } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AlertTriangle, ArrowLeft, Home, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const NotFound: React.FC = () => {
-  const navigate = useNavigate();
-
   const popularLinks = [
     { name: "Luxury Cars", path: "/luxury", icon: Car },
     { name: "Sports Cars", path: "/sports", icon: Car },
@@ -15,16 +11,6 @@ const NotFound: React.FC = () => {
     { name: "About Us", path: "/about", icon: Home },
     { name: "Contact", path: "/contact", icon: Home },
   ];
-
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const searchInput = form.elements.namedItem("search") as HTMLInputElement;
-    const searchTerm = searchInput.value;
-    if (searchTerm.trim()) {
-      navigate(`/cars?search=${encodeURIComponent(searchTerm)}`);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-4 text-white">
@@ -48,8 +34,6 @@ const NotFound: React.FC = () => {
             worry, our luxury cars are still waiting for you!
           </p>
         </div>
-
-        
 
         {/* Popular Links */}
         <div className="mb-12">
