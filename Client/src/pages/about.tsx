@@ -46,36 +46,6 @@ const values = [
   },
 ];
 
-const team = [
-  {
-    name: "Ahmed Al Maktoum",
-    position: "Founder & CEO",
-    image: "/images/team/ahmed.jpg",
-    description:
-      "Visionary leader with 20+ years in luxury automotive industry",
-  },
-  {
-    name: "Sarah Johnson",
-    position: "Operations Director",
-    image: "/images/team/sarah.jpg",
-    description: "Expert in fleet management and customer service excellence",
-  },
-  {
-    name: "Mohammed Hassan",
-    position: "Fleet Manager",
-    image: "/images/team/mohammed.jpg",
-    description:
-      "Specialist in luxury and sports car maintenance and operations",
-  },
-  {
-    name: "Lisa Chen",
-    position: "Customer Relations",
-    image: "/images/team/lisa.jpg",
-    description:
-      "Dedicated to ensuring every customer has an unforgettable experience",
-  },
-];
-
 const fleet = [
   "Supercars – Lamborghini, Ferrari, McLaren",
   "Luxury Sedans – Mercedes-Benz S-Class, BMW 7 Series, Audi A8",
@@ -381,42 +351,6 @@ const AboutPage = () => {
                   delight customers from around the world.
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Team Section */}
-      <div className="py-16 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
-                Meet Our Team
-              </h2>
-              <p className="text-xl text-gray-300">
-                The passionate professionals behind your exceptional experience
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {team.map((member, index) => (
-                <div key={index} className="text-center group">
-                  <div className="relative mb-4">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-32 h-32 rounded-full mx-auto object-cover group-hover:scale-105 transition-transform duration-200 border-4 border-yellow-800"
-                    />
-                    <div className="absolute inset-0 bg-yellow-600 bg-opacity-20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-yellow-200 mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="gold font-medium mb-2">{member.position}</p>
-                  <p className="text-gray-300 text-sm">{member.description}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>

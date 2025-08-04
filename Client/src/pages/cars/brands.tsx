@@ -5,6 +5,7 @@ import bentley from "../../assets/images/brands/bentley.png";
 import rollsroyce from "../../assets/images/brands/rollsroyce.png";
 import porsche from "../../assets/images/brands/porsche.png";
 import benz from "../../assets/images/brands/benz.png";
+import bmw from "../../assets/images/brands/bmw.png";
 
 const Brands = () => {
   const navigate = useNavigate();
@@ -39,6 +40,11 @@ const Brands = () => {
       name: "Mercedes",
       logo: benz,
       slug: "mercedes",
+    },
+    {
+      name: "BMW",
+      logo: bmw,
+      slug: "bmw",
     },
   ];
 

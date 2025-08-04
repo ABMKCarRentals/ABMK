@@ -97,9 +97,9 @@ const ContactPage: React.FC = () => {
   const contactInfo = [
     {
       icon: MapPin,
-      title: "Visit Our Showroom",
+      title: "Visit Our Office",
       details: [
-        "ABMK Rentals Premium Showroom",
+        "ABMK Rentals",
         "Business Bay, Conrad Dubai Hotel",
         "Sheikh Zayed Road, Dubai, UAE",
       ],
@@ -161,9 +161,9 @@ const ContactPage: React.FC = () => {
   ];
 
   const stats = [
-    { icon: Users, number: "50,000+", label: "Happy Customers" },
-    { icon: Star, number: "4.9/5", label: "Customer Rating" },
-    { icon: Award, number: "24/7", label: "Support Available" },
+    { icon: Users, number: "2000+", label: "Customers across the globe" },
+    { icon: Star, number: "5+", label: "Years of Experience" },
+    { icon: Award, number: "40+", label: "Premium Vehicles" },  
   ];
 
   return (
