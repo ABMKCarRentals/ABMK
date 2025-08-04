@@ -10,6 +10,7 @@ import bentley from "../../assets/images/brands/bentley.png";
 import rollsroyce from "../../assets/images/brands/rollsroyce.png";
 import porsche from "../../assets/images/brands/porsche.png";
 import benz from "../../assets/images/brands/benz.png";
+import dubai from "../../assets/images/dubai.png";
 
 const brands = [
   { name: "Ferrari", logo: ferrari, slug: "ferrari" },
@@ -206,6 +207,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <ul className="hidden md:flex items-center space-x-6 font-medium uppercase text-sm tracking-wide gold">
+          <img src={dubai} alt="dubai" className="w-16" />
           {navigationItems.map((item) => (
             <li key={item.label} className="relative">
               {item.hasDropdown ? (
@@ -342,6 +344,7 @@ const Navbar: React.FC = () => {
           </div>
 
           <ul className="flex flex-col space-y-1 p-6 flex-1 overflow-y-auto">
+            <img src={dubai} alt="dubai" className="w-20" />
             {navigationItems.map((item) => (
               <li key={item.label}>
                 {item.hasDropdown ? (

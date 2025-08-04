@@ -7,8 +7,8 @@ const callNumber = "+971552082602"; // For tel: link
 
 const WhatsappFloatButton: React.FC = () => {
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-row gap-3 justify-between items-end w-full">
-      <img src={dubai} alt="" className="w-14 md:w-32 ml-8" />
+    <div className="fixed bottom-6 right-6 z-50 flex flex-row gap-3 justify-end items-end w-full">
+      
       {/* WhatsApp Button */}
       <div className="flex flex-col md:flex-row gap-3">
         <a
