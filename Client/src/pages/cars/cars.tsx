@@ -48,6 +48,7 @@ type newFilters = {
   seats: string;
   year: string;
   sort: string;
+  status: string;
   [key: string]: string;
 };
 
@@ -102,6 +103,7 @@ const CarsPage: React.FC = () => {
     seats: "all",
     year: "all",
     sort: "newest",
+    status: "all",
   });
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [retryCount, setRetryCount] = useState(0);
@@ -208,6 +210,24 @@ const CarsPage: React.FC = () => {
     },
   ];
 
+  // Filter options
+  const brands = [
+    "Ferrari",
+    "Lamborghini",
+    "Bentley",
+    "Rolls Royce",
+    "Porsche",
+    "Mercedes",
+    "BMW",
+    "Audi",
+  ];
+
+  const years = Array.from({ length: 15 }, (_, i) => `${2025 - i}`); // 2025 to 2011
+  const transmissionOptions = ["Automatic", "Manual", "Semi-Automatic"];
+  const fuelTypeOptions = ["Petrol", "Diesel", "Hybrid", "Electric"];
+  const seatOptions = ["2", "4", "5", "7", "8"];
+  const statusOptions = ["Available", "Rented", "Maintenance"];
+
   // Initial load effect
   useEffect(() => {
     const brand = searchParams.get("brand");
@@ -222,6 +242,7 @@ const CarsPage: React.FC = () => {
       seats: "all",
       year: "all",
       sort: "newest",
+      status: "all",
     };
 
     setLocalFilters(initialFilters);
@@ -427,6 +448,7 @@ const CarsPage: React.FC = () => {
       seats: "all",
       year: "all",
       sort: "newest",
+      status: "all",
     };
     setLocalFilters(resetFilters);
     setLocalSearchQuery("");
@@ -468,17 +490,6 @@ const CarsPage: React.FC = () => {
     }
   };
 
-  const brands = [
-    "Ferrari",
-    "Lamborghini",
-    "Bentley",
-    "Rolls Royce",
-    "Porsche",
-    "Mercedes",
-    "BMW",
-    "Audi",
-  ];
-
   // --- DROPDOWN CAR CARD ---
   const DropdownCarCard: React.FC<{ car: Car }> = ({ car }) => (
     <div
@@ -508,6 +519,377 @@ const CarsPage: React.FC = () => {
       </span>
     </div>
   );
+
+  // Desktop Filters Component
+  const DesktopFilters = () => (
+    <div className="space-y-6">
+      {/* Brand Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Brand
+        </Label>
+        <Select
+          value={localFilters.brand}
+          onValueChange={(value) => handleFilterChange("brand", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Brands" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Brands
+            </SelectItem>
+            {brands.map((brand) => (
+              <SelectItem
+                key={brand}
+                value={brand}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {brand}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Year Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Year
+        </Label>
+        <Select
+          value={localFilters.year}
+          onValueChange={(value) => handleFilterChange("year", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Years" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Years
+            </SelectItem>
+            {years.map((year) => (
+              <SelectItem
+                key={year}
+                value={year}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Transmission Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Transmission
+        </Label>
+        <Select
+          value={localFilters.transmission}
+          onValueChange={(value) => handleFilterChange("transmission", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Transmissions" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Transmissions
+            </SelectItem>
+            {transmissionOptions.map((transmission) => (
+              <SelectItem
+                key={transmission}
+                value={transmission}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {transmission}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Fuel Type Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Fuel Type
+        </Label>
+        <Select
+          value={localFilters.fuelType}
+          onValueChange={(value) => handleFilterChange("fuelType", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Fuel Types" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Fuel Types
+            </SelectItem>
+            {fuelTypeOptions.map((fuelType) => (
+              <SelectItem
+                key={fuelType}
+                value={fuelType}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {fuelType}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Seats Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Seats
+        </Label>
+        <Select
+          value={localFilters.seats}
+          onValueChange={(value) => handleFilterChange("seats", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Seats" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Seats
+            </SelectItem>
+            {seatOptions.map((seat) => (
+              <SelectItem
+                key={seat}
+                value={seat}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {seat} Seats
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Status Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Status
+        </Label>
+        <Select
+          value={localFilters.status}
+          onValueChange={(value) => handleFilterChange("status", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Status" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Status
+            </SelectItem>
+            {statusOptions.map((status) => (
+              <SelectItem
+                key={status}
+                value={status}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {status}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+
+  // Mobile Filters Component
+  const MobileFilters = () => (
+    <div className="space-y-6">
+      {/* Brand Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Brand
+        </Label>
+        <Select
+          value={localFilters.brand}
+          onValueChange={(value) => handleFilterChange("brand", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Brands" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Brands
+            </SelectItem>
+            {brands.map((brand) => (
+              <SelectItem
+                key={brand}
+                value={brand}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {brand}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Year Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Year
+        </Label>
+        <Select
+          value={localFilters.year}
+          onValueChange={(value) => handleFilterChange("year", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Years" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Years
+            </SelectItem>
+            {years.map((year) => (
+              <SelectItem
+                key={year}
+                value={year}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Transmission Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Transmission
+        </Label>
+        <Select
+          value={localFilters.transmission}
+          onValueChange={(value) => handleFilterChange("transmission", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Transmissions" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Transmissions
+            </SelectItem>
+            {transmissionOptions.map((transmission) => (
+              <SelectItem
+                key={transmission}
+                value={transmission}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {transmission}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Fuel Type Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Fuel Type
+        </Label>
+        <Select
+          value={localFilters.fuelType}
+          onValueChange={(value) => handleFilterChange("fuelType", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Fuel Types" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Fuel Types
+            </SelectItem>
+            {fuelTypeOptions.map((fuelType) => (
+              <SelectItem
+                key={fuelType}
+                value={fuelType}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {fuelType}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Seats Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Seats
+        </Label>
+        <Select
+          value={localFilters.seats}
+          onValueChange={(value) => handleFilterChange("seats", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Seats" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Seats
+            </SelectItem>
+            {seatOptions.map((seat) => (
+              <SelectItem
+                key={seat}
+                value={seat}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {seat} Seats
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Status Filter */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block text-gray-200">
+          Status
+        </Label>
+        <Select
+          value={localFilters.status}
+          onValueChange={(value) => handleFilterChange("status", value)}
+          disabled={isLoading || isRateLimited}
+        >
+          <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
+            <SelectValue placeholder="All Status" />
+          </SelectTrigger>
+          <SelectContent className="bg-gray-800 border-gray-600">
+            <SelectItem value="all" className="text-gray-200 focus:bg-gray-700">
+              All Status
+            </SelectItem>
+            {statusOptions.map((status) => (
+              <SelectItem
+                key={status}
+                value={status}
+                className="text-gray-200 focus:bg-gray-700"
+              >
+                {status}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+
   // --- END DROPDOWN CAR CARD ---
 
   return (
@@ -688,44 +1070,7 @@ const CarsPage: React.FC = () => {
                   Clear All
                 </Button>
               </div>
-              <div className="space-y-6">
-                {/* Brand Filter */}
-                <div>
-                  <Label className="text-sm font-medium mb-2 block text-gray-200">
-                    Brand
-                  </Label>
-                  <Select
-                    value={localFilters.brand}
-                    onValueChange={(value) =>
-                      handleFilterChange("brand", value)
-                    }
-                    disabled={isLoading || isRateLimited}
-                  >
-                    <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-yellow-400 disabled:opacity-50">
-                      <SelectValue placeholder="All Brands" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-600">
-                      <SelectItem
-                        value="all"
-                        className="text-gray-200 focus:bg-gray-700"
-                      >
-                        All Brands
-                      </SelectItem>
-                      {brands.map((brand) => (
-                        <SelectItem
-                          key={brand}
-                          value={brand}
-                          className="text-gray-200 focus:bg-gray-700"
-                        >
-                          {brand}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* ...Transmission, Fuel Type, Seats, Year filters here... */}
-                {/* For brevity, these are omitted, but you should copy them from earlier for the full file */}
-              </div>
+              <DesktopFilters />
             </div>
           </div>
 
@@ -762,7 +1107,7 @@ const CarsPage: React.FC = () => {
                       <SheetTitle className="text-white">Filters</SheetTitle>
                     </SheetHeader>
                     <div className="py-6">
-                      {/* ...Mobile filters go here (copy from earlier)... */}
+                      <MobileFilters />
                       <Button
                         onClick={handleClearFilters}
                         variant="outline"
