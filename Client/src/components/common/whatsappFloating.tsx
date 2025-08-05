@@ -1,6 +1,5 @@
 import React from "react";
 import { FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
-import dubai from "../../assets/images/dubai.png";
 
 const phoneNumber = "971552082602"; // Update this if needed
 const callNumber = "+971552082602"; // For tel: link
