@@ -109,22 +109,14 @@ const ContactPage: React.FC = () => {
     {
       icon: Phone,
       title: "Call Us",
-      details: [
-        "Main: +971 4 567 8900",
-        "Mobile: +971 50 123 4567",
-        "Emergency: +971 55 999 8888",
-      ],
+      details: ["Main: +971552082602"],
       color: "text-green-400",
       bg: "bg-green-900/30",
     },
     {
       icon: Mail,
       title: "Email Us",
-      details: [
-        "info@abmkrentals.ae",
-        "bookings@abmkrentals.ae",
-        "vip@abmkrentals.ae",
-      ],
+      details: ["info@abmkcarrental.com"],
       color: "text-purple-400",
       bg: "bg-purple-900/30",
     },
@@ -138,16 +130,16 @@ const ContactPage: React.FC = () => {
       action: "Chat on WhatsApp",
       bgColor: "bg-green-700",
       hoverColor: "hover:bg-green-600",
-      link: "https://wa.me/971501234567",
+      link: "https://wa.me/971552082602",
     },
     {
       icon: Phone,
       title: "Call Direct",
       description: "Speak with our luxury car specialists",
-      action: "Call +971 4 567 8900",
+      action: "Call +971552082602",
       bgColor: "bg-blue-700",
       hoverColor: "hover:bg-blue-600",
-      link: "tel:+97145678900",
+      link: "tel:+971552082602",
     },
     {
       icon: Mail,
@@ -156,14 +148,14 @@ const ContactPage: React.FC = () => {
       action: "Email Us",
       bgColor: "bg-purple-700",
       hoverColor: "hover:bg-purple-600",
-      link: "mailto:info@abmkrentals.ae",
+      link: "mailto:info@abmkcarrental.com",
     },
   ];
 
   const stats = [
     { icon: Users, number: "2000+", label: "Customers across the globe" },
     { icon: Star, number: "5+", label: "Years of Experience" },
-    { icon: Award, number: "40+", label: "Premium Vehicles" },  
+    { icon: Award, number: "40+", label: "Premium Vehicles" },
   ];
 
   return (

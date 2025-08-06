@@ -44,7 +44,7 @@ const Footer = () => {
             >
               <FaTwitter className="hover:text-yellow-500 cursor-pointer" />
             </a>
-            <a href="mailto:info@ambkrentals.com" aria-label="Email">
+            <a href="mailto:info@abmkcarrental.com" aria-label="Email">
               <FaEnvelope className="hover:text-yellow-500 cursor-pointer" />
             </a>
           </div>
@@ -123,7 +123,7 @@ const Footer = () => {
               <a href="tel:+971552082602">+971 552082602</a>
             </li>
             <li className="hover:text-white">
-              <a href="mailto:info@ambkrentals.com">info@ambkrentals.com</a>
+              <a href="mailto:info@abmkcarrental.com">info@abmkcarrental.com</a>
             </li>
           </ul>
         </div>

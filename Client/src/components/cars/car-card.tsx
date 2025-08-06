@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Heart,
   Eye,
   Star,
   Calendar,
@@ -67,11 +66,6 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
                 {car.status || "Available"}
               </Badge>
             </div>
-
-            {/* Heart icon */}
-            <button className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors">
-              <Heart className="w-4 h-4" />
-            </button>
           </div>
 
           {/* Content Section */}
@@ -159,11 +153,6 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
             {car.status || "Available"}
           </Badge>
         </div>
-
-        {/* Heart icon */}
-        <button className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors">
-          <Heart className="w-4 h-4" />
-        </button>
 
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />

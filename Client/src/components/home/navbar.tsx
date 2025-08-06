@@ -207,7 +207,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <ul className="hidden md:flex items-center space-x-6 font-medium uppercase text-sm tracking-wide gold">
-          <img src={dubai} alt="dubai" className="w-16" />
+          <img src={dubai} alt="dubai" className="w-14" />
           {navigationItems.map((item) => (
             <li key={item.label} className="relative">
               {item.hasDropdown ? (
