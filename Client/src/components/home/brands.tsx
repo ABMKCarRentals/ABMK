@@ -6,6 +6,8 @@ import bentley from "../../assets/images/brands/bentley.png";
 import rollsroyce from "../../assets/images/brands/rollsroyce.png";
 import porsche from "../../assets/images/brands/porsche.png";
 import benz from "../../assets/images/brands/benz.png";
+import bmw from "../../assets/images/brands/bmw.png";
+import { useNavigate } from "react-router-dom";
 
 const brands = [
   { name: "Ferrari", logo: ferrari },
@@ -14,9 +16,11 @@ const brands = [
   { name: "Rolls Royce", logo: rollsroyce },
   { name: "Porsche", logo: porsche },
   { name: "Mercedes", logo: benz },
+  { name: "BMW", logo: bmw },
 ];
 
 const BrandSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="bg-black text-white py-16 px-4 racing">
       <div className="max-w-7xl mx-auto text-center">
@@ -38,7 +42,12 @@ const BrandSection = () => {
           ))}
         </div>
         <div className="flex justify-center mt-16">
-          <Button className="border gold text-black text-md font-semibold py-2 px-5 rounded-md flex items-center gap-2 mont">
+          <Button
+            className="border gold text-black text-md font-semibold py-2 px-5 rounded-md flex items-center gap-2 mont"
+            onClick={() => {
+              navigate("/brands");
+            }}
+          >
             All Brands <ArrowRight size={18} />
           </Button>
         </div>

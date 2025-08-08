@@ -183,7 +183,7 @@ const Navbar: React.FC = () => {
     { label: "Car Types", path: "/categories" },
     { label: "About us", path: "/about" },
     { label: "Contact us", path: "/contact" },
-    { label: "Anthem", path: "", isAudio: true },
+    { label: null, path: "", isAudio: true },
   ];
 
   return (
@@ -207,7 +207,6 @@ const Navbar: React.FC = () => {
         </div>
 
         <ul className="hidden md:flex items-center space-x-6 font-medium uppercase text-sm tracking-wide gold">
-          <img src={dubai} alt="dubai" className="w-14" />
           {navigationItems.map((item) => (
             <li key={item.label} className="relative">
               {item.hasDropdown ? (
@@ -296,6 +295,7 @@ const Navbar: React.FC = () => {
               )}
             </li>
           ))}
+          <img src={dubai} alt="dubai" className="w-8" />
         </ul>
 
         <button
@@ -344,7 +344,6 @@ const Navbar: React.FC = () => {
           </div>
 
           <ul className="flex flex-col space-y-1 p-6 flex-1 overflow-y-auto">
-            <img src={dubai} alt="dubai" className="w-20" />
             {navigationItems.map((item) => (
               <li key={item.label}>
                 {item.hasDropdown ? (
@@ -395,10 +394,10 @@ const Navbar: React.FC = () => {
                 ) : item.isAudio ? (
                   <button
                     onClick={toggleAudio}
-                    className="w-full text-left py-3 px-4 gold hover:gold hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex items-center justify-between"
+                    className="w-full text-left py-3 px-4 gold hover:gold hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex justify-end"
                     aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
                   >
-                    <span>{item.label}</span>
+                    
                     {isPlaying ? (
                       <Pause size={16} className="gold" />
                     ) : (
@@ -418,7 +417,10 @@ const Navbar: React.FC = () => {
                   </button>
                 )}
               </li>
-            ))}
+            ))}{" "}
+            <div className="flex items-center justify-end mt-4">
+              <img src={dubai} alt="dubai" className="w-10 flex" />
+            </div>
           </ul>
         </div>
       </div>

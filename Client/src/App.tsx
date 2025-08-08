@@ -33,6 +33,8 @@ import { useAuth } from "./hooks/useAuth";
 import AdminCars from "./pages/admin/Cars";
 import Brands from "./pages/cars/brands";
 import WhatsappFloatButton from "./components/common/whatsappFloating";
+import ScrollToTop from "./components/common/ScrollToTop";
+import ScrollToTopButton from "./components/common/scrollToTopButton";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -60,7 +62,8 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
+    <div className="flex flex-col overflow-hidden bg-black">
+      <ScrollToTop />
       <Routes>
         {/* Public Routes - Default for users */}
         <Route
@@ -220,6 +223,7 @@ function App() {
         <Route path="/unauth" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {/* <ScrollToTopButton /> */}
       <WhatsappFloatButton />
     </div>
   );
