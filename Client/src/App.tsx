@@ -34,7 +34,6 @@ import AdminCars from "./pages/admin/Cars";
 import Brands from "./pages/cars/brands";
 import WhatsappFloatButton from "./components/common/whatsappFloating";
 import ScrollToTop from "./components/common/ScrollToTop";
-import ScrollToTopButton from "./components/common/scrollToTopButton";
 
 function App() {
   const [loading, setLoading] = useState(true);
