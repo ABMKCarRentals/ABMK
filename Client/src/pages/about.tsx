@@ -11,11 +11,12 @@ import {
 import Navbar from "../components/home/navbar";
 import Footer from "../components/home/footer";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const stats = [
-  { number: "500+", label: "Premium Vehicles" },
-  { number: "50,000+", label: "Happy Customers" },
-  { number: "15+", label: "Years Experience" },
+  { number: "40+", label: "Premium Vehicles" },
+  { number: "2000+", label: "Happy Customers" },
+  { number: "5+", label: "Years Experience" },
   { number: "24/7", label: "Customer Support" },
 ];
 
@@ -56,6 +57,7 @@ const fleet = [
 ];
 
 const AboutPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-950 text-white">
       <Navbar />
@@ -75,12 +77,20 @@ const AboutPage = () => {
               standard—not a feature.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button className="goldbg hover:bg-yellow-700 text-black font-semibold px-8 py-3">
+              <Button
+                className="goldbg hover:bg-yellow-700 text-black font-semibold px-8 py-3"
+                onClick={() => {
+                  navigate("/cars");
+                }}
+              >
                 Our Fleet
               </Button>
               <Button
                 variant="outline"
                 className="border gold hover:goldbg hover:text-black px-8 py-3"
+                onClick={() => {
+                  navigate("/contact");
+                }}
               >
                 Contact Us
               </Button>
@@ -417,12 +427,20 @@ const AboutPage = () => {
             for their luxury car rental needs in Dubai.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button className="bg-black hover:bg-gray-900 text-white font-semibold px-8 py-3">
+            <Button
+              className="bg-black hover:bg-gray-900 text-white font-semibold px-8 py-3"
+              onClick={() => {
+                navigate("/cars");
+              }}
+            >
               Browse Our Fleet
             </Button>
             <Button
               variant="outline"
               className="border-black text-black hover:bg-black hover:text-white px-8 py-3"
+              onClick={() => {
+                navigate("/contact");
+              }}
             >
               Contact Us Today
             </Button>

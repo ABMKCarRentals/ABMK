@@ -407,9 +407,9 @@ const ContactPage: React.FC = () => {
                     Visit Us Today
                   </h2>
                   <p className="text-gray-400 mb-8">
-                    Experience our premium showroom and see our luxury fleet in
-                    person. Our experts are ready to help you choose the perfect
-                    vehicle.
+                    Visit our premium office in the heart of Dubai and see our
+                    luxury fleet in person. Our experts are ready to help you
+                    choose the perfect vehicle.
                   </p>
                 </div>
                 {contactInfo.map((info, index) => {

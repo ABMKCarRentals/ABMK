@@ -178,7 +178,7 @@ const Navbar: React.FC = () => {
   };
 
   const navigationItems = [
-    { label: "All Cars", path: "/cars" },
+    { label: "All Cars", path: "/cars", flag: true },
     { label: "Brands", path: "/brands", hasDropdown: true },
     { label: "Car Types", path: "/categories" },
     { label: "About us", path: "/about" },
@@ -283,6 +283,20 @@ const Navbar: React.FC = () => {
                     <Play size={16} className="gold" />
                   )}
                 </button>
+              ) : item.flag ? (
+                <button
+                  onClick={() => handleNavigation(item.path)}
+                  className={`hover:gold cursor-pointer transition-colors duration-200 py-2 block ${
+                    isActiveRoute(item.path) ? "gold" : ""
+                  }`}
+                >
+                  {item.label}
+                  <img
+                    src={dubai}
+                    alt="Dubai"
+                    className="w-8 inline-block ml-2"
+                  />
+                </button>
               ) : (
                 <button
                   onClick={() => handleNavigation(item.path)}
@@ -295,7 +309,6 @@ const Navbar: React.FC = () => {
               )}
             </li>
           ))}
-          <img src={dubai} alt="dubai" className="w-8" />
         </ul>
 
         <button
@@ -391,13 +404,26 @@ const Navbar: React.FC = () => {
                       </div>
                     )}
                   </div>
+                ) : item.flag ? (
+                  <button
+                    onClick={() => handleNavigation(item.path)}
+                    className={`hover:gold cursor-pointer transition-colors duration-200 py-2 block ${
+                      isActiveRoute(item.path) ? "gold" : ""
+                    }`}
+                  >
+                    {item.label}
+                    <img
+                      src={dubai}
+                      alt="Dubai"
+                      className="w-8 inline-block ml-2"
+                    />
+                  </button>
                 ) : item.isAudio ? (
                   <button
                     onClick={toggleAudio}
                     className="w-full text-left py-3 px-4 gold hover:gold hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex justify-end"
                     aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
                   >
-                    
                     {isPlaying ? (
                       <Pause size={16} className="gold" />
                     ) : (
@@ -418,9 +444,6 @@ const Navbar: React.FC = () => {
                 )}
               </li>
             ))}{" "}
-            <div className="flex items-center justify-end mt-4">
-              <img src={dubai} alt="dubai" className="w-10 flex" />
-            </div>
           </ul>
         </div>
       </div>
