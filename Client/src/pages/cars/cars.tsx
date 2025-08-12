@@ -1263,7 +1263,10 @@ const CarsPage: React.FC = () => {
                   </Button>
                   {activeTab !== "all" && (
                     <Button
-                      onClick={() => handleTabChange("all")}
+                      onClick={() => {
+                        handleTabChange("all");
+                        handleClearFilters();
+                      }}
                       className="goldbg hover:goldbg text-black"
                     >
                       Browse All Cars
