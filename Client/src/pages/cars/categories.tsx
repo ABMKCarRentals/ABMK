@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Car, Zap, Crown, Mountain, Wind } from "lucide-react";
+import { Wind } from "lucide-react";
+import { FaCar, FaGem, FaMountain } from "react-icons/fa";
+import { GiSteeringWheel } from "react-icons/gi";
+import { IoCarSport } from "react-icons/io5";
 import Navbar from "@/components/home/navbar";
 import Footer from "@/components/home/footer";
 
@@ -8,7 +11,7 @@ const categories = [
   {
     name: "Sports Cars",
     slug: "sports",
-    icon: Zap,
+    icon: IoCarSport,
     description: "High-performance vehicles built for speed and agility.",
     color: "from-red-600 to-red-900",
     shadow: "shadow-[0_0_32px_0_rgba(220,38,38,0.5)]",
@@ -16,7 +19,7 @@ const categories = [
   {
     name: "Luxury Cars",
     slug: "luxury",
-    icon: Crown,
+    icon: FaGem,
     description: "Premium comfort and elegance for business and leisure.",
     color: "from-purple-600 to-purple-900",
     shadow: "shadow-[0_0_32px_0_rgba(168,85,247,0.4)]",
@@ -24,7 +27,7 @@ const categories = [
   {
     name: "Sedans",
     slug: "sedan",
-    icon: Car,
+    icon: FaCar,
     description: "Comfortable sedans for daily commutes and business trips.",
     color: "from-blue-600 to-blue-900",
     shadow: "shadow-[0_0_32px_0_rgba(59,130,246,0.4)]",
@@ -32,7 +35,7 @@ const categories = [
   {
     name: "SUVs",
     slug: "suv",
-    icon: Mountain,
+    icon: FaMountain,
     description: "Spacious and powerful vehicles for any terrain.",
     color: "from-green-600 to-green-900",
     shadow: "shadow-[0_0_32px_0_rgba(34,197,94,0.4)]",
@@ -48,7 +51,7 @@ const categories = [
   {
     name: "Coupes",
     slug: "coupe",
-    icon: Car,
+    icon: GiSteeringWheel,
     description: "Stylish two-door vehicles combining luxury and performance.",
     color: "from-teal-500 to-teal-900",
     shadow: "shadow-[0_0_32px_0_rgba(20,184,166,0.4)]",
@@ -125,7 +128,7 @@ const Categories: React.FC = () => {
                   <p className="text-[#d8c7b0] text-sm mb-6 leading-relaxed font-medium text-center">
                     {category.description}
                   </p>
-                 
+
                   <button
                     className="bg-[#b08a53] hover:bg-[#e4c489] text-black font-semibold py-3 px-6 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 w-full shadow"
                     style={{

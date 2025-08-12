@@ -14,7 +14,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-8">
         {/* Logo and Description */}
         <div>
-          <h2 className="text-2xl mb-2 racing">ABMK Rentals</h2>
+          <h2 className="text-2xl mb-2 racing">ABMK Car Rentals</h2>
           <p className="text-sm text-gray-600 mb-4">
             Premium car rental service with a wide selection of luxury and
             everyday vehicles for all your driving needs.
@@ -131,7 +131,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="text-center text-xs text-gold py-4 flex flex-col md:flex-row justify-between items-center max-w-full mx-auto">
-        <p>© 2025 ABMK Rentals. All rights reserved.</p>
+        <p>© 2025 ABMK Car Rentals. All rights reserved.</p>
         <div className="space-x-4 mt-2 md:mt-0">
           <span
             className="hover:text-yellow-300 cursor-pointer"

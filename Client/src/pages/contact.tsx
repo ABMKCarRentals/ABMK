@@ -68,7 +68,7 @@ const ContactPage: React.FC = () => {
       toast({
         title: "Message Sent Successfully!",
         description:
-          "Thank you for contacting ABMK Rentals. We'll get back to you within 24 hours.",
+          "Thank you for contacting ABMK Car Rentals. We'll get back to you within 24 hours.",
       });
 
       // Reset form
@@ -99,7 +99,7 @@ const ContactPage: React.FC = () => {
       icon: MapPin,
       title: "Visit Our Office",
       details: [
-        "ABMK Rentals",
+        "ABMK Car Rentals",
         "Business Bay, Conrad Dubai Hotel",
         "Sheikh Zayed Road, Dubai, UAE",
       ],

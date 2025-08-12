@@ -37,7 +37,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
         <img
           src={images[selectedImage]?.url || "/api/placeholder/800/400"}
           alt={images[selectedImage]?.alt || "Car image"}
-          className="w-full h-64 md:h-96 object-cover rounded-lg"
+          className="w-full h-64 md:h-96 object-contain rounded-lg"
           onError={(e) => {
             e.currentTarget.src = "/api/placeholder/800/400";
           }}

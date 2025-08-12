@@ -67,7 +67,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About <span className="gold">ABMK Rentals</span>
+              About <span className="gold">ABMK Car Rentals</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
               With Every Mile, We Make You Smile.
@@ -148,7 +148,7 @@ const AboutPage = () => {
               <div className="relative">
                 <img
                   src="/images/about/our-story.jpg"
-                  alt="ABMK Rentals Story"
+                  alt="ABMK Car Rentals Story"
                   className="rounded-lg shadow-xl"
                 />
                 <div className="absolute -bottom-6 -left-6 bg-yellow-600 text-black p-6 rounded-lg">
@@ -372,7 +372,7 @@ const AboutPage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold gold mb-4">
-                Why Choose ABMK Rentals?
+                Why Choose ABMK Car Rentals?
               </h2>
               <p className="text-xl text-gray-300">
                 Experience the difference that sets us apart
@@ -423,7 +423,7 @@ const AboutPage = () => {
             Ready to Experience Luxury?
           </h2>
           <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who have chosen ABMK Rentals
+            Join thousands of satisfied customers who have chosen ABMK Car Rentals
             for their luxury car rental needs in Dubai.
           </p>
           <div className="flex flex-wrap justify-center gap-4">

@@ -1,15 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AlertTriangle, ArrowLeft, Home, Car } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Home,
+  Car,
+  Info,
+  Contact,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NotFound: React.FC = () => {
   const popularLinks = [
-    { name: "Luxury Cars", path: "/luxury", icon: Car },
-    { name: "Sports Cars", path: "/sports", icon: Car },
     { name: "All Cars", path: "/cars", icon: Car },
-    { name: "About Us", path: "/about", icon: Home },
-    { name: "Contact", path: "/contact", icon: Home },
+    { name: "About Us", path: "/about", icon: Info },
+    { name: "Contact", path: "/contact", icon: Contact },
   ];
 
   return (
@@ -40,7 +45,7 @@ const NotFound: React.FC = () => {
           <h3 className="text-xl font-semibold text-yellow-400 mb-6">
             Popular Destinations
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
             {popularLinks.map((link, index) => {
               const Icon = link.icon;
               return (
@@ -101,7 +106,7 @@ const NotFound: React.FC = () => {
             <Button
               className="bg-green-600 hover:bg-green-700 text-white shadow"
               onClick={() =>
-                window.open("https://wa.me/971501234567", "_blank")
+                window.open("https://wa.me/971552082602", "_blank")
               }
             >
               WhatsApp Support
@@ -109,16 +114,16 @@ const NotFound: React.FC = () => {
             <Button
               variant="outline"
               className="border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-yellow-400"
-              onClick={() => (window.location.href = "tel:+97145678900")}
+              onClick={() => (window.location.href = "tel:+971552082602")}
             >
-              Call +971 4 567 8900
+              Call +971 552082602
             </Button>
           </div>
         </div>
 
         {/* Footer Note */}
-        <div className="mt-8 text-gray-600 text-sm">
-          Error 404 - Page Not Found | ABMK Rentals |
+        <div className="mt-8 text-gray-600 text-sm mb-4">
+          Error 404 - Page Not Found | ABMK Car Rentals |
           <span className="text-yellow-400"> Premium Car Rental Dubai</span>
         </div>
       </div>

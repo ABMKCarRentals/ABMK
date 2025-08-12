@@ -135,6 +135,9 @@ export const useCars = () => {
   const isProcessingQueue = useRef(false);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
+  // FIXED: Track featured cars loading to prevent infinite loops
+  const featuredCarsInitialized = useRef(false);
+
   // Rate limiting constants
   const MIN_API_INTERVAL = 2000; // 2 seconds between API calls
   const MAX_RETRIES = 3;
@@ -386,12 +389,12 @@ export const useCars = () => {
     }
   }, [retryAfter]);
 
-  // Cache validation
+  // Cache validation - FIXED: Only run once
   useEffect(() => {
     dispatch(validateCache());
   }, [dispatch]);
 
-  // Main API functions with rate limiting
+  // STABLE API FUNCTIONS - These won't change reference unless their actual dependencies change
   const getAllCars = useCallback(
     (filters: FilterOptions = {}) => {
       const cleanedFilters = cleanFilters(filters);
@@ -400,7 +403,7 @@ export const useCars = () => {
     [makeApiCall, cleanFilters]
   );
 
-  const getFeaturedCars = useCallback(
+  const getFeaturedCarsStable = useCallback(
     (limit: number = 6) => {
       return makeApiCall(fetchFeaturedCars, { limit });
     },
@@ -497,7 +500,7 @@ export const useCars = () => {
     [makeApiCall, activeFilters, cleanFilters]
   );
 
-  // Category-specific functions
+  // Category-specific functions - STABLE REFERENCES
   const getLuxuryCars = useCallback(
     (filters: FilterOptions = {}) => {
       return getCarsByCategory("Luxury", filters);
@@ -608,22 +611,21 @@ export const useCars = () => {
     processRequestQueue();
   }, [processRequestQueue]);
 
-  // Auto-load featured cars
+  // FIXED: Auto-load featured cars - Only load once and prevent infinite loops
   useEffect(() => {
-    if (featuredCars.length === 0 && !isFeaturedLoading && !featuredError) {
-      if (cacheInfo.isExpired || !featuredCars.length) {
-        getFeaturedCars().catch((error) => {
-          console.warn("Failed to load featured cars:", error);
-        });
-      }
+    if (
+      !featuredCarsInitialized.current &&
+      featuredCars.length === 0 &&
+      !isFeaturedLoading &&
+      !featuredError
+    ) {
+      featuredCarsInitialized.current = true;
+      getFeaturedCarsStable().catch((error) => {
+        console.warn("Failed to load featured cars:", error);
+        featuredCarsInitialized.current = false; // Reset on error so it can retry
+      });
     }
-  }, [
-    featuredCars.length,
-    isFeaturedLoading,
-    featuredError,
-    cacheInfo.isExpired,
-    getFeaturedCars,
-  ]);
+  }, [featuredCars.length, isFeaturedLoading, featuredError]); // Remove getFeaturedCars from deps
 
   // Cleanup on unmount
   useEffect(() => {
@@ -679,9 +681,9 @@ export const useCars = () => {
     pagination,
     cacheInfo,
 
-    // Main API functions
+    // Main API functions - THESE NAMES EXPORTED ARE STABLE
     getAllCars,
-    getFeaturedCars,
+    getFeaturedCars: getFeaturedCarsStable, // Export the stable version
     getCarsByCategory,
     getCarsByBrand,
     getCarById,

@@ -228,8 +228,13 @@ const CarsPage: React.FC = () => {
   const seatOptions = ["2", "4", "5", "7", "8"];
   const statusOptions = ["Available", "Rented", "Maintenance"];
 
+  // Replace this part of your code:
+  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
+
   // Initial load effect
   useEffect(() => {
+    if (hasInitiallyLoaded) return; // Prevent multiple calls
+
     const brand = searchParams.get("brand");
     const category = searchParams.get("category");
     const search = searchParams.get("search");
@@ -249,7 +254,7 @@ const CarsPage: React.FC = () => {
     setActiveTab(category || "all");
     setLocalSearchQuery(search || "");
 
-    // Load initial data - always load all cars first
+    // Load initial data
     const apiFilters: Record<string, any> = {
       page: 1,
       limit: 12,
@@ -259,24 +264,56 @@ const CarsPage: React.FC = () => {
     if (brand && brand !== "all") apiFilters.brand = brand;
     if (search) apiFilters.search = search;
 
+    // Load all data
     getAllCars(apiFilters);
-    getLuxuryCars({});
-    getSportsCars({});
-    getSUVCars({});
-    getSedanCars({});
-    getConvertibleCars({});
-    getCoupeCars({});
-    // eslint-disable-next-line
-  }, [
-    getAllCars,
-    getLuxuryCars,
-    getSportsCars,
-    getSUVCars,
-    getSedanCars,
-    getConvertibleCars,
-    getCoupeCars,
-    searchParams,
-  ]);
+
+    setHasInitiallyLoaded(true);
+  }, [searchParams, hasInitiallyLoaded]); // Include hasInitiallyLoaded
+
+  // With this fixed version:
+  const hasInitiallyLoad = useRef(false);
+
+  // Initial load effect
+
+  useEffect(() => {
+    if (hasInitiallyLoad.current) return;
+
+    const brand = searchParams.get("brand");
+    const category = searchParams.get("category");
+    const search = searchParams.get("search");
+
+    const initialFilters: newFilters = {
+      brand: brand || "all",
+      category: category || "all",
+      transmission: "all",
+      fuelType: "all",
+      seats: "all",
+      year: "all",
+      sort: "newest",
+      status: "all",
+    };
+
+    setLocalFilters(initialFilters);
+    setActiveTab(category || "all");
+    setLocalSearchQuery(search || "");
+
+    // Only load data if there are specific filters
+    const apiFilters: Record<string, any> = {
+      page: 1,
+      limit: 12,
+      sort: "newest",
+    };
+
+    if (brand && brand !== "all") apiFilters.brand = brand;
+    if (search) apiFilters.search = search;
+
+    // Only load cars if there are filters, otherwise let the hook handle featured cars
+    if (brand || search) {
+      getAllCars(apiFilters);
+    }
+
+    hasInitiallyLoad.current = true;
+  }, [searchParams.toString()]); // Use toString() to prevent reference issues
 
   // Handle tab change with category-specific endpoints
   const handleTabChange = (tabValue: string) => {

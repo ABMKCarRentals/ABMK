@@ -53,7 +53,7 @@ const CommonCardLayout: React.FunctionComponent<CommonCardLayoutProps> = ({
               src={car.img}
               alt={car.name}
               className="
-                w-full h-32 object-cover sm:h-28 md:h-36 lg:h-40
+                w-full h-32 object-contain sm:h-28 md:h-36 lg:h-40
                 transition-all
               "
             />
