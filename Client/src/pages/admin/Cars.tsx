@@ -17,8 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-import { addCarFormElements } from "@/config";
 import CarImageUpload from "@/components/admin/imageupload";
 import AdminCarTile from "@/components/admin/car-tile";
 
@@ -992,21 +990,22 @@ function AdminCars() {
                     <Label className="dark-label text-sm font-medium mb-2 block">
                       Car Features
                     </Label>
-                    <select
+                    <input
+                      type="text"
                       name="features"
-                      multiple
-                      value={formData.features}
-                      onChange={handleFieldChange}
+                      value={(formData.features || []).join(", ")}
+                      onChange={(e) => {
+                        const values = e.target.value
+                          .split(",")
+                          .map((v) => v.trim());
+                        setFormData((prev) => ({
+                          ...prev,
+                          features: values,
+                        }));
+                      }}
+                      placeholder="Enter features separated by commas"
                       className="border rounded px-3 py-2 w-full dark-input"
-                    >
-                      {addCarFormElements
-                        .find((el) => el.name === "features")
-                        ?.options?.map((opt) => (
-                          <option key={opt.id} value={opt.id}>
-                            {opt.label}
-                          </option>
-                        ))}
-                    </select>
+                    />
                   </div>
 
                   {/* Specifications */}
