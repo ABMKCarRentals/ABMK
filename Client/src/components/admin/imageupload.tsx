@@ -34,8 +34,7 @@ export default function CarImageUpload({
   const [dragActive, setDragActive] = useState<DragActiveType>({});
 
   // Get backend URL from environment variable
-  const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const backendUrl = import.meta.env.VITE_PORT;
 
   function handleImageFileChange(
     event: React.ChangeEvent<HTMLInputElement>,
