@@ -3,6 +3,11 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { AxiosResponse } from "axios";
 
+interface ToggleCarPayload {
+  carId: string;
+  status?: "available" | "maintenance" | "rented" | "not available";
+}
+
 // Configure axios instance for admin
 const adminApiClient = axios.create({
   baseURL: import.meta.env.VITE_PORT,
@@ -349,24 +354,28 @@ export const deleteCar = createAsyncThunk<
 
 export const toggleCarAvailability = createAsyncThunk<
   SingleCarResponse,
-  string
->("adminCars/toggleCarAvailability", async (carId, { rejectWithValue }) => {
-  try {
-    const response = await adminApiClient.patch<SingleCarResponse>(
-      `/api/admin/cars/toggle-availability/${encodeURIComponent(carId)}`
-    );
-
-    if (!response.data.success) {
-      return rejectWithValue(
-        response.data.message || "Failed to toggle car availability"
+  ToggleCarPayload
+>(
+  "adminCars/toggleCarAvailability",
+  async ({ carId, status }, { rejectWithValue }) => {
+    try {
+      const response = await adminApiClient.patch<SingleCarResponse>(
+        `/api/admin/cars/toggle-availability/${encodeURIComponent(carId)}`,
+        { status } // send status in body
       );
-    }
 
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(handleApiError(error));
+      if (!response.data.success) {
+        return rejectWithValue(
+          response.data.message || "Failed to update car status"
+        );
+      }
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
   }
-});
+);
 
 export const getCarStats = createAsyncThunk<CarStatsResponse, void>(
   "adminCars/getCarStats",

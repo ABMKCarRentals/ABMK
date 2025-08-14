@@ -157,8 +157,12 @@ export const useAdminCars = () => {
   );
 
   const toggleAvailability = useCallback(
-    (carId: string) => {
-      return dispatch(toggleCarAvailability(carId));
+    (
+      carId: string,
+      status?: "available" | "maintenance" | "rented" | "not available"
+    ) => {
+      console.log("Hook called with:", { carId, status }); // Add this line
+      return dispatch(toggleCarAvailability({ carId, status }));
     },
     [dispatch]
   );

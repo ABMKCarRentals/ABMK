@@ -28,7 +28,10 @@ interface AdminCarTileProps {
   car: Car;
   handleEdit: (car: Car) => void;
   handleDelete: (carId: string) => void;
-  handleToggleAvailability: (carId: string) => void;
+  handleToggleAvailability: (
+    carId: string,
+    status?: "available" | "maintenance" | "rented" | "not available"
+  ) => void;
 }
 
 function AdminCarTile({
@@ -64,13 +67,40 @@ function AdminCarTile({
                 : "bg-gray-600 text-gray-200"
             } px-2 py-1 text-xs font-medium`}
           >
-            {car.isAvailable ? "Available" : "Inactive"}
+            {car.status}
           </Badge>
         </div>
 
-        {/* Featured Badge */}
+        {/* Three Dots Menu - Top Right */}
+        <div className="absolute top-3 right-3 z-10">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-8 w-8 p-0 bg-black/60 backdrop-blur-sm hover:bg-black/80 text-white rounded-full"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="bg-gray-800 border-gray-700"
+            >
+              <DropdownMenuItem
+                onClick={() => handleDelete(car._id)}
+                className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Car
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Featured Badge - Moved to accommodate three dots */}
         {car.isFeatured && (
-          <div className="absolute top-3 right-3">
+          <div className="absolute bottom-2 left-2">
             <Badge className="bg-yellow-600 text-black px-2 py-1 text-xs font-medium">
               <Star className="w-3 h-3 mr-1" />
               Featured
@@ -82,56 +112,6 @@ function AdminCarTile({
         <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
           <Eye className="w-3 h-3 text-gray-300" />
           <span className="text-xs text-gray-300">{car.viewCount || 0}</span>
-        </div>
-
-        {/* Actions Dropdown */}
-        <div className="absolute top-3 right-12">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0 bg-black/60 backdrop-blur-sm hover:bg-black/80 text-white"
-              >
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-gray-800 border-gray-700"
-            >
-              <DropdownMenuItem
-                onClick={() => handleEdit(car)}
-                className="text-gray-200 hover:bg-gray-700 cursor-pointer"
-              >
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleToggleAvailability(car._id)}
-                className="text-gray-200 hover:bg-gray-700 cursor-pointer"
-              >
-                {car.isAvailable ? (
-                  <>
-                    <XCircle className="mr-2 h-4 w-4" />
-                    Deactivate
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    Activate
-                  </>
-                )}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleDelete(car._id)}
-                className="text-red-400 hover:bg-red-500/10 cursor-pointer"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 
@@ -212,28 +192,58 @@ function AdminCarTile({
             <Edit className="w-3 h-3 mr-1" />
             Edit
           </Button>
-          <Button
-            onClick={() => handleToggleAvailability(car._id)}
-            size="sm"
-            variant="outline"
-            className={`flex-1 text-xs border-gray-600 ${
-              car.isAvailable
-                ? "text-red-400 hover:bg-red-500/10 hover:border-red-500"
-                : "text-green-400 hover:bg-green-500/10 hover:border-green-500"
-            }`}
-          >
-            {car.isAvailable ? (
-              <>
-                <XCircle className="w-3 h-3 mr-1" />
-                Deactivate
-              </>
-            ) : (
-              <>
-                <CheckCircle className="w-3 h-3 mr-1" />
-                Activate
-              </>
-            )}
-          </Button>
+
+          {car.isAvailable ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 text-xs border-gray-600 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+                >
+                  <XCircle className="w-3 h-3 mr-1" />
+                  Change Status
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="bg-gray-800 border-gray-700"
+              >
+                <DropdownMenuItem
+                  onClick={() => handleToggleAvailability(car._id, "rented")}
+                  className="text-gray-200 hover:bg-gray-700 cursor-pointer"
+                >
+                  Rented
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    handleToggleAvailability(car._id, "maintenance")
+                  }
+                  className="text-gray-200 hover:bg-gray-700 cursor-pointer"
+                >
+                  Maintenance
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    handleToggleAvailability(car._id, "not available")
+                  }
+                  className="text-gray-200 hover:bg-gray-700 cursor-pointer"
+                >
+                  Not Available
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              onClick={() => handleToggleAvailability(car._id, "available")}
+              size="sm"
+              variant="outline"
+              className="flex-1 text-xs border-gray-600 text-green-400 hover:bg-green-500/10 hover:border-green-500"
+            >
+              <CheckCircle className="w-3 h-3 mr-1" />
+              Activate
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -392,6 +392,24 @@ const deleteCar = async (req, res) => {
 const toggleCarAvailability = async (req, res) => {
   try {
     const { id } = req.params;
+    const { status } = req.body; // Default to "available"
+
+    // Validate status
+    const validStatuses = [
+      "available",
+      "maintenance",
+      "rented",
+      "not available",
+    ];
+    if (!validStatuses.includes(status.toLowerCase())) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Valid statuses are: ${validStatuses.join(
+          ", "
+        )}`,
+      });
+    }
+
     const car = await Car.findById(id);
 
     if (!car) {
@@ -401,23 +419,21 @@ const toggleCarAvailability = async (req, res) => {
       });
     }
 
-    car.isAvailable = !car.isAvailable;
-    car.status = car.isAvailable ? "Available" : "Inactive";
+    car.status = status.toLowerCase();
+    car.isAvailable = car.status === "available"; // Only "available" counts as available
 
     await car.save();
 
     res.status(200).json({
       success: true,
-      message: `Car ${
-        car.isAvailable ? "activated" : "deactivated"
-      } successfully`,
+      message: `Car status updated to '${car.status}' successfully`,
       data: car,
     });
   } catch (error) {
-    console.error("Toggle availability error:", error);
+    console.error("Update car status error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Error toggling car availability",
+      message: error.message || "Error updating car status",
     });
   }
 };

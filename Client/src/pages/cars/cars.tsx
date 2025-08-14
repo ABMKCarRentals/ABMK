@@ -226,7 +226,7 @@ const CarsPage: React.FC = () => {
   const transmissionOptions = ["Automatic", "Manual", "Semi-Automatic"];
   const fuelTypeOptions = ["Petrol", "Diesel", "Hybrid", "Electric"];
   const seatOptions = ["2", "4", "5", "7", "8"];
-  const statusOptions = ["Available", "Rented", "Maintenance"];
+  const statusOptions = ["Available", "Rented", "Maintenance", "Inactive"];
 
   // Replace this part of your code:
   const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);

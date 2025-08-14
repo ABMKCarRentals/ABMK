@@ -26,7 +26,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
     switch (status?.toLowerCase()) {
       case "available":
         return "bg-green-600 text-white";
-      case "rented":
+      case "inactive":
         return "bg-red-600 text-white";
       case "maintenance":
         return "bg-yellow-600 text-black";

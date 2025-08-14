@@ -306,31 +306,6 @@ function AdminCars() {
     }
   };
 
-  const handleToggleAvailability = async (carId: string) => {
-    try {
-      const response = await toggleAvailability(carId);
-      if (
-        response &&
-        response.payload &&
-        typeof response.payload === "object" &&
-        "success" in response.payload &&
-        (response.payload as { success: boolean }).success
-      ) {
-        toast({
-          title: "Success",
-          description: "Car availability updated successfully!",
-        });
-        getAllCars();
-      }
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to toggle car availability",
-      });
-    }
-  };
-
   const handleEditCar = (car: Car) => {
     setFormData({
       ...car,
@@ -653,7 +628,7 @@ function AdminCars() {
                 car={carItem}
                 handleEdit={() => handleEditCar(carItem)}
                 handleDelete={handleDelete}
-                handleToggleAvailability={handleToggleAvailability}
+                handleToggleAvailability={toggleAvailability}
               />
             ))
           ) : (

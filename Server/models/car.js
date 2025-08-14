@@ -113,8 +113,8 @@ const carSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Available", "Rented", "Maintenance", "Inactive"],
-      default: "Available",
+      enum: ["available", "rented", "maintenance", "not available"], // Add "available"
+      default: "available",
     },
 
     // Location

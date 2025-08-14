@@ -306,8 +306,6 @@ const getAllCars = async (req, res) => {
   try {
     const {
       sort,
-      priceMin,
-      priceMax,
       brand,
       category,
       transmission,
@@ -319,11 +317,8 @@ const getAllCars = async (req, res) => {
       limit = 12,
     } = req.query;
 
-    let filterCriteria = {
-      isActive: true,
-      isAvailable: true,
-      status: "Available",
-    };
+    // Start with no availability restriction
+    let filterCriteria = {};
 
     // Search functionality
     if (search && search.trim() && search !== "all") {
@@ -335,7 +330,7 @@ const getAllCars = async (req, res) => {
       ];
     }
 
-    // Apply all filters with "all" value handling
+    // Brand filter
     if (brand && brand !== "all" && brand.length > 0) {
       const brandArray = brand.split(",").filter((b) => b && b !== "all");
       if (brandArray.length > 0) {
@@ -343,6 +338,7 @@ const getAllCars = async (req, res) => {
       }
     }
 
+    // Category filter
     if (category && category !== "all" && category.length > 0) {
       const categoryArray = category.split(",").filter((c) => c && c !== "all");
       if (categoryArray.length > 0) {
@@ -350,6 +346,7 @@ const getAllCars = async (req, res) => {
       }
     }
 
+    // Transmission filter
     if (transmission && transmission !== "all" && transmission.length > 0) {
       const transmissionArray = transmission
         .split(",")
@@ -359,6 +356,7 @@ const getAllCars = async (req, res) => {
       }
     }
 
+    // Fuel type filter
     if (fuelType && fuelType !== "all" && fuelType.length > 0) {
       const fuelArray = fuelType.split(",").filter((f) => f && f !== "all");
       if (fuelArray.length > 0) {
@@ -366,6 +364,7 @@ const getAllCars = async (req, res) => {
       }
     }
 
+    // Seats filter
     if (seats && seats !== "all" && seats.length > 0) {
       const seatsArray = seats
         .split(",")
@@ -376,6 +375,7 @@ const getAllCars = async (req, res) => {
       }
     }
 
+    // Year filter
     if (year && year !== "all" && year.length > 0) {
       const yearArray = year
         .split(",")
@@ -446,12 +446,7 @@ const getFeaturedCars = async (req, res) => {
     const { limit = 6 } = req.query;
     const limitNum = Math.max(1, Math.min(20, parseInt(limit))); // Limit max to 20
 
-    const cars = await Car.find({
-      isFeatured: true,
-      isActive: true,
-      isAvailable: true,
-      status: "Available",
-    })
+    const cars = await Car.find({})
       .sort({ createdAt: -1 })
       .limit(limitNum)
       .select("-__v");

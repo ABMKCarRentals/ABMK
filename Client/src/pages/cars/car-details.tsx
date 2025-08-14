@@ -1,10 +1,19 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCars } from "../../hooks/useCars";
-import { ArrowLeft, MessageCircle, Phone, CheckCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  MessageCircle,
+  Phone,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Car as CarIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import Navbar from "../../components/home/navbar";
 import Footer from "../../components/home/footer";
 import LoadingSpinner from "../../components/common/loading-spinner";
@@ -48,6 +57,80 @@ const CarDetails: React.FC = () => {
     );
   };
 
+  // Function to determine car availability status
+  const getCarStatusInfo = () => {
+    if (!currentCar)
+      return { available: false, status: "unknown", message: "Status unknown" };
+
+    const status = currentCar.status?.toLowerCase() || "";
+    const isAvailable = currentCar.isAvailable;
+
+    switch (status) {
+      case "available":
+      case "active":
+        return {
+          available: true,
+          status: "available",
+          message: "Available Now",
+          color: "text-green-400",
+          bgColor: "bg-green-500/10",
+          borderColor: "border-green-500/20",
+        };
+
+      case "rented":
+        return {
+          available: false,
+          status: "rented",
+          message: "Currently Rented",
+          description:
+            "This vehicle is currently with another customer. Check back later or explore similar options.",
+          color: "text-yellow-400",
+          bgColor: "bg-yellow-500/10",
+          borderColor: "border-yellow-500/20",
+          icon: <CarIcon className="w-4 h-4" />,
+        };
+
+      case "maintenance":
+        return {
+          available: false,
+          status: "maintenance",
+          message: "Under Maintenance",
+          description:
+            "This vehicle is currently undergoing scheduled maintenance for your safety and comfort.",
+          color: "text-orange-400",
+          bgColor: "bg-orange-500/10",
+          borderColor: "border-orange-500/20",
+          icon: <AlertCircle className="w-4 h-4" />,
+        };
+
+      case "not available":
+      case "inactive":
+        return {
+          available: false,
+          status: "unavailable",
+          message: "Temporarily Unavailable",
+          description:
+            "This vehicle is currently not available for rental. Please check our other premium options.",
+          color: "text-red-400",
+          bgColor: "bg-red-500/10",
+          borderColor: "border-red-500/20",
+          icon: <Clock className="w-4 h-4" />,
+        };
+
+      default:
+        return {
+          available: isAvailable,
+          status: isAvailable ? "available" : "unavailable",
+          message: isAvailable ? "Available Now" : "Currently Unavailable",
+          color: isAvailable ? "text-green-400" : "text-red-400",
+          bgColor: isAvailable ? "bg-green-500/10" : "bg-red-500/10",
+          borderColor: isAvailable
+            ? "border-green-500/20"
+            : "border-red-500/20",
+        };
+    }
+  };
+
   if (isCarLoading) {
     return (
       <div className="min-h-screen bg-gray-900">
@@ -85,9 +168,6 @@ const CarDetails: React.FC = () => {
     );
   }
 
-  // Helper for number formatting
- 
-
   // Extract specification fields gracefully
   const {
     specifications = {},
@@ -103,9 +183,9 @@ const CarDetails: React.FC = () => {
     location,
     description,
     features,
-    status,
-    isAvailable,
   } = currentCar;
+
+  const statusInfo = getCarStatusInfo();
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -222,13 +302,8 @@ const CarDetails: React.FC = () => {
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-600">
                         <span className="text-gray-400">Availability</span>
-                        <span
-                          className={`font-semibold ${
-                            isAvailable ? "text-green-400" : "text-red-400"
-                          }`}
-                        >
-                          {status ||
-                            (isAvailable ? "Available" : "Not Available")}
+                        <span className={`font-semibold ${statusInfo.color}`}>
+                          {statusInfo.message}
                         </span>
                       </div>
                     </div>
@@ -311,40 +386,113 @@ const CarDetails: React.FC = () => {
             <Card className="sticky top-4 mb-6 bg-black border-gray-700 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-white text-lg font-semibold">
-                  Get a Quote
+                  {statusInfo.available ? "Get a Quote" : "Vehicle Status"}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="">
+                  {/* Status Alert */}
+                  {!statusInfo.available && (
+                    <Alert
+                      className={`${statusInfo.bgColor} ${statusInfo.borderColor} border flex text-center`}
+                    >
+                      <div className="flex items-center">
+                        
+                        <AlertDescription
+                          className={`ml-2 ${statusInfo.color}`}
+                        >
+                          <div className="font-semibold w-full">
+                            {statusInfo.message}
+                          </div>
+                          {statusInfo.description && (
+                            <div className="text-sm text-gray-400 mt-1">
+                              {statusInfo.description}
+                            </div>
+                          )}
+                        </AlertDescription>
+                      </div>
+                    </Alert>
+                  )}
+
                   <div className="text-center p-4 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-400 mb-2 uppercase tracking-wider">
                       ABMK Car Rentals
                     </div>
                     <div className="text-sm text-gray-300">
-                      Contact us for pricing
+                      {statusInfo.available
+                        ? "Contact us for pricing"
+                        : "Premium Car Rental Service"}
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Button
-                      onClick={handleBookNow}
-                      className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-semibold"
-                      size="lg"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Inquire via WhatsApp
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
-                      size="lg"
-                      asChild
-                    >
-                      <a href="tel:+971552082602">
-                        <Phone className="w-4 h-4 mr-2" />
-                        Call Now
-                      </a>
-                    </Button>
-                  </div>
+
+                  {statusInfo.available ? (
+                    // Available - Show inquiry buttons
+                    <div className="space-y-2">
+                      <Button
+                        onClick={handleBookNow}
+                        className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-semibold"
+                        size="lg"
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Inquire via WhatsApp
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                        size="lg"
+                        asChild
+                      >
+                        <a href="tel:+971552082602">
+                          <Phone className="w-4 h-4 mr-2" />
+                          Call Now
+                        </a>
+                      </Button>
+                    </div>
+                  ) : (
+                    // Not Available - Show alternative actions
+                    <div className="space-y-2">
+                      <Button
+                        variant="outline"
+                        className="w-full border-yellow-600 text-yellow-400 hover:bg-yellow-600/10"
+                        size="lg"
+                        onClick={() => {
+                          const message = `Hi, I'm interested in the ${brand} ${model} ${name}. When will it be available for rental?`;
+                          window.open(
+                            `https://wa.me/971552082602?text=${encodeURIComponent(
+                              message
+                            )}`,
+                            "_blank"
+                          );
+                        }}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Check Availability
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                        size="lg"
+                        asChild
+                      >
+                        <Link to="/cars">
+                          <CarIcon className="w-4 h-4 mr-2" />
+                          View Similar Cars
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-gray-400 hover:bg-gray-700"
+                        size="lg"
+                        asChild
+                      >
+                        <a href="tel:+971552082602">
+                          <Phone className="w-4 h-4 mr-2" />
+                          Speak to Our Team
+                        </a>
+                      </Button>
+                    </div>
+                  )}
+
                   <div className="text-center text-sm text-gray-400 pt-4 border-t border-gray-600">
                     <p>Need help? Contact us</p>
                     <a
@@ -354,7 +502,8 @@ const CarDetails: React.FC = () => {
                       +971 552082602
                     </a>
                   </div>
-                  <div className=" p-4 rounded-lg">
+
+                  <div className="p-4 rounded-lg">
                     <h4 className="font-semibold text-white mb-2 text-base">
                       Why Choose Us?
                     </h4>
@@ -363,6 +512,9 @@ const CarDetails: React.FC = () => {
                       <li>• Free Delivery & Pickup</li>
                       <li>• Comprehensive Insurance</li>
                       <li>• No Hidden Fees</li>
+                      {!statusInfo.available && (
+                        <li>• Alternative Vehicle Options</li>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -372,7 +524,9 @@ const CarDetails: React.FC = () => {
         </div>
         {relatedCars && relatedCars.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Similar Cars</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">
+              {statusInfo.available ? "Similar Cars" : "Available Alternatives"}
+            </h2>
             {isRelatedLoading ? (
               <div className="flex justify-center py-8">
                 <LoadingSpinner />
