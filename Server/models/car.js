@@ -11,17 +11,6 @@ const carSchema = new mongoose.Schema(
     brand: {
       type: String,
       required: [true, "Brand is required"],
-      enum: [
-        "Ferrari",
-        "Lamborghini",
-        "Bentley",
-        "Rolls Royce",
-        "Porsche",
-        "Mercedes",
-        "BMW",
-        "Audi",
-        "Other",
-      ],
     },
     model: {
       type: String,
@@ -113,7 +102,13 @@ const carSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["available", "rented", "maintenance", "not available"], // Add "available"
+      enum: [
+        "available",
+        "Available",
+        "rented",
+        "maintenance",
+        "not available",
+      ],
       default: "available",
     },
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Play, Pause } from "lucide-react";
+import { Menu, X, ChevronDown, Play, Pause, Music } from "lucide-react";
 import logo from "../../assets/images/logonav.png";
 import anthem from "../../assets/videos/Anthem.mp3";
 
@@ -278,9 +278,16 @@ const Navbar: React.FC = () => {
                 >
                   <span>{item.label}</span>
                   {isPlaying ? (
-                    <Pause size={16} className="gold" />
+                    <>
+                      {" "}
+                      <Music size={16} className="gold" />
+                      <Pause size={16} className="gold" />
+                    </>
                   ) : (
-                    <Play size={16} className="gold" />
+                    <>
+                      <Music size={16} className="gold" />
+                      <Play size={16} className="gold" />
+                    </>
                   )}
                 </button>
               ) : (
@@ -394,13 +401,19 @@ const Navbar: React.FC = () => {
                 ) : item.isAudio ? (
                   <button
                     onClick={toggleAudio}
-                    className="w-full text-left py-3 px-4 gold hover:gold hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400 flex justify-end"
+                    className="w-full text-left py-3 px-4 gold hover:gold hover:bg-yellow-400/10 rounded-lg transition-all duration-200 font-medium uppercase text-sm tracking-wide focus:outline-none focus:ring-2 focus:ring-yellow-400"
                     aria-label={isPlaying ? "Pause anthem" : "Play anthem"}
                   >
                     {isPlaying ? (
-                      <Pause size={16} className="gold" />
+                      <div className="flex items-center gap-2">
+                        <Music size={16} className="gold" />
+                        <Pause size={16} className="gold" />
+                      </div>
                     ) : (
-                      <Play size={16} className="gold" />
+                      <div className="flex items-center gap-2">
+                        <Music size={16} className="gold" />
+                        <Play size={16} className="gold" />
+                      </div>
                     )}
                   </button>
                 ) : (
