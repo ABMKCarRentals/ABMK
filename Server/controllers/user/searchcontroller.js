@@ -31,8 +31,6 @@ const searchCars = async (req, res) => {
         { transmission: regEx },
         { location: regEx },
       ],
-      isActive: true,
-      isAvailable: true,
     };
 
     const searchResults = await Car.find(createSearchQuery).sort({

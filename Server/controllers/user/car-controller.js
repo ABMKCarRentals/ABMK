@@ -34,9 +34,6 @@ const getCarsByCategory = async (req, res, category) => {
     let sortCriteria = { popularity: -1 };
     let filterCriteria = {
       category,
-      isActive: true,
-      isAvailable: true,
-      status: "Available",
     };
 
     // Sorting
