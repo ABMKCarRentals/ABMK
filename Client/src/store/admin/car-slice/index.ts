@@ -164,7 +164,6 @@ interface AdminCarState {
   imageUploadError: string | null;
   carError: string | null;
   statsError: string | null;
-
   lastFetchTime: string | null;
 }
 

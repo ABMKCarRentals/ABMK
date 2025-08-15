@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CarImageUpload from "@/components/admin/imageupload";
 import AdminCarTile from "@/components/admin/car-tile";
+import { addCarFormElements } from "@/config";
 
 import { useToast } from "@/hooks/use-toast";
 import { useAdminCars } from "@/hooks/useAdmincars";
@@ -67,7 +68,6 @@ function AdminCars() {
 
   const {
     carList,
-    carStats,
     isLoading,
     error,
     getAllCars,
@@ -84,6 +84,7 @@ function AdminCars() {
   const [carImages, setCarImages] = useState<any[]>([]);
   const [imageLoadingStates, setImageLoadingStates] = useState<boolean[]>([]);
   const [currentEditedId, setCurrentEditedId] = useState<string | null>(null);
+  const brandField = addCarFormElements.find((el) => el.name === "brand");
 
   const [filters, setFilters] = useState<{
     search: string;
@@ -102,6 +103,44 @@ function AdminCars() {
     isFeatured: "all",
   });
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
+
+  // Calculate car statistics locally
+  const calculatedCarStats = useMemo(() => {
+    if (!carList || carList.length === 0) {
+      return {
+        totalCars: 0,
+        availableCars: 0,
+        featuredCars: 0,
+        rentedCars: 0,
+      };
+    }
+
+    const stats = {
+      totalCars: carList.length,
+      availableCars: 0,
+      featuredCars: 0,
+      rentedCars: 0,
+    };
+
+    carList.forEach((car) => {
+      // Count available cars (both isAvailable and status check)
+      if (car.isAvailable && car.status?.toLowerCase() === "available") {
+        stats.availableCars++;
+      }
+
+      // Count featured cars
+      if (car.isFeatured) {
+        stats.featuredCars++;
+      }
+
+      // Count rented cars based on status
+      if (car.status?.toLowerCase() === "rented") {
+        stats.rentedCars++;
+      }
+    });
+
+    return stats;
+  }, [carList]);
 
   useEffect(() => {
     getAllCars();
@@ -375,12 +414,6 @@ function AdminCars() {
   };
 
   // Extract unique values for filters
-  const uniqueBrands = carList
-    ? [...new Set(carList.map((car: Car) => car.brand))].filter(
-        (brand) => brand && brand.trim() !== ""
-      )
-    : [];
-
   const uniqueCategories = carList
     ? [...new Set(carList.map((car: Car) => car.category))].filter(
         (category) => category && category.trim() !== ""
@@ -396,41 +429,33 @@ function AdminCars() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Fragment>
-        {/* Car Statistics */}
-        {carStats && (
-          <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
-              <h3 className="text-lg font-semibold text-blue-300">
-                Total Cars
-              </h3>
-              <p className="text-2xl font-bold text-blue-100">
-                {carStats.totalCars}
-              </p>
-            </div>
-            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
-              <h3 className="text-lg font-semibold text-green-300">
-                Available
-              </h3>
-              <p className="text-2xl font-bold text-green-100">
-                {carStats.availableCars}
-              </p>
-            </div>
-            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
-              <h3 className="text-lg font-semibold text-yellow-300">
-                Featured
-              </h3>
-              <p className="text-2xl font-bold text-yellow-100">
-                {carStats.featuredCars}
-              </p>
-            </div>
-            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
-              <h3 className="text-lg font-semibold text-red-300">Rented</h3>
-              <p className="text-2xl font-bold text-red-100">
-                {carStats.rentedCars}
-              </p>
-            </div>
+        {/* Car Statistics - Using calculated stats */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+            <h3 className="text-lg font-semibold text-blue-300">Total Cars</h3>
+            <p className="text-2xl font-bold text-blue-100">
+              {calculatedCarStats.totalCars}
+            </p>
           </div>
-        )}
+          <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+            <h3 className="text-lg font-semibold text-green-300">Available</h3>
+            <p className="text-2xl font-bold text-green-100">
+              {calculatedCarStats.availableCars}
+            </p>
+          </div>
+          <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+            <h3 className="text-lg font-semibold text-yellow-300">Featured</h3>
+            <p className="text-2xl font-bold text-yellow-100">
+              {calculatedCarStats.featuredCars}
+            </p>
+          </div>
+          <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+            <h3 className="text-lg font-semibold text-red-300">Rented</h3>
+            <p className="text-2xl font-bold text-red-100">
+              {calculatedCarStats.rentedCars}
+            </p>
+          </div>
+        </div>
 
         {/* Car Filters */}
         <div className="mb-5 p-4 bg-gray-800 rounded-lg shadow-sm border border-gray-700">
@@ -466,15 +491,17 @@ function AdminCars() {
                   <SelectItem value="all" className="dark-select-item">
                     All Brands
                   </SelectItem>
-                  {uniqueBrands.map((brand) => (
-                    <SelectItem
-                      key={brand}
-                      value={brand}
-                      className="dark-select-item"
-                    >
-                      {brand}
-                    </SelectItem>
-                  ))}
+                  {brandField &&
+                    Array.isArray(brandField.options) &&
+                    brandField.options.map((brand) => (
+                      <SelectItem
+                        key={brand.id}
+                        value={brand.id}
+                        className="dark-select-item"
+                      >
+                        {brand.label}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -704,29 +731,23 @@ function AdminCars() {
                             <SelectValue placeholder="Select brand" />
                           </SelectTrigger>
                           <SelectContent className="dark-select-content">
-                            {[
-                              "Ferrari",
-                              "Lamborghini",
-                              "Bentley",
-                              "Rolls Royce",
-                              "Porsche",
-                              "Mercedes",
-                              "BMW",
-                              "Audi",
-                              "Toyota",
-                              "Honda",
-                              "Nissan",
-                              "Hyundai",
-                              "Other",
-                            ].map((brand) => (
-                              <SelectItem
-                                key={brand}
-                                value={brand}
-                                className="dark-select-item"
-                              >
-                                {brand}
-                              </SelectItem>
-                            ))}
+                            <SelectItem
+                              value="all"
+                              className="dark-select-item"
+                            >
+                              All Brands
+                            </SelectItem>
+                            {brandField &&
+                              Array.isArray(brandField.options) &&
+                              brandField.options.map((brand) => (
+                                <SelectItem
+                                  key={brand.id}
+                                  value={brand.id}
+                                  className="dark-select-item"
+                                >
+                                  {brand.label}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                       </div>
