@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Eye,
   Star,
@@ -38,10 +38,14 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
   const primaryImage =
     car.images?.find((img) => img.isPrimary) || car.images?.[0];
   const imageUrl = primaryImage?.url || "/api/placeholder/300/200";
+  const nav = useNavigate();
 
   if (viewMode === "list") {
     return (
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <div
+        className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+        onClick={() => nav(`/cars/${car._id}`)}
+      >
         <div className="flex flex-col md:flex-row">
           {/* Image Section */}
           <div className="md:w-1/3 relative group">
@@ -129,7 +133,10 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode = "grid" }) => {
 
   // Grid view (default)
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:border-yellow-400">
+    <div
+      className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:border-yellow-400"
+      onClick={() => nav(`/cars/${car._id}`)}
+    >
       {/* Image Section */}
       <div className="relative overflow-hidden">
         <img

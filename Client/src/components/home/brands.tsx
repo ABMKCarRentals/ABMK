@@ -10,17 +10,48 @@ import bmw from "../../assets/images/brands/bmw.png";
 import { useNavigate } from "react-router-dom";
 
 const brands = [
-  { name: "Ferrari", logo: ferrari },
-  { name: "Lamborghini", logo: lambo },
-  { name: "Bentley", logo: bentley },
-  { name: "Rolls Royce", logo: rollsroyce },
-  { name: "Porsche", logo: porsche },
-  { name: "Mercedes", logo: benz },
-  { name: "BMW", logo: bmw },
+  {
+    name: "Ferrari",
+    logo: ferrari,
+    slug: "Ferrari",
+  },
+  {
+    name: "Lamborghini",
+    logo: lambo,
+    slug: "Lamborghini",
+  },
+  {
+    name: "Bentley",
+    logo: bentley,
+    slug: "Bentley",
+  },
+  {
+    name: "Rolls Royce",
+    logo: rollsroyce,
+    slug: "Rolls-royce",
+  },
+  {
+    name: "Porsche",
+    logo: porsche,
+    slug: "Porsche",
+  },
+  {
+    name: "Mercedes",
+    logo: benz,
+    slug: "Mercedes",
+  },
+  {
+    name: "BMW",
+    logo: bmw,
+    slug: "BMW",
+  },
 ];
 
 const BrandSection = () => {
   const navigate = useNavigate();
+  const handleBrandClick = (brandSlug: string) => {
+    navigate(`/cars?brand=${brandSlug}`);
+  };
   return (
     <section className="bg-black text-white py-16 px-4 racing">
       <div className="max-w-7xl mx-auto text-center">
@@ -31,6 +62,7 @@ const BrandSection = () => {
             <div
               key={index}
               className="bg-black rounded-xl border border-gray-500 w-40 h-40 flex flex-col justify-center items-center hover:scale-105 transition-transform"
+              onClick={() => handleBrandClick(brand.slug)}
             >
               <img
                 src={brand.logo}

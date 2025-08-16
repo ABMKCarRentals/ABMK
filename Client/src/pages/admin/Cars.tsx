@@ -84,6 +84,11 @@ function AdminCars() {
   const [carImages, setCarImages] = useState<any[]>([]);
   const [imageLoadingStates, setImageLoadingStates] = useState<boolean[]>([]);
   const [currentEditedId, setCurrentEditedId] = useState<string | null>(null);
+
+  // Brand handling states
+  const [showCustomBrandInput, setShowCustomBrandInput] = useState(false);
+  const [customBrandName, setCustomBrandName] = useState("");
+
   const brandField = addCarFormElements.find((el) => el.name === "brand");
 
   const [filters, setFilters] = useState<{
@@ -164,6 +169,8 @@ function AdminCars() {
     setCarImages([]);
     setCurrentEditedId(null);
     setImageLoadingStates([]);
+    setShowCustomBrandInput(false);
+    setCustomBrandName("");
   };
 
   const resetFilters = () => {
@@ -225,7 +232,6 @@ function AdminCars() {
   const isFormValid = () => {
     const requiredFields: (keyof Car)[] = [
       "name",
-      "brand",
       "model",
       "year",
       "category",
@@ -265,22 +271,28 @@ function AdminCars() {
       return;
     }
 
-    const processedFormData = {
+    // Use custom brand name if it's being used
+    const finalFormData = {
       ...formData,
-      year: Number(formData.year),
-      seats: Number(formData.seats),
+      brand: showCustomBrandInput ? customBrandName : formData.brand,
+    };
+
+    const processedFormData = {
+      ...finalFormData,
+      year: Number(finalFormData.year),
+      seats: Number(finalFormData.seats),
       images: carImages.map((img: any, index: number) => ({
         url: img.url,
-        alt: img.alt || `${formData.name} - Image ${index + 1}`,
+        alt: img.alt || `${finalFormData.name} - Image ${index + 1}`,
         isPrimary: index === 0,
       })),
       specifications: {
-        ...formData.specifications,
-        horsepower: formData.specifications.horsepower
-          ? Number(formData.specifications.horsepower)
+        ...finalFormData.specifications,
+        horsepower: finalFormData.specifications.horsepower
+          ? Number(finalFormData.specifications.horsepower)
           : undefined,
-        topSpeed: formData.specifications.topSpeed
-          ? Number(formData.specifications.topSpeed)
+        topSpeed: finalFormData.specifications.topSpeed
+          ? Number(finalFormData.specifications.topSpeed)
           : undefined,
       },
     };
@@ -346,12 +358,27 @@ function AdminCars() {
   };
 
   const handleEditCar = (car: Car) => {
+    const isCustomBrand =
+      brandField?.options &&
+      !brandField.options.some((option) => option.id === car.brand);
+
     setFormData({
       ...car,
       specifications: car.specifications || initialFormData.specifications,
     });
     setCarImages(car.images || []);
     setCurrentEditedId(car._id);
+
+    // Check if the car's brand is in the predefined list
+    if (isCustomBrand) {
+      setShowCustomBrandInput(true);
+      setCustomBrandName(car.brand);
+      setFormData((prev) => ({ ...prev, brand: "" })); // Clear the select value
+    } else {
+      setShowCustomBrandInput(false);
+      setCustomBrandName("");
+    }
+
     setOpenCreateCarDialog(true);
   };
 
@@ -413,6 +440,18 @@ function AdminCars() {
     }));
   };
 
+  // Handle brand selection
+  const handleBrandSelect = (value: string) => {
+    if (value === "custom") {
+      setShowCustomBrandInput(true);
+      setFormData((prev) => ({ ...prev, brand: "" }));
+    } else {
+      setShowCustomBrandInput(false);
+      setCustomBrandName("");
+      setFormData((prev) => ({ ...prev, brand: value }));
+    }
+  };
+
   // Extract unique values for filters
   const uniqueCategories = carList
     ? [...new Set(carList.map((car: Car) => car.category))].filter(
@@ -423,6 +462,13 @@ function AdminCars() {
   const uniqueStatuses = carList
     ? [...new Set(carList.map((car: Car) => car.status))].filter(
         (status) => status && status.trim() !== ""
+      )
+    : [];
+
+  // Get unique brands for filter (including custom ones)
+  const uniqueBrands = carList
+    ? [...new Set(carList.map((car: Car) => car.brand))].filter(
+        (brand) => brand && brand.trim() !== ""
       )
     : [];
 
@@ -491,6 +537,7 @@ function AdminCars() {
                   <SelectItem value="all" className="dark-select-item">
                     All Brands
                   </SelectItem>
+                  {/* Predefined brands */}
                   {brandField &&
                     Array.isArray(brandField.options) &&
                     brandField.options.map((brand) => (
@@ -500,6 +547,23 @@ function AdminCars() {
                         className="dark-select-item"
                       >
                         {brand.label}
+                      </SelectItem>
+                    ))}
+                  {/* Custom brands from existing cars */}
+                  {uniqueBrands
+                    .filter(
+                      (brand) =>
+                        !brandField?.options?.some(
+                          (option) => option.id === brand
+                        )
+                    )
+                    .map((brand) => (
+                      <SelectItem
+                        key={brand}
+                        value={brand}
+                        className="dark-select-item"
+                      >
+                        {brand} (Custom)
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -717,40 +781,68 @@ function AdminCars() {
                           required
                         />
                       </div>
+
+                      {/* Enhanced Brand Selection */}
                       <div>
                         <Label className="dark-label text-sm font-medium mb-2 block">
                           Brand *
                         </Label>
-                        <Select
-                          value={formData.brand}
-                          onValueChange={(value) =>
-                            setFormData((prev) => ({ ...prev, brand: value }))
-                          }
-                        >
-                          <SelectTrigger className="dark-select-trigger">
-                            <SelectValue placeholder="Select brand" />
-                          </SelectTrigger>
-                          <SelectContent className="dark-select-content">
-                            <SelectItem
-                              value="all"
-                              className="dark-select-item"
+                        {!showCustomBrandInput ? (
+                          <Select
+                            value={formData.brand}
+                            onValueChange={handleBrandSelect}
+                          >
+                            <SelectTrigger className="dark-select-trigger">
+                              <SelectValue placeholder="Select brand" />
+                            </SelectTrigger>
+                            <SelectContent className="dark-select-content">
+                              {brandField &&
+                                Array.isArray(brandField.options) &&
+                                brandField.options.map((brand) => (
+                                  <SelectItem
+                                    key={brand.id}
+                                    value={brand.id}
+                                    className="dark-select-item"
+                                  >
+                                    {brand.label}
+                                  </SelectItem>
+                                ))}
+                              <SelectItem
+                                value="custom"
+                                className="dark-select-item bg-yellow-600/20 text-yellow-400"
+                              >
+                                + Add Custom Brand
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <div className="space-y-2">
+                            <Input
+                              value={customBrandName}
+                              onChange={(e) =>
+                                setCustomBrandName(e.target.value)
+                              }
+                              placeholder="Enter custom brand name"
+                              className="dark-input"
+                              required
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setShowCustomBrandInput(false);
+                                setCustomBrandName("");
+                                setFormData((prev) => ({ ...prev, brand: "" }));
+                              }}
+                              className="border-gray-600 text-gray-300 hover:bg-gray-700 text-xs"
                             >
-                              All Brands
-                            </SelectItem>
-                            {brandField &&
-                              Array.isArray(brandField.options) &&
-                              brandField.options.map((brand) => (
-                                <SelectItem
-                                  key={brand.id}
-                                  value={brand.id}
-                                  className="dark-select-item"
-                                >
-                                  {brand.label}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
+                              Use Predefined Brand
+                            </Button>
+                          </div>
+                        )}
                       </div>
+
                       <div>
                         <Label className="dark-label text-sm font-medium mb-2 block">
                           Model *
@@ -1141,7 +1233,8 @@ function AdminCars() {
                       type="submit"
                       disabled={
                         !isFormValid() ||
-                        imageLoadingStates.some((state) => state)
+                        imageLoadingStates.some((state) => state) ||
+                        (showCustomBrandInput && !customBrandName.trim())
                       }
                       className="bg-yellow-600 hover:bg-yellow-700 text-black w-full font-semibold"
                     >
