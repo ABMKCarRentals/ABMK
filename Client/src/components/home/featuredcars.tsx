@@ -47,7 +47,7 @@ const FeaturedVehicles = () => {
         setLoading(true);
         const timestamp = Date.now();
         const response = await fetch(
-          `https://abmk.onrender.com/api/cars?page=1&limit=12&sort=newest&_t=${timestamp}`
+          `https://abmk-2q0r.onrender.com/api/cars/featured?limit=6&_t=${timestamp}`
         );
 
         if (!response.ok) {
