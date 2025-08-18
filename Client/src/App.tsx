@@ -34,6 +34,7 @@ import AdminCars from "./pages/admin/Cars";
 import Brands from "./pages/cars/brands";
 import WhatsappFloatButton from "./components/common/whatsappFloating";
 import ScrollToTop from "./components/common/ScrollToTop";
+import Disclaimer from "./pages/common/disclaimer";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -219,6 +220,8 @@ function App() {
         </Route>
 
         {/* Error Routes */}
+        <Route path="/disclaimer" element={<Disclaimer />} />
+
         <Route path="/unauth" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
