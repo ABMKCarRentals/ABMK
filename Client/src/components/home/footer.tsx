@@ -78,12 +78,6 @@ const Footer = () => {
             >
               About Us
             </li>
-            <li
-              className="hover:text-yellow-500 cursor-pointer"
-              onClick={() => navigate("/disclaimer")}
-            >
-              Disclaimer
-            </li>
           </ul>
         </div>
 
@@ -99,7 +93,7 @@ const Footer = () => {
             </li>
             <li
               className="hover:text-yellow-500 cursor-pointer"
-              onClick={() => navigate("/terms")}
+              onClick={() => navigate("/disclaimer")}
             >
               Terms of Service
             </li>
