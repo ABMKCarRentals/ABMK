@@ -23,7 +23,7 @@ const Disclaimer: React.FC = () => {
       title: "Fleet Ownership & Third-Party Vehicles",
       icon: <Car className="w-5 h-5" />,
       content: [
-        "ABMK Rental Cars offers rental vehicles from both our own licensed fleet and vehicles operated by third-party licensed rental partners.",
+        "ABMK Car Rentals offers rental vehicles from both our own licensed fleet and vehicles operated by third-party licensed rental partners.",
         "We collaborate only with RTA-approved companies that meet legal and insurance requirements for car rentals in the UAE.",
         "All third-party cars are listed under commercial agreements and may be delivered and serviced by our partners.",
       ],
@@ -66,7 +66,7 @@ const Disclaimer: React.FC = () => {
       title: "Liability & Indemnity",
       icon: <Shield className="w-5 h-5" />,
       content: [
-        "ABMK Rental Cars and its management are not responsible for delays due to third-party partners.",
+        "ABMK Car Rentals and its management are not responsible for delays due to third-party partners.",
         "Vehicle breakdowns are handled as per the rental agreement terms.",
         "Traffic fines, tolls (Salik), or damage during rental are customer's responsibility unless covered by insurance.",
         "The customer is fully liable for complying with UAE traffic laws and rental agreement terms.",
@@ -100,7 +100,7 @@ const Disclaimer: React.FC = () => {
             <p className="text-gray-300">
               Welcome to{" "}
               <span className="font-semibold text-yellow-400">
-                ABMK Rental Cars
+                ABMK Car Rentals
               </span>
               . By using our website and booking services, you agree to the
               terms outlined in this disclaimer. Please read it carefully.
@@ -194,7 +194,7 @@ const Disclaimer: React.FC = () => {
           {/* Legal Footer */}
           <div className="text-center pt-6 border-t border-gray-700">
             <p className="text-gray-400 text-sm">
-              Last Updated: August 18, 2025 | ABMK Rental Cars - Premium Car
+              Last Updated: August 18, 2025 | ABMK Car Rentals - Premium Car
               Rental Services in Dubai, UAE
             </p>
           </div>
