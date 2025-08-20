@@ -62,6 +62,14 @@ app.use(
   })
 );
 
+// CSRF protection middleware
+app.use(lusca.csrf());
+
+// Optionally, provide a route to get the CSRF token for clients
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
+
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/admin/cars", adminCarRouter);
