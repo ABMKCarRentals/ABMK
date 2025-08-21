@@ -175,13 +175,13 @@ const fetchAllCars = async (req, res) => {
     // Build filter object
     const filter = {};
 
-    if (brand) filter.brand = brand;
-    if (category) filter.category = category;
-    if (status) filter.status = status;
+    if (brand && typeof brand === "string") filter.brand = brand;
+    if (category && typeof category === "string") filter.category = category;
+    if (status && typeof status === "string") filter.status = status;
     if (isActive !== undefined) filter.isActive = isActive === "true";
     if (isFeatured !== undefined) filter.isFeatured = isFeatured === "true";
 
-    if (search) {
+    if (search && typeof search === "string") {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
         { brand: { $regex: search, $options: "i" } },
