@@ -1166,7 +1166,7 @@ const CarsPage: React.FC = () => {
                   </SheetTrigger>
                   <SheetContent
                     side="left"
-                    className="w-80 bg-gray-800 border-gray-700"
+                    className="w-80 bg-gray-800 border-gray-700 px-5"
                   >
                     <SheetHeader>
                       <SheetTitle className="text-white">Filters</SheetTitle>

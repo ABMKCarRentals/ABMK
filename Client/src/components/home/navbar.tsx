@@ -362,15 +362,9 @@ const Navbar: React.FC = () => {
                           ? "gold bg-yellow-400/10"
                           : "gold"
                       }`}
-                      onClick={() => setBrandsDropdownOpen(!brandsDropdownOpen)}
+                      onClick={() => navigate("/brands")}
                     >
                       {item.label}
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-200 ${
-                          brandsDropdownOpen ? "rotate-180" : ""
-                        }`}
-                      />
                     </button>
 
                     {brandsDropdownOpen && (
