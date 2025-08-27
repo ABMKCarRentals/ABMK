@@ -3,8 +3,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 const session = require("express-session");
-const lusca = require("lusca");
-const csurf = require("csurf"); // <-- ADD THIS
 
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth/auth-rotes");
@@ -65,16 +63,8 @@ app.use(
 
 // CSRF protection setup
 // Use csurf after cookieParser and session, but before your routes!
-const csrfProtection = csurf({
-  cookie: false, // we use session-based tokens
-});
 
 // Optionally expose the token for clients that need it (e.g. SPA/frontend)
-app.use(csrfProtection);
-app.use((req, res, next) => {
-  res.setHeader("XSRF-TOKEN", req.csrfToken());
-  next();
-});
 
 // Optionally, you could expose the CSRF token at a specific endpoint for frontend to fetch:
 // app.get("/api/csrf-token", (req, res) => {
@@ -94,14 +84,6 @@ app.get("/", (req, res) => {
 });
 
 // Error handler
-app.use((err, req, res, next) => {
-  if (err.code === "EBADCSRFTOKEN") {
-    // CSRF token errors
-    return res.status(403).json({ error: "Invalid CSRF token" });
-  }
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
 
 // Start server
 app.listen(PORT, () => {
