@@ -130,7 +130,7 @@ const ContactPage: React.FC = () => {
       action: "Chat on WhatsApp",
       bgColor: "bg-green-700",
       hoverColor: "hover:bg-green-600",
-      link: "https://wa.me/971552082602",
+      link: "https://wa.me/9710551202434",
     },
     {
       icon: Phone,

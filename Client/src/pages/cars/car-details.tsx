@@ -52,7 +52,7 @@ const CarDetails: React.FC = () => {
       currentCar?.brand || ""
     } ${currentCar?.model || ""} ${currentCar?.name || ""}`;
     window.open(
-      `https://wa.me/971552082602?text=${encodeURIComponent(message)}`,
+      `https://wa.me/9710551202434?text=${encodeURIComponent(message)}`,
       "_blank"
     );
   };
@@ -397,7 +397,6 @@ const CarDetails: React.FC = () => {
                       className={`${statusInfo.bgColor} ${statusInfo.borderColor} border flex text-center`}
                     >
                       <div className="flex items-center">
-                        
                         <AlertDescription
                           className={`ml-2 ${statusInfo.color}`}
                         >
