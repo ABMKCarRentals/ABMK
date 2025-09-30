@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
-const phoneNumber = "9710551202434"; // Update this if needed
+const phoneNumber = "+971528329765"; // Update this if needed
 
 const WhatsappFloatButton: React.FC = () => {
   const [showScroll, setShowScroll] = useState(false);
