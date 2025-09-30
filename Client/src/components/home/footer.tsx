@@ -21,7 +21,7 @@ const Footer = () => {
           </p>
           <div className="flex space-x-4">
             <a
-              href="https://www.facebook.com/"
+              href="https://www.facebook.com/share/1623Y3nRdA/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
@@ -29,7 +29,7 @@ const Footer = () => {
               <FaFacebookF className="hover:text-yellow-500 cursor-pointer" />
             </a>
             <a
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/abmk_carrentals?igsh=MXVuNHV0Zm94czE1dg=="
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
